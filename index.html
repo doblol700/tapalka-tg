@@ -1,274 +1,775 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Мототапалка - Главная</title>
-    <style>
-        :root {
-            --bg-color: #1a202c;
-            --text-color: #e2e8f0;
-            --accent-orange: #f97316;
-            --accent-cyan: #22d3ee;
-            --ui-bg: rgba(15, 23, 42, 0.8);
-            --glow: 0 0 10px var(--accent-cyan);
-            --glow-orange: 0 0 10px var(--accent-orange);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Мототапалка</title>
+<style>
+  :root {
+    --bg-color: #0d1117;
+    --text-color: #e2e8f0;
+    --text-dim: #93a3b8;
+    --accent-orange: #f97316;
+    --accent-cyan: #22d3ee;
+    --ui-bg: rgba(13, 17, 23, 0.88);
+    --card-bg: rgba(22, 30, 41, 0.92);
+    --glow: 0 0 10px var(--accent-cyan);
+    --glow-orange: 0 0 10px var(--accent-orange);
+  }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow: hidden;
-        }
+  * { box-sizing: border-box; }
 
-        /* --- ОБЩИЙ КОНТЕЙНЕР С ФОНОМ GARAGE1 --- */
-        #app-container {
-            height: 100%;
-            width: 100%;
-            background-image: url('garage1.jpg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
 
-        /* --- 1. ВЕРХНЯЯ ПАНЕЛЬ --- */
-        .top-panel {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background: var(--ui-bg);
-            border-bottom: 2px solid var(--accent-cyan);
-            box-shadow: var(--glow);
-        }
+  #app-container {
+    height: 100%;
+    width: 100%;
+    background-image: url('garage1.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+  }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+  /* --- TOP PANEL --- */
+  .top-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: var(--ui-bg);
+    border-bottom: 2px solid var(--accent-cyan);
+    box-shadow: var(--glow);
+    flex-shrink: 0;
+  }
 
-        .avatar-placeholder {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-orange);
-            background: #2d3748;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-            box-shadow: var(--glow-orange);
-        }
+  .user-info { display: flex; align-items: center; gap: 10px; }
 
-        .stats-text {
-            font-size: 13px;
-            line-height: 1.2;
-        }
+  .avatar-placeholder {
+    width: 45px; height: 45px; border-radius: 50%;
+    border: 2px solid var(--accent-orange);
+    background: #2d3748;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: bold; color: white;
+    box-shadow: var(--glow-orange);
+    flex-shrink: 0;
+  }
 
-        .level-bar {
-            width: 90px;
-            height: 5px;
-            background: #4a5568;
-            border-radius: 3px;
-            margin-top: 4px;
-        }
+  .stats-text { font-size: 13px; line-height: 1.2; }
+  .level-bar { width: 90px; height: 5px; background: #4a5568; border-radius: 3px; margin-top: 4px; }
+  .level-progress { width: 78%; height: 100%; background-color: var(--accent-orange); border-radius: 3px; }
 
-        .level-progress {
-            width: 78%;
-            height: 100%;
-            background-color: var(--accent-orange);
-            border-radius: 3px;
-        }
+  .currency-panel { display: flex; gap: 8px; }
+  .currency-item {
+    background: rgba(45, 55, 72, 0.9);
+    padding: 5px 8px; border-radius: 5px;
+    font-size: 13px; font-weight: bold;
+    display: flex; align-items: center; gap: 4px;
+    border: 1px solid var(--accent-cyan);
+    white-space: nowrap;
+  }
 
-        .currency-panel {
-            display: flex;
-            gap: 8px;
-        }
+  /* --- SCREENS --- */
+  .screens { flex-grow: 1; position: relative; overflow: hidden; }
+  .screen {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .screen.active { display: flex; }
 
-        .currency-item {
-            background: rgba(45, 55, 72, 0.9);
-            padding: 5px 8px;
-            border-radius: 5px;
-            font-size: 13px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            border: 1px solid var(--accent-cyan);
-        }
+  /* --- GARAGE SCREEN --- */
+  .tap-zone {
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 10px 10px;
+    min-height: 240px;
+  }
 
-        /* --- 2. ЦЕНТР (ЗОНА ТАПА) --- */
-        .tap-zone {
-            flex-grow: 1;
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+  .active-bike-name {
+    font-size: 13px;
+    color: var(--accent-cyan);
+    text-shadow: 0 0 8px rgba(34,211,238,0.6);
+    margin-bottom: 4px;
+    text-align: center;
+  }
 
-        /* Очки по центру */
-        #points-display {
-            font-size: 52px;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px var(--accent-orange);
-            z-index: 3;
-            pointer-events: none;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+  #points-display {
+    font-size: 44px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px var(--accent-orange);
+    z-index: 3;
+    pointer-events: none;
+    text-align: center;
+    margin-bottom: 6px;
+  }
 
-        /* Текстовые заглушки для персонажа и байка */
-        .placeholders-container {
-            display: flex;
-            gap: 20px;
-            z-index: 2;
-        }
+  .per-tap-display {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    pointer-events: none;
+  }
 
-        .object-placeholder {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px dashed var(--accent-cyan);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            color: var(--accent-cyan);
-        }
+  .bike-emoji-btn {
+    font-size: 92px;
+    line-height: 1;
+    filter: drop-shadow(0 0 18px rgba(249,115,22,0.55));
+    transition: transform 0.08s ease;
+  }
+  .bike-emoji-btn:active { transform: scale(0.9); }
 
-        /* Плавающие бонусы при клике */
-        .floating-bonus {
-            position: absolute;
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--accent-orange);
-            z-index: 4;
-            pointer-events: none;
-            animation: floatUp 0.8s ease-out forwards;
-            text-shadow: 0 0 5px #000;
-        }
+  .floating-bonus {
+    position: absolute;
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--accent-orange);
+    z-index: 4;
+    pointer-events: none;
+    animation: floatUp 0.8s ease-out forwards;
+    text-shadow: 0 0 5px #000;
+  }
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-70px); }
+  }
 
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-70px); }
-        }
+  .section-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent-cyan);
+    margin: 10px 14px 6px;
+  }
 
-        /* --- 3. НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ --- */
-        .nav-panel {
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 5px;
-            background: var(--ui-bg);
-            border-top: 2px solid var(--accent-cyan);
-            box-shadow: var(--glow);
-        }
+  /* --- TUNING --- */
+  .tuning-list { padding: 0 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .tuning-row {
+    background: var(--card-bg);
+    border: 1px solid rgba(34,211,238,0.35);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tuning-icon { font-size: 24px; width: 32px; text-align: center; }
+  .tuning-info { flex-grow: 1; }
+  .tuning-name { font-size: 14px; font-weight: bold; }
+  .tuning-level { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+  .tuning-bar { width: 100%; height: 4px; background: #2d3748; border-radius: 2px; margin-top: 5px; overflow: hidden; }
+  .tuning-bar-fill { height: 100%; background: var(--accent-orange); }
 
-        .nav-item {
-            text-align: center;
-            cursor: pointer;
-            color: var(--accent-cyan);
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
+  .upgrade-btn {
+    background: var(--accent-orange);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .upgrade-btn:disabled {
+    background: #4a5568;
+    color: #8a97a8;
+    cursor: default;
+  }
 
-        .nav-item.active {
-            opacity: 1;
-        }
+  /* --- SHOP SCREEN --- */
+  .shop-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px 4px;
+    flex-shrink: 0;
+  }
+  .shop-tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(34,211,238,0.35);
+    background: rgba(15,23,42,0.6);
+    color: var(--accent-cyan);
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .shop-tab.active {
+    background: var(--accent-orange);
+    color: #1a1a1a;
+    border-color: var(--accent-orange);
+  }
 
-        .nav-text-label {
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
-        .nav-item.active .nav-text-label {
-            color: var(--accent-orange);
-        }
+  .bike-list { padding: 8px 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .bike-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(34,211,238,0.35);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bike-card-emoji { font-size: 30px; width: 40px; text-align: center; flex-shrink: 0; }
+  .bike-card-info { flex-grow: 1; min-width: 0; }
+  .bike-card-name { font-size: 14px; font-weight: bold; }
+  .bike-card-stats { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .bike-card-price { font-size: 12px; color: var(--accent-orange); margin-top: 2px; font-weight: bold; }
 
-    </style>
+  .bike-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .bike-btn.buy { background: var(--accent-orange); color: #1a1a1a; }
+  .bike-btn.buy:disabled { background: #4a5568; color: #8a97a8; }
+  .bike-btn.select { background: var(--accent-cyan); color: #1a1a1a; }
+  .bike-btn.selected { background: #2d3748; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+
+  /* --- MISSIONS SCREEN --- */
+  .missions-list { padding: 10px 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .mission-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(34,211,238,0.35);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mission-info { flex-grow: 1; }
+  .mission-name { font-size: 13px; font-weight: bold; }
+  .mission-progress { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+  .mission-reward { font-size: 12px; color: var(--accent-orange); margin-top: 3px; font-weight: bold; }
+  .claim-btn {
+    border: none; border-radius: 8px; padding: 8px 10px;
+    font-size: 12px; font-weight: bold; cursor: pointer; flex-shrink: 0;
+    background: var(--accent-orange); color: #1a1a1a;
+  }
+  .claim-btn:disabled { background: #4a5568; color: #8a97a8; }
+  .claim-btn.done { background: #2d3748; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+
+  /* --- CLAN SCREEN --- */
+  .clan-placeholder {
+    margin: auto;
+    text-align: center;
+    padding: 30px;
+    color: var(--text-dim);
+  }
+  .clan-placeholder .icon { font-size: 48px; margin-bottom: 10px; }
+  .clan-placeholder .title { font-size: 16px; color: var(--text-color); font-weight: bold; margin-bottom: 6px; }
+
+  /* --- NAV PANEL --- */
+  .nav-panel {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 5px;
+    background: var(--ui-bg);
+    border-top: 2px solid var(--accent-cyan);
+    box-shadow: var(--glow);
+    flex-shrink: 0;
+  }
+  .nav-item {
+    text-align: center;
+    cursor: pointer;
+    color: var(--accent-cyan);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    flex: 1;
+  }
+  .nav-item.active { opacity: 1; }
+  .nav-item-icon { font-size: 20px; }
+  .nav-text-label { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-top: 3px; }
+  .nav-item.active .nav-text-label { color: var(--accent-orange); }
+</style>
 </head>
 <body>
 
-    <div id="app-container">
-        <!-- Верхняя панель -->
-        <div class="top-panel">
-            <div class="user-info">
-                <div class="avatar-placeholder">VIP</div>
-                <div class="stats-text">
-                    <strong>RIDERNICK</strong><br>
-                    Lv 15
-                    <div class="level-bar"><div class="level-progress"></div></div>
-                </div>
-            </div>
-            <div class="currency-panel">
-                <div class="currency-item">🪙 4,580</div>
-                <div class="currency-item">💰 150</div>
-            </div>
-        </div>
+<div id="app-container">
 
-        <!-- Центральная зона тапа -->
-        <div id="tap-zone" class="tap-zone">
-            <div id="points-display">95 360 pts</div>
-            
-            <div class="placeholders-container">
-                <div class="object-placeholder">🏍️ Мотоциклист</div>
-                <div class="object-placeholder">🏍️ Мотоцикл</div>
-            </div>
-        </div>
+  <!-- Верхняя панель -->
+  <div class="top-panel">
+    <div class="user-info">
+      <div class="avatar-placeholder">VIP</div>
+      <div class="stats-text">
+        <strong>RIDERNICK</strong><br>
+        Lv 15
+        <div class="level-bar"><div class="level-progress"></div></div>
+      </div>
+    </div>
+    <div class="currency-panel">
+      <div class="currency-item" id="coins-display">🪙 0</div>
+    </div>
+  </div>
 
-        <!-- Нижняя панель -->
-        <div class="nav-panel">
-            <div class="nav-item active">
-                <div style="font-size: 18px;">🔧</div>
-                <div class="nav-text-label">Garage</div>
-            </div>
-            <div class="nav-item">
-                <div style="font-size: 18px;">🛒</div>
-                <div class="nav-text-label">Shop</div>
-            </div>
-            <div class="nav-item">
-                <div style="font-size: 18px;">🎯</div>
-                <div class="nav-text-label">Missions</div>
-            </div>
-            <div class="nav-item">
-                <div style="font-size: 18px;">👥</div>
-                <div class="nav-text-label">Clan</div>
-            </div>
-        </div>
+  <div class="screens">
+
+    <!-- ГАРАЖ -->
+    <div class="screen active" id="screen-garage">
+      <div id="tap-zone" class="tap-zone">
+        <div class="active-bike-name" id="active-bike-name">Honda Dio 27</div>
+        <div id="points-display">0 pts</div>
+        <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
+        <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
+      </div>
+      <div class="section-title">Тюнинг</div>
+      <div class="tuning-list" id="tuning-list"></div>
     </div>
 
-    <script>
-        const tapZone = document.getElementById('tap-zone');
-        const pointsDisplay = document.getElementById('points-display');
-        let currentPoints = 95360;
+    <!-- МАГАЗИН -->
+    <div class="screen" id="screen-shop">
+      <div class="shop-tabs" id="shop-tabs"></div>
+      <div class="bike-list" id="bike-list"></div>
+    </div>
 
-        tapZone.addEventListener('click', (e) => {
-            currentPoints += 100;
-            pointsDisplay.innerText = currentPoints.toLocaleString('ru-RU') + ' pts';
+    <!-- МИССИИ -->
+    <div class="screen" id="screen-missions">
+      <div class="section-title">Задания</div>
+      <div class="missions-list" id="missions-list"></div>
+    </div>
 
-            // Создаем всплывающий текст +100 XP
-            const b = document.createElement('div');
-            b.classList.add('floating-bonus');
-            b.innerText = '+100 XP';
-            
-            const rect = tapZone.getBoundingClientRect();
-            b.style.left = `${e.clientX - rect.left - 20}px`;
-            b.style.top = `${e.clientY - rect.top - 40}px`;
-            
-            tapZone.appendChild(b);
-            setTimeout(() => b.remove(), 800);
-        });
-    </script>
+    <!-- КЛАН -->
+    <div class="screen" id="screen-clan">
+      <div class="clan-placeholder">
+        <div class="icon">👥</div>
+        <div class="title">Кланы в разработке</div>
+        <div>Скоро здесь можно будет объединяться с другими райдерами и соревноваться командами.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Нижняя панель -->
+  <div class="nav-panel">
+    <div class="nav-item active" data-screen="garage">
+      <div class="nav-item-icon">🔧</div>
+      <div class="nav-text-label">Гараж</div>
+    </div>
+    <div class="nav-item" data-screen="shop">
+      <div class="nav-item-icon">🛒</div>
+      <div class="nav-text-label">Магазин</div>
+    </div>
+    <div class="nav-item" data-screen="missions">
+      <div class="nav-item-icon">🎯</div>
+      <div class="nav-text-label">Задания</div>
+    </div>
+    <div class="nav-item" data-screen="clan">
+      <div class="nav-item-icon">👥</div>
+      <div class="nav-text-label">Клан</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================
+   ДАННЫЕ: реальные марки и модели по классам мотоциклов
+   ========================================================= */
+const BIKE_CATALOG = {
+  pitbike: {
+    label: 'Питбайк',
+    emoji: '🏍️',
+    bikes: [
+      { id: 'ycf-slw150',  name: 'YCF SLW 150F',      price: 3000,  power: 2,  top: '65 км/ч' },
+      { id: 'apollo-rfz',  name: 'Apollo RFZ 150',    price: 5000,  power: 3,  top: '75 км/ч' },
+      { id: 'kayo-tt250',  name: 'KAYO TT250',        price: 9000,  power: 5,  top: '95 км/ч' },
+      { id: 'stomp-190',   name: 'Stomp Predator 190',price: 14000, power: 6,  top: '100 км/ч' },
+    ]
+  },
+  enduro: {
+    label: 'Эндуро',
+    emoji: '🏍️',
+    bikes: [
+      { id: 'ktm-300exc',    name: 'KTM 300 EXC',        price: 40000, power: 11, top: '135 км/ч' },
+      { id: 'husq-te300',    name: 'Husqvarna TE 300i',   price: 45000, power: 12, top: '138 км/ч' },
+      { id: 'beta-300rr',    name: 'Beta 300 RR',         price: 42000, power: 11, top: '132 км/ч' },
+      { id: 'yamaha-wr450f', name: 'Yamaha WR450F',       price: 52000, power: 14, top: '145 км/ч' },
+      { id: 'honda-crf450rx',name: 'Honda CRF450RX',      price: 55000, power: 15, top: '148 км/ч' },
+      { id: 'sherco-300se',  name: 'Sherco 300 SE Factory',price: 47000, power: 12, top: '134 км/ч' },
+    ]
+  },
+  motocross: {
+    label: 'Кросс',
+    emoji: '🏁',
+    bikes: [
+      { id: 'ktm-450sxf',     name: 'KTM 450 SX-F',        price: 90000,  power: 22, top: '155 км/ч' },
+      { id: 'yamaha-yz450f',  name: 'Yamaha YZ450F',       price: 92000,  power: 22, top: '156 км/ч' },
+      { id: 'honda-crf450r',  name: 'Honda CRF450R',       price: 95000,  power: 23, top: '158 км/ч' },
+      { id: 'kawasaki-kx450', name: 'Kawasaki KX450',      price: 93000,  power: 23, top: '157 км/ч' },
+      { id: 'suzuki-rmz450',  name: 'Suzuki RM-Z450',      price: 85000,  power: 21, top: '152 км/ч' },
+      { id: 'husq-fc450',     name: 'Husqvarna FC 450',    price: 96000,  power: 24, top: '159 км/ч' },
+    ]
+  }
+};
+
+const STARTER_BIKE = { id: 'starter', name: 'Honda Dio 27', power: 1, emoji: '🛵' };
+
+const TUNING_TYPES = [
+  { id: 'engine',     name: 'Двигатель', icon: '⚙️', baseCost: 400, costMult: 1.6,  powerPerLevel: 3, maxLevel: 10 },
+  { id: 'exhaust',    name: 'Выхлоп',    icon: '🔥', baseCost: 300, costMult: 1.55, powerPerLevel: 2, maxLevel: 10 },
+  { id: 'suspension', name: 'Подвеска',  icon: '🛠️', baseCost: 350, costMult: 1.55, powerPerLevel: 2, maxLevel: 10 },
+  { id: 'tires',      name: 'Резина',    icon: '🛞', baseCost: 250, costMult: 1.5,  powerPerLevel: 1, maxLevel: 10 },
+];
+
+const MISSIONS = [
+  { id: 'taps50',  name: 'Сделать 50 тапов',            reward: 300,  type: 'taps',  target: 50 },
+  { id: 'taps200', name: 'Сделать 200 тапов',           reward: 900,  type: 'taps',  target: 200 },
+  { id: 'taps1000',name: 'Сделать 1000 тапов',          reward: 4000, type: 'taps',  target: 1000 },
+  { id: 'coins5000',name: 'Накопить 5 000 монет',       reward: 500,  type: 'coins', target: 5000 },
+  { id: 'buybike', name: 'Купить любой мотоцикл',       reward: 800,  type: 'ownedBikes', target: 1 },
+  { id: 'tune3',   name: 'Прокачать один узел до 3 ур.',reward: 700,  type: 'tuneLevel', target: 3 },
+];
+
+/* =========================================================
+   СОСТОЯНИЕ ИГРЫ (сохраняется в localStorage)
+   ========================================================= */
+const SAVE_KEY = 'motoTapalkaSave';
+
+function defaultState() {
+  return {
+    coins: 500,
+    totalTaps: 0,
+    ownedBikeIds: [],
+    activeBikeId: 'starter',
+    tuning: { engine: 0, exhaust: 0, suspension: 0, tires: 0 },
+    claimedMissions: {}
+  };
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    return Object.assign(defaultState(), parsed);
+  } catch (e) {
+    return defaultState();
+  }
+}
+
+let state = loadState();
+
+function saveState() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+/* =========================================================
+   ПОМОЩНИКИ
+   ========================================================= */
+function findBikeById(id) {
+  if (id === 'starter') return STARTER_BIKE;
+  for (const cat of Object.values(BIKE_CATALOG)) {
+    const found = cat.bikes.find(b => b.id === id);
+    if (found) return found;
+  }
+  return STARTER_BIKE;
+}
+
+function activeBike() {
+  return findBikeById(state.activeBikeId);
+}
+
+function tuningCost(type, level) {
+  return Math.round(type.baseCost * Math.pow(type.costMult, level));
+}
+
+function perTapValue() {
+  const bike = activeBike();
+  let value = bike.power || 1;
+  TUNING_TYPES.forEach(t => {
+    value += (state.tuning[t.id] || 0) * t.powerPerLevel;
+  });
+  return value;
+}
+
+function fmt(n) {
+  return Math.round(n).toLocaleString('ru-RU');
+}
+
+/* =========================================================
+   РЕНДЕР: верхняя панель
+   ========================================================= */
+function renderTop() {
+  document.getElementById('coins-display').innerText = '🪙 ' + fmt(state.coins);
+}
+
+/* =========================================================
+   РЕНДЕР: гараж (тап-зона + тюнинг)
+   ========================================================= */
+function renderGarage() {
+  const bike = activeBike();
+  document.getElementById('active-bike-name').innerText = bike.name;
+  document.getElementById('points-display').innerText = fmt(state.coins) + ' pts';
+  document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
+  document.getElementById('bike-emoji').innerText = bike.emoji || '🏍️';
+
+  const list = document.getElementById('tuning-list');
+  list.innerHTML = '';
+  TUNING_TYPES.forEach(t => {
+    const level = state.tuning[t.id] || 0;
+    const maxed = level >= t.maxLevel;
+    const cost = tuningCost(t, level);
+    const canAfford = state.coins >= cost;
+
+    const row = document.createElement('div');
+    row.className = 'tuning-row';
+    row.innerHTML = `
+      <div class="tuning-icon">${t.icon}</div>
+      <div class="tuning-info">
+        <div class="tuning-name">${t.name}</div>
+        <div class="tuning-level">Уровень ${level} / ${t.maxLevel}</div>
+        <div class="tuning-bar"><div class="tuning-bar-fill" style="width:${(level / t.maxLevel) * 100}%"></div></div>
+      </div>
+      <button class="upgrade-btn" ${maxed || !canAfford ? 'disabled' : ''} data-tune="${t.id}">
+        ${maxed ? 'Макс.' : '🪙 ' + fmt(cost)}
+      </button>
+    `;
+    list.appendChild(row);
+  });
+
+  list.querySelectorAll('button[data-tune]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-tune');
+      const type = TUNING_TYPES.find(t => t.id === id);
+      const level = state.tuning[id] || 0;
+      if (level >= type.maxLevel) return;
+      const cost = tuningCost(type, level);
+      if (state.coins < cost) return;
+      state.coins -= cost;
+      state.tuning[id] = level + 1;
+      saveState();
+      renderTop();
+      renderGarage();
+      renderMissions();
+    });
+  });
+}
+
+/* =========================================================
+   РЕНДЕР: магазин
+   ========================================================= */
+let activeShopTab = 'pitbike';
+
+function renderShopTabs() {
+  const tabsEl = document.getElementById('shop-tabs');
+  tabsEl.innerHTML = '';
+  Object.keys(BIKE_CATALOG).forEach(key => {
+    const cat = BIKE_CATALOG[key];
+    const tab = document.createElement('div');
+    tab.className = 'shop-tab' + (key === activeShopTab ? ' active' : '');
+    tab.innerText = cat.label;
+    tab.addEventListener('click', () => {
+      activeShopTab = key;
+      renderShopTabs();
+      renderBikeList();
+    });
+    tabsEl.appendChild(tab);
+  });
+}
+
+function renderBikeList() {
+  const listEl = document.getElementById('bike-list');
+  listEl.innerHTML = '';
+  const cat = BIKE_CATALOG[activeShopTab];
+
+  cat.bikes.forEach(bike => {
+    const owned = state.ownedBikeIds.includes(bike.id);
+    const selected = state.activeBikeId === bike.id;
+    const canAfford = state.coins >= bike.price;
+
+    const card = document.createElement('div');
+    card.className = 'bike-card';
+
+    let btnHtml;
+    if (selected) {
+      btnHtml = `<button class="bike-btn selected" disabled>Выбран</button>`;
+    } else if (owned) {
+      btnHtml = `<button class="bike-btn select" data-select="${bike.id}">Выбрать</button>`;
+    } else {
+      btnHtml = `<button class="bike-btn buy" data-buy="${bike.id}" ${canAfford ? '' : 'disabled'}>🪙 ${fmt(bike.price)}</button>`;
+    }
+
+    card.innerHTML = `
+      <div class="bike-card-emoji">${cat.emoji}</div>
+      <div class="bike-card-info">
+        <div class="bike-card-name">${bike.name}</div>
+        <div class="bike-card-stats">Сила клика: ${bike.power} · Макс. скорость: ${bike.top}</div>
+        <div class="bike-card-price">${owned ? 'Куплен' : '🪙 ' + fmt(bike.price)}</div>
+      </div>
+      ${btnHtml}
+    `;
+    listEl.appendChild(card);
+  });
+
+  listEl.querySelectorAll('button[data-buy]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-buy');
+      const bike = findBikeById(id);
+      if (state.coins < bike.price) return;
+      state.coins -= bike.price;
+      state.ownedBikeIds.push(id);
+      state.activeBikeId = id;
+      saveState();
+      renderTop();
+      renderBikeList();
+      renderGarage();
+      renderMissions();
+    });
+  });
+
+  listEl.querySelectorAll('button[data-select]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-select');
+      state.activeBikeId = id;
+      saveState();
+      renderBikeList();
+      renderGarage();
+    });
+  });
+}
+
+/* =========================================================
+   РЕНДЕР: миссии
+   ========================================================= */
+function missionProgressValue(mission) {
+  if (mission.type === 'taps') return state.totalTaps;
+  if (mission.type === 'coins') return state.coins;
+  if (mission.type === 'ownedBikes') return state.ownedBikeIds.length;
+  if (mission.type === 'tuneLevel') return Math.max(0, ...Object.values(state.tuning));
+  return 0;
+}
+
+function renderMissions() {
+  const listEl = document.getElementById('missions-list');
+  listEl.innerHTML = '';
+
+  MISSIONS.forEach(m => {
+    const progress = missionProgressValue(m);
+    const complete = progress >= m.target;
+    const claimed = !!state.claimedMissions[m.id];
+
+    const card = document.createElement('div');
+    card.className = 'mission-card';
+
+    let btnHtml;
+    if (claimed) {
+      btnHtml = `<button class="claim-btn done" disabled>Получено</button>`;
+    } else if (complete) {
+      btnHtml = `<button class="claim-btn" data-claim="${m.id}">Забрать</button>`;
+    } else {
+      btnHtml = `<button class="claim-btn" disabled>${Math.min(progress, m.target)}/${m.target}</button>`;
+    }
+
+    card.innerHTML = `
+      <div class="mission-info">
+        <div class="mission-name">${m.name}</div>
+        <div class="mission-progress">Прогресс: ${Math.min(progress, m.target)} / ${m.target}</div>
+        <div class="mission-reward">Награда: 🪙 ${fmt(m.reward)}</div>
+      </div>
+      ${btnHtml}
+    `;
+    listEl.appendChild(card);
+  });
+
+  listEl.querySelectorAll('button[data-claim]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-claim');
+      const mission = MISSIONS.find(m => m.id === id);
+      if (state.claimedMissions[id]) return;
+      if (missionProgressValue(mission) < mission.target) return;
+      state.coins += mission.reward;
+      state.claimedMissions[id] = true;
+      saveState();
+      renderTop();
+      renderMissions();
+      renderGarage();
+    });
+  });
+}
+
+/* =========================================================
+   ТАП-ЗОНА
+   ========================================================= */
+const tapZone = document.getElementById('tap-zone');
+tapZone.addEventListener('click', (e) => {
+  const gain = perTapValue();
+  state.coins += gain;
+  state.totalTaps += 1;
+  saveState();
+
+  document.getElementById('points-display').innerText = fmt(state.coins) + ' pts';
+  renderTop();
+
+  const b = document.createElement('div');
+  b.classList.add('floating-bonus');
+  b.innerText = '+' + gain;
+  const rect = tapZone.getBoundingClientRect();
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+  b.style.left = (x - 15) + 'px';
+  b.style.top = (y - 30) + 'px';
+  tapZone.appendChild(b);
+  setTimeout(() => b.remove(), 800);
+
+  // Миссии могут обновиться в фоне — перерисуем при следующем открытии экрана
+});
+
+/* =========================================================
+   НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ
+   ========================================================= */
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const target = item.getAttribute('data-screen');
+
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + target).classList.add('active');
+
+    if (target === 'garage') renderGarage();
+    if (target === 'shop') { renderShopTabs(); renderBikeList(); }
+    if (target === 'missions') renderMissions();
+  });
+});
+
+/* =========================================================
+   СТАРТ
+   ========================================================= */
+renderTop();
+renderGarage();
+renderShopTabs();
+renderBikeList();
+renderMissions();
+</script>
 
 </body>
 </html>
