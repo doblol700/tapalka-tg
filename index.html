@@ -142,8 +142,12 @@
     line-height: 1;
     filter: drop-shadow(0 0 18px rgba(249,115,22,0.55));
     transition: transform 0.08s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .bike-emoji-btn:active { transform: scale(0.9); }
+  .bike-emoji-btn.is-svg { width: 190px; filter: none; }
 
   .floating-bonus {
     position: absolute;
@@ -210,6 +214,7 @@
     gap: 6px;
     padding: 10px 12px 4px;
     flex-shrink: 0;
+    overflow-x: auto;
   }
   .shop-tab {
     flex: 1;
@@ -223,6 +228,7 @@
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
+    white-space: nowrap;
   }
   .shop-tab.active {
     background: var(--accent-orange);
@@ -240,7 +246,8 @@
     align-items: center;
     gap: 10px;
   }
-  .bike-card-emoji { font-size: 30px; width: 40px; text-align: center; flex-shrink: 0; }
+  .bike-card-emoji { font-size: 30px; width: 40px; text-align: center; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .bike-card-emoji svg { width: 100%; height: auto; display: block; }
   .bike-card-info { flex-grow: 1; min-width: 0; }
   .bike-card-name { font-size: 14px; font-weight: bold; }
   .bike-card-stats { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
@@ -376,11 +383,14 @@
   }
   .stunt-bike {
     font-size: 72px;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transform-origin: 75% 85%;
     transition: transform 0.05s linear;
     filter: drop-shadow(0 0 14px rgba(249,115,22,0.6));
   }
+  .stunt-bike.is-svg { width: 170px; filter: none; }
 
   .stunt-road {
     position: absolute;
@@ -466,6 +476,32 @@
   .stunt-result-title { font-size: 18px; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; }
   .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
   .stunt-result-stats b { color: var(--accent-cyan); }
+
+  /* --- ИСКРЫ (задним крылом об асфальт) --- */
+  .stunt-spark-anchor {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    width: 0;
+    height: 0;
+    transform: translate(42px, 34px);
+    pointer-events: none;
+  }
+  .spark-particle {
+    position: absolute;
+    width: 7px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #fff9c4, #f97316);
+    box-shadow: 0 0 6px 1px rgba(249,115,22,0.9);
+    pointer-events: none;
+    z-index: 4;
+    animation: sparkFly 0.5s ease-out forwards;
+  }
+  @keyframes sparkFly {
+    0%   { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); }
+    100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); }
+  }
 </style>
 </head>
 <body>
@@ -561,6 +597,7 @@
     <div class="stunt-bike-wrap">
       <div class="stunt-bike" id="stunt-bike">🏍️</div>
     </div>
+    <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div>
     <div class="stunt-road" id="stunt-road"></div>
   </div>
 
@@ -588,9 +625,47 @@
 
 <script>
 /* =========================================================
-   ДАННЫЕ: реальные марки и модели по классам мотоциклов
+   SVG-ИКОНКА РЕАЛЬНОГО СКУТЕРА (по мотивам Honda Dio, чёрный)
+   Используется для гаража, карточек магазина и стант-заезда
+   ========================================================= */
+function scooterSvgMarkup(cls) {
+  return `<svg class="${cls}" viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="150" cy="146" rx="140" ry="8" fill="rgba(0,0,0,0.35)"/>
+  <circle cx="62" cy="122" r="36" fill="#0a0a0a" stroke="#3a3a3a" stroke-width="5"/>
+  <circle cx="62" cy="122" r="15" fill="#4b5563"/>
+  <circle cx="62" cy="122" r="5" fill="#1a1a1a"/>
+  <circle cx="232" cy="122" r="36" fill="#0a0a0a" stroke="#3a3a3a" stroke-width="5"/>
+  <circle cx="232" cy="122" r="20" fill="none" stroke="#7d8896" stroke-width="3"/>
+  <circle cx="232" cy="122" r="15" fill="#4b5563"/>
+  <circle cx="232" cy="122" r="5" fill="#1a1a1a"/>
+  <path d="M38,112 C26,88 42,62 74,60 L100,58 C104,42 120,30 140,28 L154,28 C162,14 188,4 210,10 L224,15 C240,21 250,38 252,55 C260,70 259,96 248,114 L238,120 L222,120 C216,102 200,90 182,90 L104,90 C88,90 74,98 70,114 Z" fill="#161616" stroke="#000000" stroke-width="1.5"/>
+  <path d="M104,58 C126,49 168,47 200,52 L206,64 C170,59 132,61 110,68 Z" fill="#0d0d0d" stroke="#000" stroke-width="1"/>
+  <ellipse cx="238" cy="35" rx="11" ry="8" fill="#e9edf3"/>
+  <ellipse cx="238" cy="35" rx="6" ry="4" fill="#93a3b8"/>
+  <line x1="222" y1="16" x2="206" y2="4" stroke="#111111" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="204" cy="2" r="7" fill="#111111"/>
+  <rect x="26" y="78" width="10" height="15" rx="2" fill="#ef4444"/>
+  <path d="M150,112 C162,117 178,117 190,112 L190,121 C178,126 162,126 150,121 Z" fill="#0a0a0a" stroke="#000" stroke-width="1"/>
+  <path d="M226,20 C230,26 232,32 232,38" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>`;
+}
+
+/* =========================================================
+   ДАННЫЕ: реальные марки и модели по классам мотоциклов/скутеров
    ========================================================= */
 const BIKE_CATALOG = {
+  scooter: {
+    label: 'Скутеры',
+    emoji: '🛵',
+    bikes: [
+      { id: 'starter',       name: 'Honda Dio 27',        price: 0,    power: 1, top: '60 км/ч', svgType: 'scooter' },
+      { id: 'honda-dio110',  name: 'Honda Dio 110 AF35',  price: 2500, power: 2, top: '65 км/ч', svgType: 'scooter' },
+      { id: 'honda-tact',    name: 'Honda Tact AF51',     price: 3500, power: 2, top: '60 км/ч', svgType: 'scooter' },
+      { id: 'suzuki-lets4',  name: "Suzuki Let's 4",      price: 4000, power: 2, top: '60 км/ч', svgType: 'scooter' },
+      { id: 'yamaha-jog',    name: 'Yamaha JOG ZR',       price: 4500, power: 3, top: '70 км/ч', svgType: 'scooter' },
+      { id: 'honda-zoomer',  name: 'Honda Zoomer',        price: 6000, power: 3, top: '75 км/ч', svgType: 'scooter' },
+    ]
+  },
   pitbike: {
     label: 'Питбайк',
     emoji: '🏍️',
@@ -627,7 +702,7 @@ const BIKE_CATALOG = {
   }
 };
 
-const STARTER_BIKE = { id: 'starter', name: 'Honda Dio 27', power: 1, emoji: '🛵' };
+const STARTER_BIKE = { id: 'starter', name: 'Honda Dio 27', power: 1, emoji: '🛵', svgType: 'scooter' };
 
 const TUNING_TYPES = [
   { id: 'engine',     name: 'Двигатель', icon: '⚙️', baseCost: 400, costMult: 1.6,  powerPerLevel: 3, maxLevel: 10 },
@@ -726,7 +801,15 @@ function renderGarage() {
   document.getElementById('active-bike-name').innerText = bike.name;
   document.getElementById('points-display').innerText = fmt(state.coins) + ' pts';
   document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
-  document.getElementById('bike-emoji').innerText = bike.emoji || '🏍️';
+
+  const iconEl = document.getElementById('bike-emoji');
+  if (bike.svgType === 'scooter') {
+    iconEl.classList.add('is-svg');
+    iconEl.innerHTML = scooterSvgMarkup('scooter-icon-garage');
+  } else {
+    iconEl.classList.remove('is-svg');
+    iconEl.innerText = bike.emoji || '🏍️';
+  }
 
   const list = document.getElementById('tuning-list');
   list.innerHTML = '';
@@ -773,7 +856,7 @@ function renderGarage() {
 /* =========================================================
    РЕНДЕР: магазин
    ========================================================= */
-let activeShopTab = 'pitbike';
+let activeShopTab = 'scooter';
 
 function renderShopTabs() {
   const tabsEl = document.getElementById('shop-tabs');
@@ -798,7 +881,7 @@ function renderBikeList() {
   const cat = BIKE_CATALOG[activeShopTab];
 
   cat.bikes.forEach(bike => {
-    const owned = state.ownedBikeIds.includes(bike.id);
+    const owned = bike.id === 'starter' || state.ownedBikeIds.includes(bike.id);
     const selected = state.activeBikeId === bike.id;
     const canAfford = state.coins >= bike.price;
 
@@ -814,8 +897,10 @@ function renderBikeList() {
       btnHtml = `<button class="bike-btn buy" data-buy="${bike.id}" ${canAfford ? '' : 'disabled'}>🪙 ${fmt(bike.price)}</button>`;
     }
 
+    const iconInner = bike.svgType === 'scooter' ? scooterSvgMarkup('scooter-icon-card') : cat.emoji;
+
     card.innerHTML = `
-      <div class="bike-card-emoji">${cat.emoji}</div>
+      <div class="bike-card-emoji">${iconInner}</div>
       <div class="bike-card-info">
         <div class="bike-card-name">${bike.name}</div>
         <div class="bike-card-stats">Сила клика: ${bike.power} · Макс. скорость: ${bike.top}</div>
@@ -1001,14 +1086,58 @@ const stuntResultEl  = document.getElementById('stunt-result');
 const stuntResultStatsEl = document.getElementById('stunt-result-stats');
 const gasZone   = document.getElementById('stunt-gas');
 const brakeZone = document.getElementById('stunt-brake');
+const stuntSceneEl  = document.querySelector('.stunt-scene');
+const sparkAnchorEl = document.getElementById('stunt-spark-anchor');
 
-const STUNT_MAX_ANGLE = 92;   // угол — заваливаемся назад (крашимся)
+const STUNT_MAX_ANGLE = 92;   // угол — заваливаемся назад (крашимся, крыло чиркает по асфальту)
 const STUNT_MIN_ANGLE = -18;  // угол — зарываемся передним колесом (крашимся)
+const SPARK_ANGLE_THRESHOLD = 88; // с этого угла заднее крыло уже касается асфальта — летят искры
+const SPARK_INTERVAL_MS = 45;
 
 let stunt = null; // объект состояния текущего заезда
+let lastSparkTs = 0;
 
 function stuntCoinsForState(elapsedSec, maxAngle) {
   return Math.floor(elapsedSec * 18 + maxAngle * 5);
+}
+
+/* --- искры --- */
+function clearSparks() {
+  stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
+}
+
+function spawnSparkBurst(count) {
+  const anchorRect = sparkAnchorEl.getBoundingClientRect();
+  const sceneRect = stuntSceneEl.getBoundingClientRect();
+  const baseX = anchorRect.left - sceneRect.left;
+  const baseY = anchorRect.top - sceneRect.top;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'spark-particle';
+    const angleDeg = -100 + (Math.random() * 80 - 40); // разлёт назад-вверх/вниз от точки касания
+    const dist = 16 + Math.random() * 26;
+    const rad = angleDeg * Math.PI / 180;
+    const sx = Math.cos(rad) * dist;
+    const sy = Math.sin(rad) * dist;
+    el.style.left = baseX + 'px';
+    el.style.top = baseY + 'px';
+    el.style.setProperty('--sx', sx.toFixed(1) + 'px');
+    el.style.setProperty('--sy', sy.toFixed(1) + 'px');
+    el.style.setProperty('--sa', (Math.random() * 360).toFixed(0) + 'deg');
+    stuntSceneEl.appendChild(el);
+    setTimeout(() => el.remove(), 550);
+  }
+}
+
+function maybeSpawnSparks(ts) {
+  if (!stunt || stunt.crashed) return;
+  if (stunt.angle >= SPARK_ANGLE_THRESHOLD) {
+    if (ts - lastSparkTs > SPARK_INTERVAL_MS) {
+      spawnSparkBurst(2 + Math.floor(Math.random() * 2));
+      lastSparkTs = ts;
+    }
+  }
 }
 
 function openStunt() {
@@ -1024,8 +1153,20 @@ function openStunt() {
     lastTs: null,
     rafId: null,
   };
+  lastSparkTs = 0;
+  clearSparks();
   stuntResultEl.classList.add('hidden');
   stuntOverlay.classList.remove('hidden');
+
+  const bike = activeBike();
+  if (bike.svgType === 'scooter') {
+    stuntBikeEl.classList.add('is-svg');
+    stuntBikeEl.innerHTML = scooterSvgMarkup('scooter-icon-stunt');
+  } else {
+    stuntBikeEl.classList.remove('is-svg');
+    stuntBikeEl.innerText = bike.emoji || '🏍️';
+  }
+
   stuntBikeEl.style.transform = 'rotate(0deg)';
   stuntTimerEl.innerText = '0.0';
   stuntAngleEl.innerText = '0';
@@ -1036,6 +1177,7 @@ function openStunt() {
 function closeStunt() {
   if (stunt && stunt.rafId) cancelAnimationFrame(stunt.rafId);
   stunt = null;
+  clearSparks();
   stuntOverlay.classList.add('hidden');
 }
 
@@ -1072,9 +1214,15 @@ function stuntTick(ts) {
   stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
   stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.elapsed, stunt.maxAngle));
 
+  // --- искры от заднего крыла на большом угле ---
+  maybeSpawnSparks(ts);
+
   // --- проверка краша ---
   if (stunt.angle >= STUNT_MAX_ANGLE || stunt.angle <= STUNT_MIN_ANGLE) {
     stunt.crashed = true;
+    if (stunt.angle >= STUNT_MAX_ANGLE) {
+      spawnSparkBurst(16); // крупный сноп искр в момент удара крыла об асфальт
+    }
     finishStunt();
     return;
   }
