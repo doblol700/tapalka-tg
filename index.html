@@ -75,8 +75,8 @@
   }
 
   .stats-text { font-size: 13px; line-height: 1.2; }
-  .level-bar { width: 90px; height: 5px; background: #4a5568; border-radius: 3px; margin-top: 4px; }
-  .level-progress { width: 78%; height: 100%; background-color: var(--accent-orange); border-radius: 3px; }
+  .level-bar { width: 90px; height: 5px; background: #4a5568; border-radius: 3px; margin-top: 4px; overflow: hidden; }
+  .level-progress { width: 0%; height: 100%; background-color: var(--accent-orange); border-radius: 3px; transition: width 0.3s ease; }
 
   .currency-panel { display: flex; gap: 8px; }
   .currency-item {
@@ -138,7 +138,6 @@
     pointer-events: none;
   }
 
-  /* Статичный скутер в гараже (без вращения при тапе) */
   .bike-emoji-btn {
     font-size: 92px;
     line-height: 1;
@@ -340,12 +339,12 @@
   }
   .start-stunt-btn:active { transform: scale(0.98); }
 
-  /* --- СТАНТ-ЗАЕЗД: ОВЕРЛЕЙ --- */
+  /* --- СТАНТ-ЗАЕЗД: ОВЕРЛЕЙ (ПЕРЕРАБОТАННАЯ ЛОКАЦИЯ) --- */
   .stunt-overlay {
     position: fixed;
     inset: 0;
     z-index: 100;
-    background: linear-gradient(180deg, #0b1220 0%, #16202e 55%, #0d1117 100%);
+    background: linear-gradient(180deg, #030712 0%, #0f172a 60%, #1e1b4b 100%);
     display: flex;
     flex-direction: column;
   }
@@ -356,9 +355,10 @@
     justify-content: space-around;
     padding: 12px 10px 6px;
     flex-shrink: 0;
+    z-index: 5;
   }
   .stunt-hud-item {
-    background: rgba(15,23,42,0.7);
+    background: rgba(15,23,42,0.85);
     border: 1px solid rgba(34,211,238,0.4);
     border-radius: 8px;
     padding: 6px 12px;
@@ -371,20 +371,22 @@
     flex-grow: 1;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(180deg, #0b1220 0%, #16202e 100%);
+    background: linear-gradient(180deg, #050b14 0%, #0f172a 50%, #1e293b 100%);
   }
   
+  /* Ночной городской фон с огнями и зданиями */
   .stunt-scene::before {
     content: '';
     position: absolute;
     bottom: 34%;
     left: 0; right: 0;
-    height: 50%;
-    background-image:
-        linear-gradient(180deg, transparent 0%, #0d1117 100%),
-        repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 40px, transparent 40px, transparent 80px),
-        repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 50px, transparent 50px, transparent 100px);
-    background-size: 100% 100%, 150px 100%, 80px 70%;
+    height: 45%;
+    background-image: 
+      radial-gradient(circle at 15% 30%, rgba(34,211,238,0.15) 0%, transparent 40%),
+      radial-gradient(circle at 75% 20%, rgba(249,115,22,0.15) 0%, transparent 45%),
+      linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 120px 100%;
     background-position: bottom;
     z-index: 1;
     pointer-events: none;
@@ -412,21 +414,23 @@
     width: 100%;
     height: auto;
     display: block;
-    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7));
   }
 
+  /* Красивая детализированная дорога */
   .stunt-road {
     position: absolute;
     left: 0; right: 0;
     bottom: 0;
     height: 34%;
-    background-color: #1a1c23; 
+    background-color: #0f1218;
     background-image:
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.8) 0, rgba(255,255,255,0.8) 60px, transparent 60px, transparent 130px);
-    background-position: 0 20px;
-    background-size: 130px 6px;
-    border-top: 3px solid var(--accent-cyan);
-    box-shadow: inset 0 20px 20px -20px rgba(0,0,0,0.8);
+      linear-gradient(180deg, #1e293b 0%, #090d16 100%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px);
+    background-position: 0 0, 0 18px;
+    background-size: 100% 100%, 140px 8px;
+    border-top: 4px solid var(--accent-cyan);
+    box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9);
     z-index: 2;
   }
 
@@ -434,6 +438,7 @@
     display: flex;
     height: 26%;
     flex-shrink: 0;
+    z-index: 5;
   }
   .stunt-zone {
     flex: 1;
@@ -473,17 +478,17 @@
     color: var(--text-color);
     font-size: 15px;
     cursor: pointer;
-    z-index: 5;
+    z-index: 10;
   }
 
   .stunt-result {
     position: absolute;
     inset: 0;
-    z-index: 10;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.75);
   }
   .stunt-result.hidden { display: none; }
   .stunt-result-card {
@@ -525,6 +530,32 @@
     0%   { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); }
     100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); }
   }
+
+  /* Модальное окно повышения уровня */
+  .level-up-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+  }
+  .level-up-modal.hidden { display: none; }
+  .level-up-card {
+    background: var(--card-bg);
+    border: 2px solid var(--accent-orange);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    width: 82%;
+    max-width: 320px;
+    box-shadow: 0 0 25px rgba(249,115,22,0.6);
+  }
+  .level-up-title { font-size: 20px; font-weight: bold; color: var(--accent-orange); margin-bottom: 8px; text-shadow: 0 0 10px rgba(249,115,22,0.5); }
+  .level-up-desc { font-size: 14px; color: var(--text-color); margin-bottom: 18px; line-height: 1.5; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
 <body>
@@ -537,8 +568,8 @@
       <div class="avatar-placeholder" id="avatar-placeholder">VIP</div>
       <div class="stats-text">
         <strong id="user-nickname">RIDERNICK</strong><br>
-        Lv 15
-        <div class="level-bar"><div class="level-progress"></div></div>
+        <span id="user-level-label">Lv 1</span>
+        <div class="level-bar"><div class="level-progress" id="level-progress-bar"></div></div>
       </div>
     </div>
     <div class="currency-panel">
@@ -620,7 +651,6 @@
   <div class="stunt-scene" id="stunt-scene">
     <div class="stunt-bike-wrap">
       <div class="stunt-bike" id="stunt-bike">🏍️</div>
-      <!-- Точка генерации искр от заднего крыла -->
       <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div> 
     </div>
     <div class="stunt-road" id="stunt-road"></div>
@@ -646,6 +676,15 @@
   </div>
 
   <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
+</div>
+
+<!-- ОКНО ПОВЫШЕНИЯ УРОВНЯ -->
+<div id="level-up-modal" class="level-up-modal hidden">
+  <div class="level-up-card">
+    <div class="level-up-title">🎉 Поздравляем!</div>
+    <div class="level-up-desc" id="level-up-desc">Вы достигли 2 уровня и получаете 250 валюты.</div>
+    <button id="level-up-ok-btn" class="claim-btn" style="width: 100%;">Отлично!</button>
+  </div>
 </div>
 
 <script>
@@ -727,6 +766,16 @@ const MISSIONS = [
 ];
 
 /* =========================================================
+   ТАБЛИЦА УРОВНЕЙ И ЭКСПЫ
+   ========================================================= */
+const LEVEL_REQUIREMENTS = {
+  2: { exp: 200, reward: 250 },
+  3: { exp: 300, reward: 350 },
+  4: { exp: 450, reward: 500 },
+  5: { exp: 700, reward: 800 }
+};
+
+/* =========================================================
    СОСТОЯНИЕ ИГРЫ
    ========================================================= */
 const SAVE_KEY = 'motoTapalkaSave';
@@ -735,6 +784,8 @@ function defaultState() {
   return {
     coins: 500,
     totalTaps: 0,
+    level: 1,
+    exp: 0,
     ownedBikeIds: [],
     activeBikeId: 'starter',
     tuning: { engine: 0, exhaust: 0, suspension: 0, tires: 0 },
@@ -788,12 +839,61 @@ function fmt(n) {
   return Math.round(n).toLocaleString('ru-RU');
 }
 
+/* =========================================================
+   ПРОВЕРКА И НАЧИСЛЕНИЕ ОПЫТА / УРОВНЕЙ
+   ========================================================= */
+function addExp(amount) {
+  state.exp += amount;
+  checkLevelUp();
+  saveState();
+  renderTop();
+}
+
+function checkLevelUp() {
+  let nextLevel = state.level + 1;
+  if (LEVEL_REQUIREMENTS[nextLevel]) {
+    let reqExp = LEVEL_REQUIREMENTS[nextLevel].exp;
+    if (state.exp >= reqExp) {
+      let reward = LEVEL_REQUIREMENTS[nextLevel].reward;
+      state.level = nextLevel;
+      state.coins += reward;
+      
+      // Показываем модальное окно повышения уровня
+      showLevelUpModal(state.level, reward);
+      checkLevelUp(); // На случай если набралось на несколько уровней сразу
+    }
+  }
+}
+
+function showLevelUpModal(lvl, reward) {
+  const modal = document.getElementById('level-up-modal');
+  const desc = document.getElementById('level-up-desc');
+  desc.innerText = `Вы достигли ${lvl} уровня и получаете ${fmt(reward)} валюты.`;
+  modal.classList.remove('hidden');
+}
+
+document.getElementById('level-up-ok-btn').addEventListener('click', () => {
+  document.getElementById('level-up-modal').classList.add('hidden');
+});
+
 function renderTop() {
   document.getElementById('coins-display').innerText = '🪙 ' + fmt(state.coins);
+  document.getElementById('user-level-label').innerText = 'Lv ' + state.level;
+  
+  // Расчет прогресс-бара уровня
+  let currentTargetExp = LEVEL_REQUIREMENTS[state.level + 1] ? LEVEL_REQUIREMENTS[state.level + 1].exp : (LEVEL_REQUIREMENTS[5].exp + 500);
+  let prevTargetExp = LEVEL_REQUIREMENTS[state.level] ? LEVEL_REQUIREMENTS[state.level].exp : 0;
+  let progressPercent = 100;
+  if (LEVEL_REQUIREMENTS[state.level + 1]) {
+    let span = currentTargetExp - prevTargetExp;
+    let currentInLevel = state.exp - prevTargetExp;
+    progressPercent = Math.min(100, Math.max(0, (currentInLevel / span) * 100));
+  }
+  document.getElementById('level-progress-bar').style.width = progressPercent + '%';
 }
 
 /* =========================================================
-   РЕНДЕР ГАРАЖА (Скутер стоит статично)
+   РЕНДЕР ГАРАЖА (Главное меню не тронуто)
    ========================================================= */
 function renderGarage() {
   const bike = activeBike();
@@ -994,13 +1094,14 @@ function renderMissions() {
 }
 
 /* =========================================================
-   ОБРАБОТКА ТАПА В ГАРАЖЕ (без движения скутера)
+   ОБРАБОТКА ТАПА В ГАРАЖЕ (с начислением EXP)
    ========================================================= */
 const tapZone = document.getElementById('tap-zone');
 tapZone.addEventListener('click', (e) => {
   const gain = perTapValue();
   state.coins += gain;
   state.totalTaps += 1;
+  addExp(1); // Добавляем 1 очко опыта за каждый тап
   saveState();
 
   document.getElementById('points-display').innerText = fmt(state.coins) + ' pts';
@@ -1066,7 +1167,7 @@ function initTelegramUser() {
 }
 
 /* =========================================================
-   СТАНТ-ЗАЕЗД И ИСКРЫ ОТ КРЫЛА
+   СТАНТ-ЗАЕЗД И ИСКРЫ ОТ КРЫЛА (С уменьшенной наградой)
    ========================================================= */
 const stuntOverlay   = document.getElementById('stunt-overlay');
 const stuntBikeEl    = document.getElementById('stunt-bike');
@@ -1083,14 +1184,15 @@ const sparkAnchorEl = document.getElementById('stunt-spark-anchor');
 
 const STUNT_MAX_ANGLE = 92;
 const STUNT_MIN_ANGLE = -18;
-const SPARK_ANGLE_THRESHOLD = 86; // Угол, при котором заднее крыло чиркает асфальт
+const SPARK_ANGLE_THRESHOLD = 86;
 const SPARK_INTERVAL_MS = 40;
 
 let stunt = null; 
 let lastSparkTs = 0;
 
 function stuntCoinsForState(elapsedSec, maxAngle) {
-  return Math.floor(elapsedSec * 18 + maxAngle * 5);
+  // Награда за стант существенно снижена
+  return Math.max(1, Math.floor(elapsedSec * 6 + maxAngle * 1.5));
 }
 
 function clearSparks() {
@@ -1198,7 +1300,7 @@ function stuntTick(ts) {
   stunt.roadOffset -= stunt.speed * dt * 4;
 
   stuntBikeEl.style.transform = 'rotate(' + (-stunt.angle) + 'deg)';
-  stuntRoadEl.style.backgroundPosition = stunt.roadOffset + 'px 20px';
+  stuntRoadEl.style.backgroundPosition = '0 0, ' + stunt.roadOffset + 'px 18px';
   stuntTimerEl.innerText = stunt.elapsed.toFixed(1);
   stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
   stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.elapsed, stunt.maxAngle));
@@ -1230,6 +1332,7 @@ function finishStunt() {
 function claimStuntReward() {
   const reward = parseInt(stuntResultEl.dataset.reward || '0', 10);
   state.coins += reward;
+  addExp(Math.floor(stunt.elapsed * 5)); // Начисляем немного опыта за стант-заезд
   saveState();
   renderTop();
   renderGarage();
