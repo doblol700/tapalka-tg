@@ -10,7 +10,7 @@
             --text-color: #e2e8f0;
             --accent-orange: #f97316;
             --accent-cyan: #22d3ee;
-            --ui-bg: rgba(15, 23, 42, 0.7);
+            --ui-bg: rgba(15, 23, 42, 0.8);
             --glow: 0 0 10px var(--accent-cyan);
             --glow-orange: 0 0 10px var(--accent-orange);
         }
@@ -26,12 +26,11 @@
             overflow: hidden;
         }
 
-        /* --- ОБЩИЙ КОНТЕЙНЕР (С ФОНОМ) --- */
+        /* --- ОБЩИЙ КОНТЕЙНЕР С ФОНОМ GARAGE1 --- */
         #app-container {
             height: 100%;
             width: 100%;
-            /* ЗАМЕНИТЕ НА ССЫЛКУ НА ВАШУ КАРТИНКУ ГАРАЖА */
-            background-image: url('URL-TO-YOUR-GARAGE-BACKGROUND.jpg');
+            background-image: url('garage1.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -43,11 +42,11 @@
         .top-panel {
             display: flex;
             justify-content: space-between;
-            padding: 10px;
+            align-items: center;
+            padding: 10px 15px;
             background: var(--ui-bg);
             border-bottom: 2px solid var(--accent-cyan);
             box-shadow: var(--glow);
-            margin-bottom: 20px;
         }
 
         .user-info {
@@ -56,54 +55,59 @@
             gap: 10px;
         }
 
-        .avatar-img {
-            width: 50px;
-            height: 50px;
+        .avatar-placeholder {
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             border: 2px solid var(--accent-orange);
+            background: #2d3748;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
             box-shadow: var(--glow-orange);
         }
 
         .stats-text {
-            font-size: 14px;
-            line-height: 1.3;
+            font-size: 13px;
+            line-height: 1.2;
         }
 
         .level-bar {
-            width: 100px;
-            height: 6px;
+            width: 90px;
+            height: 5px;
             background: #4a5568;
             border-radius: 3px;
-            margin-top: 5px;
+            margin-top: 4px;
         }
 
         .level-progress {
-            width: 78%; /* ПРОГРЕСС 78% */
+            width: 78%;
             height: 100%;
             background-color: var(--accent-orange);
             border-radius: 3px;
-            box-shadow: var(--glow-orange);
         }
 
         .currency-panel {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .currency-item {
-            background: #2d3748;
-            padding: 5px 10px;
+            background: rgba(45, 55, 72, 0.9);
+            padding: 5px 8px;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             border: 1px solid var(--accent-cyan);
-            box-shadow: var(--glow);
         }
 
-        /* --- 2. ЗОНА ТАПА (ЦЕНТР) --- */
+        /* --- 2. ЦЕНТР (ЗОНА ТАПА) --- */
         .tap-zone {
             flex-grow: 1;
             position: relative;
@@ -112,82 +116,58 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* Чтобы клик срабатывал на всей площади */
         }
 
-        /* Персонаж и Мотоцикл (Абсолютное позиционирование поверх фона) */
-        #character-img, #motorcycle-img {
-            position: absolute;
-            bottom: 50px; /* Отступ от нижней панели */
-            height: 50%; /* Занимает 50% высоты экрана */
-            width: auto;
-            pointer-events: none; /* Клик должен проходить сквозь картинки к зоне тапа */
-        }
-        #character-img {
-             left: 10%;
-             z-index: 2;
-        }
-        #motorcycle-img {
-             right: 10%;
-             z-index: 1;
-        }
-
-        /* Очки (Крупно в центре) */
+        /* Очки по центру */
         #points-display {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 64px;
+            font-size: 52px;
             font-weight: bold;
-            color: white;
-            text-shadow: 0 0 20px var(--accent-orange), 0 0 30px var(--accent-orange);
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px var(--accent-orange);
             z-index: 3;
             pointer-events: none;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        /* Плавающие бонусы */
+        /* Текстовые заглушки для персонажа и байка */
+        .placeholders-container {
+            display: flex;
+            gap: 20px;
+            z-index: 2;
+        }
+
+        .object-placeholder {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px dashed var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--accent-cyan);
+        }
+
+        /* Плавающие бонусы при клике */
         .floating-bonus {
             position: absolute;
-            font-size: 32px;
+            font-size: 24px;
             font-weight: bold;
             color: var(--accent-orange);
             z-index: 4;
             pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
+            animation: floatUp 0.8s ease-out forwards;
+            text-shadow: 0 0 5px #000;
         }
 
         @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
-        }
-
-        /* Эффект искр при тапе */
-        #sparkle-container {
-            position: absolute;
-            pointer-events: none;
-            z-index: 5;
-            width: 100%;
-            height: 100%;
-        }
-        .sparkle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: var(--accent-orange);
-            border-radius: 50%;
-            animation: spark 0.5s ease-out forwards;
-        }
-        @keyframes spark {
-            0% { transform: scale(1) translate(0,0); opacity: 1; }
-            100% { transform: scale(0.1) translate(var(--tx), var(--ty)); opacity: 0; }
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-70px); }
         }
 
         /* --- 3. НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ --- */
         .nav-panel {
             display: flex;
             justify-content: space-around;
-            padding: 15px 10px;
+            padding: 12px 5px;
             background: var(--ui-bg);
             border-top: 2px solid var(--accent-cyan);
             box-shadow: var(--glow);
@@ -198,30 +178,18 @@
             cursor: pointer;
             color: var(--accent-cyan);
             opacity: 0.7;
-            transition: opacity 0.2s, color 0.2s;
-            width: 60px;
+            transition: opacity 0.2s;
         }
 
-        .nav-item:hover, .nav-item.active {
+        .nav-item.active {
             opacity: 1;
         }
 
-        .nav-icon-img {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 5px;
-            filter: drop-shadow(0 0 10px var(--accent-cyan));
-            transition: filter 0.2s;
-        }
-        .nav-item.active .nav-icon-img {
-            filter: drop-shadow(0 0 15px var(--accent-orange));
-        }
-
         .nav-text-label {
-            font-size: 14px;
+            font-size: 11px;
             font-weight: bold;
             text-transform: uppercase;
-            transition: color 0.2s;
+            margin-top: 4px;
         }
         .nav-item.active .nav-text-label {
             color: var(--accent-orange);
@@ -235,8 +203,7 @@
         <!-- Верхняя панель -->
         <div class="top-panel">
             <div class="user-info">
-                <!-- ЗАМЕНИТЕ НА ССЫЛКУ НА ВАШУ АВАТАРКУ -->
-                <img src="URL-TO-YOUR-AVATAR.jpg" alt="Avatar" class="avatar-img">
+                <div class="avatar-placeholder">VIP</div>
                 <div class="stats-text">
                     <strong>RIDERNICK</strong><br>
                     Lv 15
@@ -244,46 +211,38 @@
                 </div>
             </div>
             <div class="currency-panel">
-                <div class="currency-item">
-                    🪙 4,580
-                </div>
-                <div class="currency-item">
-                    💰 150
-                </div>
+                <div class="currency-item">🪙 4,580</div>
+                <div class="currency-item">💰 150</div>
             </div>
         </div>
 
-        <!-- Зона тапа (Центр) -->
+        <!-- Центральная зона тапа -->
         <div id="tap-zone" class="tap-zone">
-             <!-- Элементы управления (кликабельный контент) -->
-            <div id="points-display">95 560 pts</div>
-
-             <!-- ЗАМЕНИТЕ НА ССЫЛКИ НА ВАШИ ИЗОБРАЖЕНИЯ (прозрачный png) -->
-            <img id="character-img" src="URL-TO-YOUR-CHARACTER.png" alt="Мотоциклист">
-            <img id="motorcycle-img" src="URL-TO-YOUR-MOTORCYCLE.png" alt="Мотоцикл">
-
-            <!-- Контейнер для эффектов (генерируется JS) -->
-            <div id="sparkle-container"></div>
+            <div id="points-display">95 360 pts</div>
+            
+            <div class="placeholders-container">
+                <div class="object-placeholder">🏍️ Мотоциклист</div>
+                <div class="object-placeholder">🏍️ Мотоцикл</div>
+            </div>
         </div>
 
-        <!-- Нижняя панель навигации -->
+        <!-- Нижняя панель -->
         <div class="nav-panel">
             <div class="nav-item active">
-                <!-- ЗАМЕНИТЕ НА ССЫЛКИ НА ВАШИ ИКОНКИ (прозрачный png) -->
-                <img class="nav-icon-img" src="URL-TO-ICON-GARAGE.png" alt="Garage">
-                <div class="nav-text-label">GARAGE</div>
+                <div style="font-size: 18px;">🔧</div>
+                <div class="nav-text-label">Garage</div>
             </div>
             <div class="nav-item">
-                <img class="nav-icon-img" src="URL-TO-ICON-MOTO-SHOP.png" alt="Moto Shop">
-                <div class="nav-text-label">MOTO SHOP</div>
+                <div style="font-size: 18px;">🛒</div>
+                <div class="nav-text-label">Shop</div>
             </div>
             <div class="nav-item">
-                <img class="nav-icon-img" src="URL-TO-ICON-MISSIONS.png" alt="Missions">
-                <div class="nav-text-label">MISSIONS</div>
+                <div style="font-size: 18px;">🎯</div>
+                <div class="nav-text-label">Missions</div>
             </div>
             <div class="nav-item">
-                <img class="nav-icon-img" src="URL-TO-ICON-CLAN.png" alt="Clan">
-                <div class="nav-text-label">CLAN</div>
+                <div style="font-size: 18px;">👥</div>
+                <div class="nav-text-label">Clan</div>
             </div>
         </div>
     </div>
@@ -291,51 +250,24 @@
     <script>
         const tapZone = document.getElementById('tap-zone');
         const pointsDisplay = document.getElementById('points-display');
-        const sparkleContainer = document.getElementById('sparkle-container');
-        let currentPoints = 95560;
+        let currentPoints = 95360;
 
         tapZone.addEventListener('click', (e) => {
-            // Обновляем счет
             currentPoints += 100;
             pointsDisplay.innerText = currentPoints.toLocaleString('ru-RU') + ' pts';
 
-            // Создаем эффект искр в точке клика
-            createSparkles(e.clientX, e.clientY);
-
-            // Показываем плавающий бонус
-            createFloatingBonus(e.clientX, e.clientY);
-        });
-
-        function createSparkles(x, y) {
-            const numSparkles = 10;
-            for (let i = 0; i < numSparkles; i++) {
-                const s = document.createElement('div');
-                s.classList.add('sparkle');
-                // Позиционируем относительно контейнера
-                const rect = sparkleContainer.getBoundingClientRect();
-                s.style.left = `${x - rect.left}px`;
-                s.style.top = `${y - rect.top}px`;
-
-                // Случайное направление разлета
-                s.style.setProperty('--tx', `${(Math.random() - 0.5) * 200}px`);
-                s.style.setProperty('--ty', `${(Math.random() - 0.5) * 200}px`);
-                sparkleContainer.appendChild(s);
-                // Удаляем элемент после анимации
-                setTimeout(() => s.remove(), 500);
-            }
-        }
-
-        function createFloatingBonus(x, y) {
+            // Создаем всплывающий текст +100 XP
             const b = document.createElement('div');
             b.classList.add('floating-bonus');
             b.innerText = '+100 XP';
-            // Позиционируем относительно контейнера
-            const rect = sparkleContainer.getBoundingClientRect();
-            b.style.left = `${x - rect.left + 20}px`;
-            b.style.top = `${y - rect.top - 20}px`;
-            sparkleContainer.appendChild(b);
-            setTimeout(() => b.remove(), 1000);
-        }
+            
+            const rect = tapZone.getBoundingClientRect();
+            b.style.left = `${e.clientX - rect.left - 20}px`;
+            b.style.top = `${e.clientY - rect.top - 40}px`;
+            
+            tapZone.appendChild(b);
+            setTimeout(() => b.remove(), 800);
+        });
     </script>
 
 </body>
