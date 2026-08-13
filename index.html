@@ -3,85 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Telegram Tapalka</title>
-    <!-- Подключаем Telegram Web App скрипт -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Мототапалка - Главная</title>
     <style>
-        body {
+        :root {
+            --bg-color: #1a202c;
+            --accent-color: #f97316; /* Оранжевый */
+            --neon-blue: #22d3ee;
+            --text-color: #e2e8f0;
+            --ui-bg: rgba(15, 23, 42, 0.7);
+        }
+
+        body, html {
             margin: 0;
             padding: 0;
-            background-color: var(--tg-theme-bg-color, #1f1f1f);
-            color: var(--tg-theme-text-color, #ffffff);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        /* Фоновый рисунок (детализированный гараж) */
+        #app-container {
+            height: 100%;
+            width: 100%;
+            background-image: url('URL-TO-YOUR-GARAGE-BACKGROUND.jpg');
+            background-size: cover;
+            background-position: center;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* --- ВЕРХНЯЯ ПАНЕЛЬ --- */
+        .top-panel {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: var(--ui-bg);
+            border-bottom: 2px solid var(--neon-blue);
+            margin-bottom: 20px;
+        }
+        .user-info {
+            display: flex;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            user-select: none;
-            -webkit-user-select: none;
+            gap: 10px;
+        }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+        }
+        .stats-text {
+            font-size: 14px;
+            line-height: 1.3;
+        }
+        .level-bar {
+            width: 100px;
+            height: 5px;
+            background: #4a5568;
+            border-radius: 2.5px;
+            margin-top: 5px;
+        }
+        .level-progress {
+            width: 78%;
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 2.5px;
+        }
+        .currency-panel {
+            display: flex;
+            gap: 10px;
+        }
+        .currency-item {
+            background: #2d3748;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .container {
-            text-align: center;
+        /* --- ЗОНА ТАПА (ЦЕНТР) --- */
+        .tap-zone {
+            flex-grow: 1;
+            position: relative;
+            cursor: pointer;
+            /* ВАЖНО: Делаем кликабельным весь контент внутри, который будет отрисован абсолютно */
         }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+        /* Персонаж и мотоцикл (картинки с абсолютным позиционированием) */
+        #character {
+            position: absolute;
+            bottom: 50px;
+            left: 20px;
+            width: 60%;
+            height: auto;
+            z-index: 2;
+            pointer-events: none; /* Чтобы клик проходил сквозь изображение */
+        }
+        #motorcycle {
+            position: absolute;
+            bottom: 50px;
+            right: 20px;
+            width: 40%;
+            height: auto;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        #score {
+        /* Очки и бонусы (с абсолютным позиционированием) */
+        #points-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             font-size: 48px;
             font-weight: bold;
-            margin-bottom: 30px;
-            color: var(--tg-theme-button-color, #3ffa8b);
+            color: white;
+            text-shadow: 0 0 10px var(--accent-color);
+            z-index: 3;
+            pointer-events: none;
+        }
+        .floating-xp {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-color);
+            z-index: 4;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
         }
 
-        .coin-btn {
-            width: 200px;
-            height: 200px;
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+
+        /* Эффект искр при тапе */
+        #sparkles {
+            position: absolute;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-color);
             border-radius: 50%;
-            background: linear-gradient(135deg, #f5af19, #f2994a);
-            border: none;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: transform 0.1s ease;
-            outline: none;
+            animation: spark 0.5s ease-out forwards;
         }
 
-        .coin-btn:active {
-            transform: scale(0.92);
+        @keyframes spark {
+            0% { transform: scale(1) translate(0,0); opacity: 1; }
+            100% { transform: scale(0.1) translate(var(--tx), var(--ty)); opacity: 0; }
         }
+
+
+        /* --- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ --- */
+        .nav-panel {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 10px;
+            background: var(--ui-bg);
+            border-top: 2px solid var(--neon-blue);
+        }
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            color: var(--neon-blue);
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .nav-item:hover, .nav-item.active {
+            opacity: 1;
+        }
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 0 5px var(--neon-blue));
+        }
+        .nav-item.active .nav-icon {
+            filter: drop-shadow(0 0 10px var(--neon-blue));
+        }
+        .nav-text {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .nav-item.active .nav-text {
+            color: var(--accent-color);
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Мой Кликен</h1>
-        <div id="score">0</div>
-        <button class="coin-btn" id="tapButton"></button>
+    <div id="app-container">
+        <!-- Верхняя панель -->
+        <div class="top-panel">
+            <div class="user-info">
+                <img src="URL-TO-YOUR-AVATAR.jpg" alt="Аватар" class="avatar">
+                <div class="stats-text">
+                    <strong>RIDERNICK</strong><br>
+                    Lv 15
+                    <div class="level-bar"><div class="level-progress"></div></div>
+                </div>
+            </div>
+            <div class="currency-panel">
+                <div class="currency-item">
+                    <span>🪙</span> 4,580
+                </div>
+                <div class="currency-item">
+                    <span>💰</span> 150
+                </div>
+                 <div class="currency-item">
+                    <span>⛽</span> 150
+                </div>
+            </div>
+        </div>
+
+        <!-- Зона тапа (Центр) -->
+        <div id="tap-zone" class="tap-zone">
+            <img id="character" src="URL-TO-YOUR-CHARACTER.png" alt="Мотоциклист">
+            <img id="motorcycle" src="URL-TO-YOUR-MOTORCYCLE.png" alt="Мотоцикл">
+            <div id="points-display">94,760 pts</div>
+        </div>
+
+        <!-- Нижняя панель навигации -->
+        <div class="nav-panel">
+            <div class="nav-item active">
+                <img class="nav-icon" src="URL-TO-ICON-GARAGE.png" alt="Garage">
+                <div class="nav-text">Garage</div>
+            </div>
+            <div class="nav-item">
+                <img class="nav-icon" src="URL-TO-ICON-MOTO-SHOP.png" alt="Moto Shop">
+                <div class="nav-text">Moto Shop</div>
+            </div>
+            <div class="nav-item">
+                <img class="nav-icon" src="URL-TO-ICON-MISSIONS.png" alt="Missions">
+                <div class="nav-text">Missions</div>
+            </div>
+            <div class="nav-item">
+                <img class="nav-icon" src="URL-TO-ICON-CLAN.png" alt="Clan">
+                <div class="nav-text">Clan</div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Инициализация Telegram Web App
-        let tg = window.Telegram.WebApp;
-        tg.expand(); // Растягиваем на весь экран
+        const tapZone = document.getElementById('tap-zone');
+        const pointsDisplay = document.getElementById('points-display');
+        let currentPoints = 94760;
 
-        let score = 0;
-        const scoreElement = document.getElementById('score');
-        const tapButton = document.getElementById('tapButton');
+        tapZone.addEventListener('click', (e) => {
+            // Обновляем счет
+            currentPoints += 100;
+            pointsDisplay.innerText = currentPoints.toLocaleString('ru-RU') + ' pts';
 
-        // Обработка клика / тапа
-        tapButton.addEventListener('click', () => {
-            score++;
-            scoreElement.textContent = score;
-            
-            // Легкая вибрация при клике (если поддерживается устройством)
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
+            // Создаем эффект искр в точке клика
+            createSparkles(e.clientX, e.clientY);
+
+            // Показываем плавающий бонус
+            createFloatingBonus(e.clientX, e.clientY);
         });
+
+        function createSparkles(x, y) {
+            const numSparkles = 10;
+            for (let i = 0; i < numSparkles; i++) {
+                const s = document.createElement('div');
+                s.classList.add('sparkle');
+                s.style.left = `${x}px`;
+                s.style.top = `${y}px`;
+                // Случайное направление разлета (от -100 до 100 пикселей)
+                s.style.setProperty('--tx', `${(Math.random() - 0.5) * 200}px`);
+                s.style.setProperty('--ty', `${(Math.random() - 0.5) * 200}px`);
+                document.body.appendChild(s);
+                // Удаляем элемент после анимации
+                setTimeout(() => s.remove(), 500);
+            }
+        }
+
+        function createFloatingBonus(x, y) {
+            const b = document.createElement('div');
+            b.classList.add('floating-xp');
+            b.innerText = '+100 X3';
+            // Позиционируем рядом с местом клика
+            b.style.left = `${x + 20}px`;
+            b.style.top = `${y - 20}px`;
+            document.body.appendChild(b);
+            setTimeout(() => b.remove(), 1000);
+        }
     </script>
+
 </body>
 </html>
