@@ -316,6 +316,156 @@
   .nav-item-icon { font-size: 20px; }
   .nav-text-label { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-top: 3px; }
   .nav-item.active .nav-text-label { color: var(--accent-orange); }
+
+  /* --- КНОПКА СТАРТ (в гараже) --- */
+  .start-stunt-wrap { padding: 4px 12px 18px; }
+  .start-stunt-btn {
+    width: 100%;
+    padding: 14px 10px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent-orange), #ea580c);
+    color: #1a1a1a;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 0 16px rgba(249,115,22,0.5);
+  }
+  .start-stunt-btn:active { transform: scale(0.98); }
+
+  /* --- СТАНТ-ЗАЕЗД: ОВЕРЛЕЙ --- */
+  .stunt-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: linear-gradient(180deg, #0b1220 0%, #16202e 55%, #0d1117 100%);
+    display: flex;
+    flex-direction: column;
+  }
+  .stunt-overlay.hidden { display: none; }
+
+  .stunt-hud {
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 10px 6px;
+    flex-shrink: 0;
+  }
+  .stunt-hud-item {
+    background: rgba(15,23,42,0.7);
+    border: 1px solid rgba(34,211,238,0.4);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: var(--glow);
+  }
+
+  .stunt-scene {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stunt-bike-wrap {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  .stunt-bike {
+    font-size: 72px;
+    display: inline-block;
+    transform-origin: 75% 85%;
+    transition: transform 0.05s linear;
+    filter: drop-shadow(0 0 14px rgba(249,115,22,0.6));
+  }
+
+  .stunt-road {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 0;
+    height: 34%;
+    background-color: #1c1f26;
+    background-image:
+      linear-gradient(180deg, rgba(34,211,238,0.15), transparent 40%),
+      repeating-linear-gradient(90deg, #f1f5f9 0 40px, transparent 40px 90px);
+    background-position: 0 0, 0 85%;
+    background-size: 100% 100%, 130px 6px;
+    border-top: 3px solid var(--accent-cyan);
+    box-shadow: 0 0 20px rgba(34,211,238,0.35);
+  }
+
+  .stunt-controls {
+    display: flex;
+    height: 26%;
+    flex-shrink: 0;
+  }
+  .stunt-zone {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .stunt-zone-icon { font-size: 34px; }
+  .stunt-zone.brake {
+    background: rgba(239,68,68,0.15);
+    border-top: 2px solid rgba(239,68,68,0.6);
+    color: #fca5a5;
+  }
+  .stunt-zone.brake.pressed { background: rgba(239,68,68,0.4); }
+  .stunt-zone.gas {
+    background: rgba(249,115,22,0.15);
+    border-top: 2px solid var(--accent-orange);
+    color: var(--accent-orange);
+  }
+  .stunt-zone.gas.pressed { background: rgba(249,115,22,0.45); }
+
+  .stunt-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(34,211,238,0.5);
+    background: rgba(15,23,42,0.75);
+    color: var(--text-color);
+    font-size: 15px;
+    cursor: pointer;
+    z-index: 5;
+  }
+
+  .stunt-result {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+  }
+  .stunt-result.hidden { display: none; }
+  .stunt-result-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(34,211,238,0.5);
+    border-radius: 14px;
+    padding: 22px 24px;
+    text-align: center;
+    width: 78%;
+    max-width: 320px;
+    box-shadow: var(--glow);
+  }
+  .stunt-result-title { font-size: 18px; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; }
+  .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
+  .stunt-result-stats b { color: var(--accent-cyan); }
 </style>
 </head>
 <body>
@@ -349,6 +499,9 @@
       </div>
       <div class="section-title">Тюнинг</div>
       <div class="tuning-list" id="tuning-list"></div>
+      <div class="start-stunt-wrap">
+        <button id="start-stunt-btn" class="start-stunt-btn">🏁 СТАРТ — СТАНТ ЗАЕЗД</button>
+      </div>
     </div>
 
     <!-- МАГАЗИН -->
@@ -394,6 +547,43 @@
     </div>
   </div>
 
+</div>
+
+<!-- СТАНТ-ЗАЕЗД (оверлей) -->
+<div id="stunt-overlay" class="stunt-overlay hidden">
+  <div class="stunt-hud">
+    <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
+    <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
+    <div class="stunt-hud-item">🪙 <span id="stunt-coins-preview">0</span></div>
+  </div>
+
+  <div class="stunt-scene">
+    <div class="stunt-bike-wrap">
+      <div class="stunt-bike" id="stunt-bike">🏍️</div>
+    </div>
+    <div class="stunt-road" id="stunt-road"></div>
+  </div>
+
+  <div class="stunt-controls">
+    <div class="stunt-zone brake" id="stunt-brake">
+      <div class="stunt-zone-icon">🛑</div>
+      <div class="stunt-zone-label">ТОРМОЗ</div>
+    </div>
+    <div class="stunt-zone gas" id="stunt-gas">
+      <div class="stunt-zone-icon">⚡</div>
+      <div class="stunt-zone-label">ГАЗ</div>
+    </div>
+  </div>
+
+  <div class="stunt-result hidden" id="stunt-result">
+    <div class="stunt-result-card">
+      <div class="stunt-result-title" id="stunt-result-title">Заезд окончен!</div>
+      <div class="stunt-result-stats" id="stunt-result-stats"></div>
+      <button id="stunt-claim-btn" class="claim-btn">Забрать награду</button>
+    </div>
+  </div>
+
+  <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
 </div>
 
 <script>
@@ -797,6 +987,142 @@ function initTelegramUser() {
     // не в Telegram / API недоступно — оставляем плейсхолдер
   }
 }
+
+/* =========================================================
+   СТАНТ-ЗАЕЗД
+   ========================================================= */
+const stuntOverlay   = document.getElementById('stunt-overlay');
+const stuntBikeEl    = document.getElementById('stunt-bike');
+const stuntRoadEl    = document.getElementById('stunt-road');
+const stuntTimerEl   = document.getElementById('stunt-timer');
+const stuntAngleEl   = document.getElementById('stunt-angle');
+const stuntCoinsEl   = document.getElementById('stunt-coins-preview');
+const stuntResultEl  = document.getElementById('stunt-result');
+const stuntResultStatsEl = document.getElementById('stunt-result-stats');
+const gasZone   = document.getElementById('stunt-gas');
+const brakeZone = document.getElementById('stunt-brake');
+
+const STUNT_MAX_ANGLE = 92;   // угол — заваливаемся назад (крашимся)
+const STUNT_MIN_ANGLE = -18;  // угол — зарываемся передним колесом (крашимся)
+
+let stunt = null; // объект состояния текущего заезда
+
+function stuntCoinsForState(elapsedSec, maxAngle) {
+  return Math.floor(elapsedSec * 18 + maxAngle * 5);
+}
+
+function openStunt() {
+  stunt = {
+    angle: 0,
+    speed: 30,
+    roadOffset: 0,
+    elapsed: 0,
+    maxAngle: 0,
+    gas: false,
+    brake: false,
+    crashed: false,
+    lastTs: null,
+    rafId: null,
+  };
+  stuntResultEl.classList.add('hidden');
+  stuntOverlay.classList.remove('hidden');
+  stuntBikeEl.style.transform = 'rotate(0deg)';
+  stuntTimerEl.innerText = '0.0';
+  stuntAngleEl.innerText = '0';
+  stuntCoinsEl.innerText = '0';
+  stunt.rafId = requestAnimationFrame(stuntTick);
+}
+
+function closeStunt() {
+  if (stunt && stunt.rafId) cancelAnimationFrame(stunt.rafId);
+  stunt = null;
+  stuntOverlay.classList.add('hidden');
+}
+
+function stuntTick(ts) {
+  if (!stunt || stunt.crashed) return;
+  if (stunt.lastTs === null) stunt.lastTs = ts;
+  const dt = Math.min((ts - stunt.lastTs) / 1000, 0.05);
+  stunt.lastTs = ts;
+
+  // --- физика ---
+  if (stunt.gas) {
+    stunt.angle += 55 * dt;
+    stunt.speed = Math.min(stunt.speed + 35 * dt, 100);
+  } else {
+    stunt.speed = Math.max(stunt.speed - 12 * dt, 22);
+  }
+  if (stunt.brake) {
+    stunt.angle -= 85 * dt;
+    stunt.speed = Math.max(stunt.speed - 70 * dt, 0);
+  }
+  // лёгкий естественный снос угла к нулю, если совсем нет газа
+  if (!stunt.gas && !stunt.brake) {
+    stunt.angle += (stunt.angle > 0 ? -1 : 1) * 8 * dt;
+  }
+
+  stunt.elapsed += dt;
+  stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
+  stunt.roadOffset -= stunt.speed * dt * 4;
+
+  // --- визуал ---
+  stuntBikeEl.style.transform = 'rotate(' + (-stunt.angle) + 'deg)';
+  stuntRoadEl.style.backgroundPosition = '0 0, ' + stunt.roadOffset + 'px 85%';
+  stuntTimerEl.innerText = stunt.elapsed.toFixed(1);
+  stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
+  stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.elapsed, stunt.maxAngle));
+
+  // --- проверка краша ---
+  if (stunt.angle >= STUNT_MAX_ANGLE || stunt.angle <= STUNT_MIN_ANGLE) {
+    stunt.crashed = true;
+    finishStunt();
+    return;
+  }
+
+  stunt.rafId = requestAnimationFrame(stuntTick);
+}
+
+function finishStunt() {
+  const reward = stuntCoinsForState(stunt.elapsed, stunt.maxAngle);
+  stuntResultStatsEl.innerHTML =
+    'Время в станте: <b>' + stunt.elapsed.toFixed(1) + 'с</b><br>' +
+    'Макс. угол: <b>' + Math.round(stunt.maxAngle) + '°</b><br>' +
+    'Награда: <b>🪙 ' + fmt(reward) + '</b>';
+  stuntResultEl.dataset.reward = reward;
+  stuntResultEl.classList.remove('hidden');
+}
+
+function claimStuntReward() {
+  const reward = parseInt(stuntResultEl.dataset.reward || '0', 10);
+  state.coins += reward;
+  saveState();
+  renderTop();
+  renderGarage();
+  renderMissions();
+  closeStunt();
+}
+
+document.getElementById('start-stunt-btn').addEventListener('click', openStunt);
+document.getElementById('stunt-close-btn').addEventListener('click', closeStunt);
+document.getElementById('stunt-claim-btn').addEventListener('click', claimStuntReward);
+
+function bindHold(el, onPress, onRelease) {
+  const press = (e) => { e.preventDefault(); onPress(); };
+  const release = (e) => { e.preventDefault(); onRelease(); };
+  el.addEventListener('pointerdown', press);
+  el.addEventListener('pointerup', release);
+  el.addEventListener('pointerleave', release);
+  el.addEventListener('pointercancel', release);
+}
+
+bindHold(gasZone,
+  () => { if (stunt && !stunt.crashed) { stunt.gas = true; gasZone.classList.add('pressed'); } },
+  () => { if (stunt) { stunt.gas = false; } gasZone.classList.remove('pressed'); }
+);
+bindHold(brakeZone,
+  () => { if (stunt && !stunt.crashed) { stunt.brake = true; brakeZone.classList.add('pressed'); } },
+  () => { if (stunt) { stunt.brake = false; } brakeZone.classList.remove('pressed'); }
+);
 
 /* =========================================================
    СТАРТ
