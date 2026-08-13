@@ -39,7 +39,7 @@
     background-image: url('garage1.jpg');
     background-size: cover;
     background-position: center;
-    background-color: #0b1220; /* Резервный цвет, если картинки гаража нет */
+    background-color: #0b1220;
     display: flex;
     flex-direction: column;
   }
@@ -138,16 +138,15 @@
     pointer-events: none;
   }
 
+  /* Статичный скутер в гараже (без вращения при тапе) */
   .bike-emoji-btn {
     font-size: 92px;
     line-height: 1;
-    filter: drop-shadow(0 0 18px rgba(249,115,22,0.55));
-    transition: transform 0.08s ease-out;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .bike-emoji-btn.is-svg { width: 190px; filter: none; }
+  .bike-emoji-btn.is-svg { width: 190px; }
 
   .floating-bonus {
     position: absolute;
@@ -324,7 +323,7 @@
   .nav-text-label { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-top: 3px; }
   .nav-item.active .nav-text-label { color: var(--accent-orange); }
 
-  /* --- КНОПКА СТАРТ (в гараже) --- */
+  /* --- СТАРТ СТАНТА --- */
   .start-stunt-wrap { padding: 4px 12px 18px; }
   .start-stunt-btn {
     width: 100%;
@@ -375,7 +374,6 @@
     background: linear-gradient(180deg, #0b1220 0%, #16202e 100%);
   }
   
-  /* Силуэты ночного города */
   .stunt-scene::before {
     content: '';
     position: absolute;
@@ -394,7 +392,7 @@
 
   .stunt-bike-wrap {
     position: absolute;
-    bottom: 34%; /* Скутер стоит ровно на дороге */
+    bottom: 34%;
     left: 50%;
     transform: translate(-50%, 0);
     z-index: 3;
@@ -407,7 +405,7 @@
   
   .stunt-bike {
     width: 100%;
-    transform-origin: 20% 85%; /* Ось на заднем колесе для подъема */
+    transform-origin: 20% 85%;
     transition: transform 0.05s linear;
   }
   .stunt-bike img {
@@ -417,7 +415,6 @@
     filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
   }
 
-  /* Дорога (темный асфальт и белая разметка) */
   .stunt-road {
     position: absolute;
     left: 0; right: 0;
@@ -503,7 +500,7 @@
   .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
   .stunt-result-stats b { color: var(--accent-cyan); }
 
-  /* --- ИСКРЫ (жестко привязаны к крылу и асфальту) --- */
+  /* --- ИСКРЫ ОТ ЗАДНЕГО КРЫЛА --- */
   .stunt-spark-anchor {
     position: absolute;
     bottom: 45px;
@@ -557,6 +554,7 @@
         <div class="active-bike-name" id="active-bike-name">Honda Dio 27</div>
         <div id="points-display">0 pts</div>
         <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
+        <!-- Статичный скутер в меню -->
         <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
       </div>
       <div class="section-title">Тюнинг</div>
@@ -622,7 +620,7 @@
   <div class="stunt-scene" id="stunt-scene">
     <div class="stunt-bike-wrap">
       <div class="stunt-bike" id="stunt-bike">🏍️</div>
-      <!-- Якорь для искр находится внутри контейнера со скутером -->
+      <!-- Точка генерации искр от заднего крыла -->
       <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div> 
     </div>
     <div class="stunt-road" id="stunt-road"></div>
@@ -652,28 +650,26 @@
 
 <script>
 /* =========================================================
-   ЗАМЕНА ВЕКТОРА НА ИЗОБРАЖЕНИЕ (Скутер)
-   Используется для гаража, карточек магазина и стант-заезда
+   ФУНКЦИЯ ВЫЗОВА PNG (дио1.png)
    ========================================================= */
-function scooterSvgMarkup(cls) {
-  // Теперь функция возвращает не вектор, а тег img с дио1.jpg
-  return `<img src="дио1.jpg" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Скутер">`;
+function scooterImageMarkup(cls) {
+  return `<img src="дио1.png" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Скутер">`;
 }
 
 /* =========================================================
-   ДАННЫЕ: реальные марки и модели по классам мотоциклов/скутеров
+   КАТАЛОГ МОТОЦИКЛОВ И СКУТЕРОВ
    ========================================================= */
 const BIKE_CATALOG = {
   scooter: {
     label: 'Скутеры',
     emoji: '🛵',
     bikes: [
-      { id: 'starter',       name: 'Honda Dio 27',        price: 0,    power: 1, top: '60 км/ч', svgType: 'scooter' },
-      { id: 'honda-dio110',  name: 'Honda Dio 110 AF35',  price: 2500, power: 2, top: '65 км/ч', svgType: 'scooter' },
-      { id: 'honda-tact',    name: 'Honda Tact AF51',     price: 3500, power: 2, top: '60 км/ч', svgType: 'scooter' },
-      { id: 'suzuki-lets4',  name: "Suzuki Let's 4",      price: 4000, power: 2, top: '60 км/ч', svgType: 'scooter' },
-      { id: 'yamaha-jog',    name: 'Yamaha JOG ZR',       price: 4500, power: 3, top: '70 км/ч', svgType: 'scooter' },
-      { id: 'honda-zoomer',  name: 'Honda Zoomer',        price: 6000, power: 3, top: '75 км/ч', svgType: 'scooter' },
+      { id: 'starter',       name: 'Honda Dio 27',        price: 0,    power: 1, top: '60 км/ч', imgType: 'scooter' },
+      { id: 'honda-dio110',  name: 'Honda Dio 110 AF35',  price: 2500, power: 2, top: '65 км/ч', imgType: 'scooter' },
+      { id: 'honda-tact',    name: 'Honda Tact AF51',     price: 3500, power: 2, top: '60 км/ч', imgType: 'scooter' },
+      { id: 'suzuki-lets4',  name: "Suzuki Let's 4",      price: 4000, power: 2, top: '60 км/ч', imgType: 'scooter' },
+      { id: 'yamaha-jog',    name: 'Yamaha JOG ZR',       price: 4500, power: 3, top: '70 км/ч', imgType: 'scooter' },
+      { id: 'honda-zoomer',  name: 'Honda Zoomer',        price: 6000, power: 3, top: '75 км/ч', imgType: 'scooter' },
     ]
   },
   pitbike: {
@@ -712,7 +708,7 @@ const BIKE_CATALOG = {
   }
 };
 
-const STARTER_BIKE = { id: 'starter', name: 'Honda Dio 27', power: 1, emoji: '🛵', svgType: 'scooter' };
+const STARTER_BIKE = { id: 'starter', name: 'Honda Dio 27', power: 1, emoji: '🛵', imgType: 'scooter' };
 
 const TUNING_TYPES = [
   { id: 'engine',     name: 'Двигатель', icon: '⚙️', baseCost: 400, costMult: 1.6,  powerPerLevel: 3, maxLevel: 10 },
@@ -731,7 +727,7 @@ const MISSIONS = [
 ];
 
 /* =========================================================
-   СОСТОЯНИЕ ИГРЫ (сохраняется в localStorage)
+   СОСТОЯНИЕ ИГРЫ
    ========================================================= */
 const SAVE_KEY = 'motoTapalkaSave';
 
@@ -750,8 +746,7 @@ function loadState() {
   try {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return defaultState();
-    const parsed = JSON.parse(raw);
-    return Object.assign(defaultState(), parsed);
+    return Object.assign(defaultState(), JSON.parse(raw));
   } catch (e) {
     return defaultState();
   }
@@ -763,9 +758,6 @@ function saveState() {
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {}
 }
 
-/* =========================================================
-   ПОМОЩНИКИ
-   ========================================================= */
 function findBikeById(id) {
   if (id === 'starter') return STARTER_BIKE;
   for (const cat of Object.values(BIKE_CATALOG)) {
@@ -796,15 +788,12 @@ function fmt(n) {
   return Math.round(n).toLocaleString('ru-RU');
 }
 
-/* =========================================================
-   РЕНДЕР: верхняя панель
-   ========================================================= */
 function renderTop() {
   document.getElementById('coins-display').innerText = '🪙 ' + fmt(state.coins);
 }
 
 /* =========================================================
-   РЕНДЕР: гараж (тап-зона + тюнинг)
+   РЕНДЕР ГАРАЖА (Скутер стоит статично)
    ========================================================= */
 function renderGarage() {
   const bike = activeBike();
@@ -813,9 +802,9 @@ function renderGarage() {
   document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
 
   const iconEl = document.getElementById('bike-emoji');
-  if (bike.svgType === 'scooter') {
+  if (bike.imgType === 'scooter') {
     iconEl.classList.add('is-svg');
-    iconEl.innerHTML = scooterSvgMarkup('scooter-icon-garage');
+    iconEl.innerHTML = scooterImageMarkup('scooter-icon-garage');
   } else {
     iconEl.classList.remove('is-svg');
     iconEl.innerText = bike.emoji || '🏍️';
@@ -864,7 +853,7 @@ function renderGarage() {
 }
 
 /* =========================================================
-   РЕНДЕР: магазин
+   МАГАЗИН И МИССИИ
    ========================================================= */
 let activeShopTab = 'scooter';
 
@@ -907,13 +896,13 @@ function renderBikeList() {
       btnHtml = `<button class="bike-btn buy" data-buy="${bike.id}" ${canAfford ? '' : 'disabled'}>🪙 ${fmt(bike.price)}</button>`;
     }
 
-    const iconInner = bike.svgType === 'scooter' ? scooterSvgMarkup('scooter-icon-card') : cat.emoji;
+    const iconInner = bike.imgType === 'scooter' ? scooterImageMarkup('scooter-icon-card') : cat.emoji;
 
     card.innerHTML = `
       <div class="bike-card-emoji">${iconInner}</div>
       <div class="bike-card-info">
         <div class="bike-card-name">${bike.name}</div>
-        <div class="bike-card-stats">Сила клика: ${bike.power} · Макс. скорость: ${bike.top}</div>
+        <div class="bike-card-stats">Сила клика: ${bike.power} · Скорость: ${bike.top}</div>
         <div class="bike-card-price">${owned ? 'Куплен' : '🪙 ' + fmt(bike.price)}</div>
       </div>
       ${btnHtml}
@@ -948,9 +937,6 @@ function renderBikeList() {
   });
 }
 
-/* =========================================================
-   РЕНДЕР: миссии
-   ========================================================= */
 function missionProgressValue(mission) {
   if (mission.type === 'taps') return state.totalTaps;
   if (mission.type === 'coins') return state.coins;
@@ -1008,7 +994,7 @@ function renderMissions() {
 }
 
 /* =========================================================
-   ТАП-ЗОНА (с подъемом скутера на дыбы)
+   ОБРАБОТКА ТАПА В ГАРАЖЕ (без движения скутера)
    ========================================================= */
 const tapZone = document.getElementById('tap-zone');
 tapZone.addEventListener('click', (e) => {
@@ -1019,14 +1005,6 @@ tapZone.addEventListener('click', (e) => {
 
   document.getElementById('points-display').innerText = fmt(state.coins) + ' pts';
   renderTop();
-  
-  // Вращаем скутер при клике (на 18 градусов назад)
-  const bikeEl = document.getElementById('bike-emoji');
-  bikeEl.style.transformOrigin = '20% 85%';
-  bikeEl.style.transform = 'scale(0.95) rotate(-18deg)';
-  setTimeout(() => {
-    bikeEl.style.transform = 'scale(1) rotate(0deg)';
-  }, 100);
 
   const b = document.createElement('div');
   b.classList.add('floating-bonus');
@@ -1041,7 +1019,7 @@ tapZone.addEventListener('click', (e) => {
 });
 
 /* =========================================================
-   НАВИГАЦИЯ МЕЖДУ ЭКРАНАМИ
+   НАВИГАЦИЯ
    ========================================================= */
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
@@ -1060,7 +1038,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
 });
 
 /* =========================================================
-   TELEGRAM: синхронизация аватарки и ника
+   ТЕЛЕГРАМ ИНИТ
    ========================================================= */
 function initTelegramUser() {
   try {
@@ -1082,13 +1060,13 @@ function initTelegramUser() {
       avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`;
     } else {
       const initials = (user.first_name ? user.first_name[0] : '') + (user.last_name ? user.last_name[0] : '');
-      avatarEl.innerText = initials ? initials.toUpperCase() : (user.username ? user.username[0].toUpperCase() : 'R');
+      avatarEl.innerText = initials ? initials.toUpperCase() : 'R';
     }
   } catch (e) {}
 }
 
 /* =========================================================
-   СТАНТ-ЗАЕЗД
+   СТАНТ-ЗАЕЗД И ИСКРЫ ОТ КРЫЛА
    ========================================================= */
 const stuntOverlay   = document.getElementById('stunt-overlay');
 const stuntBikeEl    = document.getElementById('stunt-bike');
@@ -1103,10 +1081,10 @@ const brakeZone = document.getElementById('stunt-brake');
 const stuntSceneEl  = document.getElementById('stunt-scene');
 const sparkAnchorEl = document.getElementById('stunt-spark-anchor');
 
-const STUNT_MAX_ANGLE = 92;   // угол — заваливаемся назад
-const STUNT_MIN_ANGLE = -18;  // угол — зарываемся передним колесом
-const SPARK_ANGLE_THRESHOLD = 88; // искры от крыла
-const SPARK_INTERVAL_MS = 45;
+const STUNT_MAX_ANGLE = 92;
+const STUNT_MIN_ANGLE = -18;
+const SPARK_ANGLE_THRESHOLD = 86; // Угол, при котором заднее крыло чиркает асфальт
+const SPARK_INTERVAL_MS = 40;
 
 let stunt = null; 
 let lastSparkTs = 0;
@@ -1115,7 +1093,6 @@ function stuntCoinsForState(elapsedSec, maxAngle) {
   return Math.floor(elapsedSec * 18 + maxAngle * 5);
 }
 
-/* --- искры --- */
 function clearSparks() {
   stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
 }
@@ -1129,8 +1106,8 @@ function spawnSparkBurst(count) {
   for (let i = 0; i < count; i++) {
     const el = document.createElement('div');
     el.className = 'spark-particle';
-    const angleDeg = -100 + (Math.random() * 80 - 40); 
-    const dist = 16 + Math.random() * 26;
+    const angleDeg = -110 + (Math.random() * 90 - 45); 
+    const dist = 18 + Math.random() * 30;
     const rad = angleDeg * Math.PI / 180;
     const sx = Math.cos(rad) * dist;
     const sy = Math.sin(rad) * dist;
@@ -1140,7 +1117,7 @@ function spawnSparkBurst(count) {
     el.style.setProperty('--sy', sy.toFixed(1) + 'px');
     el.style.setProperty('--sa', (Math.random() * 360).toFixed(0) + 'deg');
     stuntSceneEl.appendChild(el);
-    setTimeout(() => el.remove(), 550);
+    setTimeout(() => el.remove(), 500);
   }
 }
 
@@ -1148,7 +1125,7 @@ function maybeSpawnSparks(ts) {
   if (!stunt || stunt.crashed) return;
   if (stunt.angle >= SPARK_ANGLE_THRESHOLD) {
     if (ts - lastSparkTs > SPARK_INTERVAL_MS) {
-      spawnSparkBurst(2 + Math.floor(Math.random() * 2));
+      spawnSparkBurst(3 + Math.floor(Math.random() * 3));
       lastSparkTs = ts;
     }
   }
@@ -1173,9 +1150,9 @@ function openStunt() {
   stuntOverlay.classList.remove('hidden');
 
   const bike = activeBike();
-  if (bike.svgType === 'scooter') {
+  if (bike.imgType === 'scooter') {
     stuntBikeEl.classList.add('is-svg');
-    stuntBikeEl.innerHTML = scooterSvgMarkup('scooter-icon-stunt');
+    stuntBikeEl.innerHTML = scooterImageMarkup('scooter-icon-stunt');
   } else {
     stuntBikeEl.classList.remove('is-svg');
     stuntBikeEl.innerText = bike.emoji || '🏍️';
@@ -1201,7 +1178,6 @@ function stuntTick(ts) {
   const dt = Math.min((ts - stunt.lastTs) / 1000, 0.05);
   stunt.lastTs = ts;
 
-  // --- физика ---
   if (stunt.gas) {
     stunt.angle += 55 * dt;
     stunt.speed = Math.min(stunt.speed + 35 * dt, 100);
@@ -1221,21 +1197,18 @@ function stuntTick(ts) {
   stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
   stunt.roadOffset -= stunt.speed * dt * 4;
 
-  // --- визуал ---
   stuntBikeEl.style.transform = 'rotate(' + (-stunt.angle) + 'deg)';
   stuntRoadEl.style.backgroundPosition = stunt.roadOffset + 'px 20px';
   stuntTimerEl.innerText = stunt.elapsed.toFixed(1);
   stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
   stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.elapsed, stunt.maxAngle));
 
-  // --- искры ---
   maybeSpawnSparks(ts);
 
-  // --- проверка краша ---
   if (stunt.angle >= STUNT_MAX_ANGLE || stunt.angle <= STUNT_MIN_ANGLE) {
     stunt.crashed = true;
     if (stunt.angle >= STUNT_MAX_ANGLE) {
-      spawnSparkBurst(16);
+      spawnSparkBurst(20);
     }
     finishStunt();
     return;
@@ -1287,7 +1260,7 @@ bindHold(brakeZone,
 );
 
 /* =========================================================
-   СТАРТ
+   СТАРТ ИГРЫ
    ========================================================= */
 initTelegramUser();
 renderTop();
