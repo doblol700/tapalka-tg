@@ -339,7 +339,7 @@
   }
   .start-stunt-btn:active { transform: scale(0.98); }
 
-  /* --- СТАНТ-ЗАЕЗД: ОВЕРЛЕЙ (ПЕРЕРАБОТАННАЯ ЛОКАЦИЯ) --- */
+  /* --- СТАНТ-ЗАЕЗД: ОВЕРЛЕЙ --- */
   .stunt-overlay {
     position: fixed;
     inset: 0;
@@ -353,18 +353,21 @@
   .stunt-hud {
     display: flex;
     justify-content: space-around;
-    padding: 12px 10px 6px;
+    padding: 12px 4px 6px;
     flex-shrink: 0;
     z-index: 5;
+    gap: 4px;
   }
   .stunt-hud-item {
     background: rgba(15,23,42,0.85);
     border: 1px solid rgba(34,211,238,0.4);
     border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 14px;
+    padding: 6px 8px;
+    font-size: 12px;
     font-weight: bold;
     box-shadow: var(--glow);
+    text-align: center;
+    flex: 1;
   }
 
   .stunt-scene {
@@ -374,9 +377,8 @@
     background: linear-gradient(180deg, #050b14 0%, #0f172a 50%, #1e293b 100%);
   }
   
-  /* Ночной городской фон с огнями и зданиями */
-  .stunt-scene::before {
-    content: '';
+  /* Динамичный городской фон */
+  .stunt-city-bg {
     position: absolute;
     bottom: 34%;
     left: 0; right: 0;
@@ -389,7 +391,6 @@
     background-size: 100% 100%, 100% 100%, 100% 100%, 120px 100%;
     background-position: bottom;
     z-index: 1;
-    pointer-events: none;
   }
 
   .stunt-bike-wrap {
@@ -585,7 +586,7 @@
         <div class="active-bike-name" id="active-bike-name">Honda Dio 27</div>
         <div id="points-display">0 pts</div>
         <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
-        <!-- Статичный скутер в меню -->
+        <!-- Скутер в меню стоит ровно, клик обрабатывается прозрачной зоной -->
         <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
       </div>
       <div class="section-title">Тюнинг</div>
@@ -645,10 +646,12 @@
   <div class="stunt-hud">
     <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
     <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
+    <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
     <div class="stunt-hud-item">🪙 <span id="stunt-coins-preview">0</span></div>
   </div>
 
   <div class="stunt-scene" id="stunt-scene">
+    <div class="stunt-city-bg" id="stunt-city-bg"></div>
     <div class="stunt-bike-wrap">
       <div class="stunt-bike" id="stunt-bike">🏍️</div>
       <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div> 
@@ -858,9 +861,8 @@ function checkLevelUp() {
       state.level = nextLevel;
       state.coins += reward;
       
-      // Показываем модальное окно повышения уровня
       showLevelUpModal(state.level, reward);
-      checkLevelUp(); // На случай если набралось на несколько уровней сразу
+      checkLevelUp();
     }
   }
 }
@@ -880,7 +882,6 @@ function renderTop() {
   document.getElementById('coins-display').innerText = '🪙 ' + fmt(state.coins);
   document.getElementById('user-level-label').innerText = 'Lv ' + state.level;
   
-  // Расчет прогресс-бара уровня
   let currentTargetExp = LEVEL_REQUIREMENTS[state.level + 1] ? LEVEL_REQUIREMENTS[state.level + 1].exp : (LEVEL_REQUIREMENTS[5].exp + 500);
   let prevTargetExp = LEVEL_REQUIREMENTS[state.level] ? LEVEL_REQUIREMENTS[state.level].exp : 0;
   let progressPercent = 100;
@@ -893,7 +894,7 @@ function renderTop() {
 }
 
 /* =========================================================
-   РЕНДЕР ГАРАЖА (Главное меню не тронуто)
+   РЕНДЕР ГАРАЖА (Скутер стоит статично)
    ========================================================= */
 function renderGarage() {
   const bike = activeBike();
@@ -1094,14 +1095,14 @@ function renderMissions() {
 }
 
 /* =========================================================
-   ОБРАБОТКА ТАПА В ГАРАЖЕ (с начислением EXP)
+   ОБРАБОТКА ТАПА В ГАРАЖЕ
    ========================================================= */
 const tapZone = document.getElementById('tap-zone');
 tapZone.addEventListener('click', (e) => {
   const gain = perTapValue();
   state.coins += gain;
   state.totalTaps += 1;
-  addExp(1); // Добавляем 1 очко опыта за каждый тап
+  addExp(1);
   saveState();
 
   document.getElementById('points-display').innerText = fmt(state.coins) + ' pts';
@@ -1167,13 +1168,15 @@ function initTelegramUser() {
 }
 
 /* =========================================================
-   СТАНТ-ЗАЕЗД И ИСКРЫ ОТ КРЫЛА (С уменьшенной наградой)
+   СТАНТ-ЗАЕЗД (Спидометр, Таймер только в станте, Параллакс)
    ========================================================= */
 const stuntOverlay   = document.getElementById('stunt-overlay');
 const stuntBikeEl    = document.getElementById('stunt-bike');
 const stuntRoadEl    = document.getElementById('stunt-road');
+const stuntCityBg    = document.getElementById('stunt-city-bg');
 const stuntTimerEl   = document.getElementById('stunt-timer');
 const stuntAngleEl   = document.getElementById('stunt-angle');
+const stuntSpeedEl   = document.getElementById('stunt-speed');
 const stuntCoinsEl   = document.getElementById('stunt-coins-preview');
 const stuntResultEl  = document.getElementById('stunt-result');
 const stuntResultStatsEl = document.getElementById('stunt-result-stats');
@@ -1191,7 +1194,7 @@ let stunt = null;
 let lastSparkTs = 0;
 
 function stuntCoinsForState(elapsedSec, maxAngle) {
-  // Награда за стант существенно снижена
+  // Награда теперь опирается только на то время, когда байк был на заднем колесе!
   return Math.max(1, Math.floor(elapsedSec * 6 + maxAngle * 1.5));
 }
 
@@ -1236,8 +1239,9 @@ function maybeSpawnSparks(ts) {
 function openStunt() {
   stunt = {
     angle: 0,
-    speed: 30,
+    speed: 15, // Стартуем сразу с 15 км/ч
     roadOffset: 0,
+    cityOffset: 0,
     elapsed: 0,
     maxAngle: 0,
     gas: false,
@@ -1263,6 +1267,7 @@ function openStunt() {
   stuntBikeEl.style.transform = 'rotate(0deg)';
   stuntTimerEl.innerText = '0.0';
   stuntAngleEl.innerText = '0';
+  stuntSpeedEl.innerText = '15';
   stuntCoinsEl.innerText = '0';
   stunt.rafId = requestAnimationFrame(stuntTick);
 }
@@ -1284,25 +1289,37 @@ function stuntTick(ts) {
     stunt.angle += 55 * dt;
     stunt.speed = Math.min(stunt.speed + 35 * dt, 100);
   } else {
-    stunt.speed = Math.max(stunt.speed - 12 * dt, 22);
+    // Скорость не падает ниже 15
+    stunt.speed = Math.max(stunt.speed - 12 * dt, 15);
   }
   if (stunt.brake) {
     stunt.angle -= 85 * dt;
-    stunt.speed = Math.max(stunt.speed - 70 * dt, 0);
+    // Тормоз не сбрасывает скорость ниже 15
+    stunt.speed = Math.max(stunt.speed - 70 * dt, 15);
   }
   
   if (!stunt.gas && !stunt.brake) {
     stunt.angle += (stunt.angle > 0 ? -1 : 1) * 8 * dt;
   }
 
-  stunt.elapsed += dt;
+  // СЧЕТЧИК СЕКУНД РАБОТАЕТ ТОЛЬКО ЕСЛИ БАЙК В СТАНТЕ (угол больше 5 градусов)
+  if (stunt.angle > 5) {
+    stunt.elapsed += dt;
+  }
+
   stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
+  
+  // Параллакс эффект для фона и дороги зависит от скорости
   stunt.roadOffset -= stunt.speed * dt * 4;
+  stunt.cityOffset -= stunt.speed * dt * 0.8;
 
   stuntBikeEl.style.transform = 'rotate(' + (-stunt.angle) + 'deg)';
   stuntRoadEl.style.backgroundPosition = '0 0, ' + stunt.roadOffset + 'px 18px';
+  stuntCityBg.style.backgroundPosition = stunt.cityOffset + 'px bottom';
+  
   stuntTimerEl.innerText = stunt.elapsed.toFixed(1);
   stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
+  stuntSpeedEl.innerText = Math.round(stunt.speed);
   stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.elapsed, stunt.maxAngle));
 
   maybeSpawnSparks(ts);
@@ -1332,7 +1349,7 @@ function finishStunt() {
 function claimStuntReward() {
   const reward = parseInt(stuntResultEl.dataset.reward || '0', 10);
   state.coins += reward;
-  addExp(Math.floor(stunt.elapsed * 5)); // Начисляем немного опыта за стант-заезд
+  addExp(Math.floor(stunt.elapsed * 5));
   saveState();
   renderTop();
   renderGarage();
