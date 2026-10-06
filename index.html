@@ -49,7 +49,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
+    /* УВЕЛИЧЕН ВЕРХНИЙ ОТСТУП (30px) ЧТОБЫ НЕ ПЕРЕКРЫВАЛОСЬ ИНТЕРФЕЙСОМ ТЕЛЕГРАМА */
+    padding: 30px 15px 10px 15px; 
     background: var(--ui-bg);
     border-bottom: 2px solid var(--accent-cyan);
     box-shadow: var(--glow);
@@ -353,7 +354,8 @@
   .stunt-hud {
     display: flex;
     justify-content: space-around;
-    padding: 12px 4px 6px;
+    /* УВЕЛИЧЕН ВЕРХНИЙ ОТСТУП ДЛЯ ИНТЕРФЕЙСА СТАНТА (30px) */
+    padding: 30px 4px 6px;
     flex-shrink: 0;
     z-index: 5;
     gap: 4px;
@@ -377,7 +379,6 @@
     background: linear-gradient(180deg, #050b14 0%, #0f172a 50%, #1e293b 100%);
   }
   
-  /* Динамичный городской фон */
   .stunt-city-bg {
     position: absolute;
     bottom: 34%;
@@ -418,7 +419,6 @@
     filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7));
   }
 
-  /* Красивая детализированная дорога */
   .stunt-road {
     position: absolute;
     left: 0; right: 0;
@@ -470,7 +470,8 @@
 
   .stunt-close-btn {
     position: absolute;
-    top: 10px;
+    /* КРЕСТИК ТАКЖЕ СДВИНУТ ВНИЗ */
+    top: 28px;
     right: 12px;
     width: 32px; height: 32px;
     border-radius: 50%;
@@ -586,7 +587,7 @@
         <div class="active-bike-name" id="active-bike-name">Honda Dio 27</div>
         <div id="points-display">0 pts</div>
         <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
-        <!-- Скутер в меню стоит ровно, клик обрабатывается прозрачной зоной -->
+        <!-- Скутер в меню стоит ровно -->
         <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
       </div>
       <div class="section-title">Тюнинг</div>
@@ -769,13 +770,23 @@ const MISSIONS = [
 ];
 
 /* =========================================================
-   ТАБЛИЦА УРОВНЕЙ И ЭКСПЫ
+   ТАБЛИЦА УРОВНЕЙ И ЭКСПЫ (до 15 уровня)
    ========================================================= */
 const LEVEL_REQUIREMENTS = {
-  2: { exp: 200, reward: 250 },
-  3: { exp: 300, reward: 350 },
-  4: { exp: 450, reward: 500 },
-  5: { exp: 700, reward: 800 }
+  2:  { exp: 200,   reward: 250 },
+  3:  { exp: 300,   reward: 350 },
+  4:  { exp: 450,   reward: 500 },
+  5:  { exp: 700,   reward: 800 },
+  6:  { exp: 1000,  reward: 1000 },
+  7:  { exp: 1400,  reward: 1300 },
+  8:  { exp: 1900,  reward: 1700 },
+  9:  { exp: 2500,  reward: 2200 },
+  10: { exp: 3300,  reward: 3000 },
+  11: { exp: 4300,  reward: 4000 },
+  12: { exp: 5500,  reward: 5500 },
+  13: { exp: 7000,  reward: 7500 },
+  14: { exp: 8800,  reward: 10000 },
+  15: { exp: 11000, reward: 15000 }
 };
 
 /* =========================================================
@@ -882,10 +893,10 @@ function renderTop() {
   document.getElementById('coins-display').innerText = '🪙 ' + fmt(state.coins);
   document.getElementById('user-level-label').innerText = 'Lv ' + state.level;
   
-  let currentTargetExp = LEVEL_REQUIREMENTS[state.level + 1] ? LEVEL_REQUIREMENTS[state.level + 1].exp : (LEVEL_REQUIREMENTS[5].exp + 500);
-  let prevTargetExp = LEVEL_REQUIREMENTS[state.level] ? LEVEL_REQUIREMENTS[state.level].exp : 0;
-  let progressPercent = 100;
+  let progressPercent = 100; // По умолчанию 100% для максимального уровня
   if (LEVEL_REQUIREMENTS[state.level + 1]) {
+    let currentTargetExp = LEVEL_REQUIREMENTS[state.level + 1].exp;
+    let prevTargetExp = state.level === 1 ? 0 : LEVEL_REQUIREMENTS[state.level].exp;
     let span = currentTargetExp - prevTargetExp;
     let currentInLevel = state.exp - prevTargetExp;
     progressPercent = Math.min(100, Math.max(0, (currentInLevel / span) * 100));
@@ -1168,7 +1179,7 @@ function initTelegramUser() {
 }
 
 /* =========================================================
-   СТАНТ-ЗАЕЗД (Спидометр, Таймер только в станте, Параллакс)
+   СТАНТ-ЗАЕЗД (Таймер обнуляется при опускании колеса!)
    ========================================================= */
 const stuntOverlay   = document.getElementById('stunt-overlay');
 const stuntBikeEl    = document.getElementById('stunt-bike');
@@ -1193,9 +1204,9 @@ const SPARK_INTERVAL_MS = 40;
 let stunt = null; 
 let lastSparkTs = 0;
 
-function stuntCoinsForState(elapsedSec, maxAngle) {
-  // Награда теперь опирается только на то время, когда байк был на заднем колесе!
-  return Math.max(1, Math.floor(elapsedSec * 6 + maxAngle * 1.5));
+function stuntCoinsForState(bestWheelieSec, maxAngle) {
+  // Награда теперь опирается только на ЛУЧШЕЕ время непрерывного станта
+  return Math.max(1, Math.floor(bestWheelieSec * 6 + maxAngle * 1.5));
 }
 
 function clearSparks() {
@@ -1239,10 +1250,11 @@ function maybeSpawnSparks(ts) {
 function openStunt() {
   stunt = {
     angle: 0,
-    speed: 15, // Стартуем сразу с 15 км/ч
+    speed: 15,
     roadOffset: 0,
     cityOffset: 0,
-    elapsed: 0,
+    currentWheelie: 0, // Текущее время на заднем колесе (сбрасывается)
+    bestWheelie: 0,    // Рекорд времени за этот заезд (не сбрасывается)
     maxAngle: 0,
     gas: false,
     brake: false,
@@ -1289,12 +1301,10 @@ function stuntTick(ts) {
     stunt.angle += 55 * dt;
     stunt.speed = Math.min(stunt.speed + 35 * dt, 100);
   } else {
-    // Скорость не падает ниже 15
     stunt.speed = Math.max(stunt.speed - 12 * dt, 15);
   }
   if (stunt.brake) {
     stunt.angle -= 85 * dt;
-    // Тормоз не сбрасывает скорость ниже 15
     stunt.speed = Math.max(stunt.speed - 70 * dt, 15);
   }
   
@@ -1302,14 +1312,16 @@ function stuntTick(ts) {
     stunt.angle += (stunt.angle > 0 ? -1 : 1) * 8 * dt;
   }
 
-  // СЧЕТЧИК СЕКУНД РАБОТАЕТ ТОЛЬКО ЕСЛИ БАЙК В СТАНТЕ (угол больше 5 градусов)
+  // --- ЛОГИКА СБРОСА ТАЙМЕРА ---
   if (stunt.angle > 5) {
-    stunt.elapsed += dt;
+    stunt.currentWheelie += dt;
+    stunt.bestWheelie = Math.max(stunt.bestWheelie, stunt.currentWheelie);
+  } else {
+    stunt.currentWheelie = 0; // Скутер опустился - счетчик обнуляется!
   }
 
   stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
   
-  // Параллакс эффект для фона и дороги зависит от скорости
   stunt.roadOffset -= stunt.speed * dt * 4;
   stunt.cityOffset -= stunt.speed * dt * 0.8;
 
@@ -1317,10 +1329,12 @@ function stuntTick(ts) {
   stuntRoadEl.style.backgroundPosition = '0 0, ' + stunt.roadOffset + 'px 18px';
   stuntCityBg.style.backgroundPosition = stunt.cityOffset + 'px bottom';
   
-  stuntTimerEl.innerText = stunt.elapsed.toFixed(1);
+  // На экране показываем ТЕКУЩИЙ (сбрасываемый) таймер для напряжения
+  stuntTimerEl.innerText = stunt.currentWheelie.toFixed(1);
   stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
   stuntSpeedEl.innerText = Math.round(stunt.speed);
-  stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.elapsed, stunt.maxAngle));
+  // А вот награда рассчитывается из ЛУЧШЕГО времени за заезд
+  stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle));
 
   maybeSpawnSparks(ts);
 
@@ -1337,9 +1351,9 @@ function stuntTick(ts) {
 }
 
 function finishStunt() {
-  const reward = stuntCoinsForState(stunt.elapsed, stunt.maxAngle);
+  const reward = stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle);
   stuntResultStatsEl.innerHTML =
-    'Время в станте: <b>' + stunt.elapsed.toFixed(1) + 'с</b><br>' +
+    'Рекорд в станте: <b>' + stunt.bestWheelie.toFixed(1) + 'с</b><br>' +
     'Макс. угол: <b>' + Math.round(stunt.maxAngle) + '°</b><br>' +
     'Награда: <b>🪙 ' + fmt(reward) + '</b>';
   stuntResultEl.dataset.reward = reward;
@@ -1349,7 +1363,7 @@ function finishStunt() {
 function claimStuntReward() {
   const reward = parseInt(stuntResultEl.dataset.reward || '0', 10);
   state.coins += reward;
-  addExp(Math.floor(stunt.elapsed * 5));
+  addExp(Math.floor(stunt.bestWheelie * 5)); // Даем опыт за лучшее время на колесе
   saveState();
   renderTop();
   renderGarage();
