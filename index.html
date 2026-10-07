@@ -44,7 +44,7 @@
     flex-direction: column;
   }
 
-  /* --- TOP PANEL --- */
+  /* --- TOP PANEL (Сдвинута вниз) --- */
   .top-panel {
     display: flex;
     justify-content: space-between;
@@ -56,7 +56,6 @@
     flex-shrink: 0;
   }
 
-  /* Блок профиля теперь кликабельный */
   .user-info { 
     display: flex; 
     align-items: center; 
@@ -78,11 +77,7 @@
     flex-shrink: 0;
     overflow: hidden;
   }
-  .avatar-placeholder img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+  .avatar-placeholder img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .stats-text { font-size: 13px; line-height: 1.2; }
   .level-bar { width: 90px; height: 5px; background: #4a5568; border-radius: 3px; margin-top: 4px; overflow: hidden; }
@@ -100,233 +95,67 @@
 
   /* --- SCREENS --- */
   .screens { flex-grow: 1; position: relative; overflow: hidden; }
-  .screen {
-    position: absolute; inset: 0;
-    display: none;
-    flex-direction: column;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+  .screen { position: absolute; inset: 0; display: none; flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .screen.active { display: flex; }
 
-  /* --- GARAGE SCREEN --- */
-  .tap-zone {
-    flex-shrink: 0;
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 18px 10px 10px;
-    min-height: 240px;
-  }
-
-  .active-bike-name {
-    font-size: 13px;
-    color: var(--accent-cyan);
-    text-shadow: 0 0 8px rgba(34,211,238,0.6);
-    margin-bottom: 4px;
-    text-align: center;
-  }
-
-  #points-display {
-    font-size: 44px;
-    font-weight: bold;
-    color: #ffffff;
-    text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px var(--accent-orange);
-    z-index: 3;
-    pointer-events: none;
-    text-align: center;
-    margin-bottom: 6px;
-  }
-
-  .per-tap-display {
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-bottom: 14px;
-    pointer-events: none;
-  }
-
-  .bike-emoji-btn {
-    font-size: 92px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  /* --- GARAGE --- */
+  .tap-zone { flex-shrink: 0; position: relative; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px 10px 10px; min-height: 240px; }
+  .active-bike-name { font-size: 13px; color: var(--accent-cyan); text-shadow: 0 0 8px rgba(34,211,238,0.6); margin-bottom: 4px; text-align: center; }
+  #points-display { font-size: 44px; font-weight: bold; color: #ffffff; text-shadow: 0 0 20px rgba(0,0,0,0.9), 0 0 10px var(--accent-orange); z-index: 3; pointer-events: none; text-align: center; margin-bottom: 6px; }
+  .per-tap-display { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; pointer-events: none; }
+  .bike-emoji-btn { font-size: 92px; line-height: 1; display: flex; align-items: center; justify-content: center; }
   .bike-emoji-btn.is-svg { width: 190px; }
-
-  .floating-bonus {
-    position: absolute;
-    font-size: 22px;
-    font-weight: bold;
-    color: var(--accent-orange);
-    z-index: 4;
-    pointer-events: none;
-    animation: floatUp 0.8s ease-out forwards;
-    text-shadow: 0 0 5px #000;
-  }
-  @keyframes floatUp {
-    0% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-70px); }
-  }
-
-  .section-title {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--accent-cyan);
-    margin: 10px 14px 6px;
-  }
+  .floating-bonus { position: absolute; font-size: 22px; font-weight: bold; color: var(--accent-orange); z-index: 4; pointer-events: none; animation: floatUp 0.8s ease-out forwards; text-shadow: 0 0 5px #000; }
+  @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-70px); } }
+  .section-title { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-cyan); margin: 10px 14px 6px; }
 
   /* --- TUNING --- */
   .tuning-list { padding: 0 12px 16px; display: flex; flex-direction: column; gap: 8px; }
-  .tuning-row {
-    background: var(--card-bg);
-    border: 1px solid rgba(34,211,238,0.35);
-    border-radius: 10px;
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .tuning-row { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.35); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
   .tuning-icon { font-size: 24px; width: 32px; text-align: center; }
   .tuning-info { flex-grow: 1; }
   .tuning-name { font-size: 14px; font-weight: bold; }
   .tuning-level { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
   .tuning-bar { width: 100%; height: 4px; background: #2d3748; border-radius: 2px; margin-top: 5px; overflow: hidden; }
   .tuning-bar-fill { height: 100%; background: var(--accent-orange); }
+  .upgrade-btn { background: var(--accent-orange); color: #1a1a1a; border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  .upgrade-btn:disabled { background: #4a5568; color: #8a97a8; cursor: default; }
 
-  .upgrade-btn {
-    background: var(--accent-orange);
-    color: #1a1a1a;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .upgrade-btn:disabled {
-    background: #4a5568;
-    color: #8a97a8;
-    cursor: default;
-  }
-
-  /* --- SHOP SCREEN --- */
-  .shop-tabs {
-    display: flex;
-    gap: 6px;
-    padding: 10px 12px 4px;
-    flex-shrink: 0;
-    overflow-x: auto;
-  }
-  .shop-tab {
-    flex: 1;
-    text-align: center;
-    padding: 8px 4px;
-    border-radius: 8px;
-    border: 1px solid rgba(34,211,238,0.35);
-    background: rgba(15,23,42,0.6);
-    color: var(--accent-cyan);
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .shop-tab.active {
-    background: var(--accent-orange);
-    color: #1a1a1a;
-    border-color: var(--accent-orange);
-  }
-
+  /* --- SHOP --- */
+  .shop-tabs { display: flex; gap: 6px; padding: 10px 12px 4px; flex-shrink: 0; overflow-x: auto; }
+  .shop-tab { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(34,211,238,0.35); background: rgba(15,23,42,0.6); color: var(--accent-cyan); font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
+  .shop-tab.active { background: var(--accent-orange); color: #1a1a1a; border-color: var(--accent-orange); }
   .bike-list { padding: 8px 12px 16px; display: flex; flex-direction: column; gap: 8px; }
-  .bike-card {
-    background: var(--card-bg);
-    border: 1px solid rgba(34,211,238,0.35);
-    border-radius: 10px;
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .bike-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.35); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
   .bike-card-emoji { font-size: 30px; width: 40px; text-align: center; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
   .bike-card-emoji img { width: 100%; height: auto; display: block; }
   .bike-card-info { flex-grow: 1; min-width: 0; }
   .bike-card-name { font-size: 14px; font-weight: bold; }
   .bike-card-stats { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
   .bike-card-price { font-size: 12px; color: var(--accent-orange); margin-top: 2px; font-weight: bold; }
-
-  .bike-btn {
-    border: none;
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
+  .bike-btn { border: none; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: bold; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
   .bike-btn.buy { background: var(--accent-orange); color: #1a1a1a; }
   .bike-btn.buy:disabled { background: #4a5568; color: #8a97a8; }
   .bike-btn.select { background: var(--accent-cyan); color: #1a1a1a; }
   .bike-btn.selected { background: #2d3748; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
 
-  /* --- MISSIONS SCREEN --- */
+  /* --- MISSIONS & CLAN --- */
   .missions-list { padding: 10px 12px 16px; display: flex; flex-direction: column; gap: 8px; }
-  .mission-card {
-    background: var(--card-bg);
-    border: 1px solid rgba(34,211,238,0.35);
-    border-radius: 10px;
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .mission-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.35); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
   .mission-info { flex-grow: 1; }
   .mission-name { font-size: 13px; font-weight: bold; }
   .mission-progress { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
   .mission-reward { font-size: 12px; color: var(--accent-orange); margin-top: 3px; font-weight: bold; }
-  .claim-btn {
-    border: none; border-radius: 8px; padding: 8px 10px;
-    font-size: 12px; font-weight: bold; cursor: pointer; flex-shrink: 0;
-    background: var(--accent-orange); color: #1a1a1a;
-  }
+  .claim-btn { border: none; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: bold; cursor: pointer; flex-shrink: 0; background: var(--accent-orange); color: #1a1a1a; }
   .claim-btn:disabled { background: #4a5568; color: #8a97a8; }
   .claim-btn.done { background: #2d3748; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
-
-  /* --- CLAN SCREEN --- */
-  .clan-placeholder {
-    margin: auto;
-    text-align: center;
-    padding: 30px;
-    color: var(--text-dim);
-  }
+  .clan-placeholder { margin: auto; text-align: center; padding: 30px; color: var(--text-dim); }
   .clan-placeholder .icon { font-size: 48px; margin-bottom: 10px; }
   .clan-placeholder .title { font-size: 16px; color: var(--text-color); font-weight: bold; margin-bottom: 6px; }
 
   /* --- NAV PANEL --- */
-  .nav-panel {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 5px;
-    background: var(--ui-bg);
-    border-top: 2px solid var(--accent-cyan);
-    box-shadow: var(--glow);
-    flex-shrink: 0;
-  }
-  .nav-item {
-    text-align: center;
-    cursor: pointer;
-    color: var(--accent-cyan);
-    opacity: 0.6;
-    transition: opacity 0.2s;
-    flex: 1;
-  }
+  .nav-panel { display: flex; justify-content: space-around; padding: 10px 5px; background: var(--ui-bg); border-top: 2px solid var(--accent-cyan); box-shadow: var(--glow); flex-shrink: 0; }
+  .nav-item { text-align: center; cursor: pointer; color: var(--accent-cyan); opacity: 0.6; transition: opacity 0.2s; flex: 1; }
   .nav-item.active { opacity: 1; }
   .nav-item-icon { font-size: 20px; }
   .nav-text-label { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-top: 3px; }
@@ -334,252 +163,45 @@
 
   /* --- СТАРТ СТАНТА --- */
   .start-stunt-wrap { padding: 4px 12px 18px; }
-  .start-stunt-btn {
-    width: 100%;
-    padding: 14px 10px;
-    border-radius: 12px;
-    border: none;
-    background: linear-gradient(135deg, var(--accent-orange), #ea580c);
-    color: #1a1a1a;
-    font-size: 15px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    box-shadow: 0 0 16px rgba(249,115,22,0.5);
-  }
+  .start-stunt-btn { width: 100%; padding: 14px 10px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; font-size: 15px; font-weight: bold; letter-spacing: 0.5px; cursor: pointer; box-shadow: 0 0 16px rgba(249,115,22,0.5); }
   .start-stunt-btn:active { transform: scale(0.98); }
 
   /* --- СТАНТ-ЗАЕЗД: ОВЕРЛЕЙ --- */
-  .stunt-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: linear-gradient(180deg, #030712 0%, #0f172a 60%, #1e1b4b 100%);
-    display: flex;
-    flex-direction: column;
-  }
+  .stunt-overlay { position: fixed; inset: 0; z-index: 100; background: linear-gradient(180deg, #030712 0%, #0f172a 60%, #1e1b4b 100%); display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
-
-  .stunt-hud {
-    display: flex;
-    justify-content: space-around;
-    padding: 30px 4px 6px;
-    flex-shrink: 0;
-    z-index: 5;
-    gap: 4px;
-  }
-  .stunt-hud-item {
-    background: rgba(15,23,42,0.85);
-    border: 1px solid rgba(34,211,238,0.4);
-    border-radius: 8px;
-    padding: 6px 8px;
-    font-size: 12px;
-    font-weight: bold;
-    box-shadow: var(--glow);
-    text-align: center;
-    flex: 1;
-  }
-
-  .stunt-scene {
-    flex-grow: 1;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(180deg, #050b14 0%, #0f172a 50%, #1e293b 100%);
-  }
-  
-  .stunt-city-bg {
-    position: absolute;
-    bottom: 34%;
-    left: 0; right: 0;
-    height: 45%;
-    background-image: 
-      radial-gradient(circle at 15% 30%, rgba(34,211,238,0.15) 0%, transparent 40%),
-      radial-gradient(circle at 75% 20%, rgba(249,115,22,0.15) 0%, transparent 45%),
-      linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 120px 100%;
-    background-position: bottom;
-    z-index: 1;
-  }
-
-  .stunt-bike-wrap {
-    position: absolute;
-    bottom: 34%;
-    left: 50%;
-    transform: translate(-50%, 0);
-    z-index: 3;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    width: 190px;
-    height: 170px;
-  }
-  
-  .stunt-bike {
-    width: 100%;
-    transform-origin: 20% 85%;
-    transition: transform 0.05s linear;
-  }
-  .stunt-bike img {
-    width: 100%;
-    height: auto;
-    display: block;
-    filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7));
-  }
-
-  .stunt-road {
-    position: absolute;
-    left: 0; right: 0;
-    bottom: 0;
-    height: 34%;
-    background-color: #0f1218;
-    background-image:
-      linear-gradient(180deg, #1e293b 0%, #090d16 100%),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px);
-    background-position: 0 0, 0 18px;
-    background-size: 100% 100%, 140px 8px;
-    border-top: 4px solid var(--accent-cyan);
-    box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9);
-    z-index: 2;
-  }
-
-  .stunt-controls {
-    display: flex;
-    height: 26%;
-    flex-shrink: 0;
-    z-index: 5;
-  }
-  .stunt-zone {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    font-size: 13px;
-    cursor: pointer;
-    user-select: none;
-  }
+  .stunt-hud { display: flex; justify-content: space-around; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; }
+  .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 8px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; }
+  .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background: linear-gradient(180deg, #050b14 0%, #0f172a 50%, #1e293b 100%); }
+  .stunt-city-bg { position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; background-image: radial-gradient(circle at 15% 30%, rgba(34,211,238,0.15) 0%, transparent 40%), radial-gradient(circle at 75% 20%, rgba(249,115,22,0.15) 0%, transparent 45%), linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); background-size: 100% 100%, 100% 100%, 100% 100%, 120px 100%; background-position: bottom; z-index: 1; }
+  .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
+  .stunt-bike { width: 100%; transform-origin: 20% 85%; transition: transform 0.05s linear; }
+  .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
+  .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background-color: #0f1218; background-image: linear-gradient(180deg, #1e293b 0%, #090d16 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px); background-position: 0 0, 0 18px; background-size: 100% 100%, 140px 8px; border-top: 4px solid var(--accent-cyan); box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; }
+  .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; }
+  .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; }
   .stunt-zone-icon { font-size: 34px; }
-  .stunt-zone.brake {
-    background: rgba(239,68,68,0.15);
-    border-top: 2px solid rgba(239,68,68,0.6);
-    color: #fca5a5;
-  }
+  .stunt-zone.brake { background: rgba(239,68,68,0.15); border-top: 2px solid rgba(239,68,68,0.6); color: #fca5a5; }
   .stunt-zone.brake.pressed { background: rgba(239,68,68,0.4); }
-  .stunt-zone.gas {
-    background: rgba(249,115,22,0.15);
-    border-top: 2px solid var(--accent-orange);
-    color: var(--accent-orange);
-  }
+  .stunt-zone.gas { background: rgba(249,115,22,0.15); border-top: 2px solid var(--accent-orange); color: var(--accent-orange); }
   .stunt-zone.gas.pressed { background: rgba(249,115,22,0.45); }
-
-  .stunt-close-btn {
-    position: absolute;
-    top: 28px;
-    right: 12px;
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    border: 1px solid rgba(34,211,238,0.5);
-    background: rgba(15,23,42,0.75);
-    color: var(--text-color);
-    font-size: 15px;
-    cursor: pointer;
-    z-index: 10;
-  }
-
-  .stunt-result {
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.75);
-  }
+  .stunt-close-btn { position: absolute; top: 28px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,0.75); color: var(--text-color); font-size: 15px; cursor: pointer; z-index: 10; }
+  .stunt-result { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); }
   .stunt-result.hidden { display: none; }
-  .stunt-result-card {
-    background: var(--card-bg);
-    border: 1px solid rgba(34,211,238,0.5);
-    border-radius: 14px;
-    padding: 22px 24px;
-    text-align: center;
-    width: 78%;
-    max-width: 320px;
-    box-shadow: var(--glow);
-  }
+  .stunt-result-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.5); border-radius: 14px; padding: 22px 24px; text-align: center; width: 78%; max-width: 320px; box-shadow: var(--glow); }
   .stunt-result-title { font-size: 18px; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; }
   .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
   .stunt-result-stats b { color: var(--accent-cyan); }
+  .stunt-spark-anchor { position: absolute; bottom: 45px; left: 45px; width: 1px; height: 1px; pointer-events: none; z-index: 4; }
+  .spark-particle { position: absolute; width: 7px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #fff9c4, #f97316); box-shadow: 0 0 6px 1px rgba(249,115,22,0.9); pointer-events: none; z-index: 4; animation: sparkFly 0.5s ease-out forwards; }
+  @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
 
-  /* --- ИСКРЫ ОТ ЗАДНЕГО КРЫЛА --- */
-  .stunt-spark-anchor {
-    position: absolute;
-    bottom: 45px;
-    left: 45px;
-    width: 1px;
-    height: 1px;
-    pointer-events: none;
-    z-index: 4;
-  }
-  .spark-particle {
-    position: absolute;
-    width: 7px;
-    height: 2px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, #fff9c4, #f97316);
-    box-shadow: 0 0 6px 1px rgba(249,115,22,0.9);
-    pointer-events: none;
-    z-index: 4;
-    animation: sparkFly 0.5s ease-out forwards;
-  }
-  @keyframes sparkFly {
-    0%   { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); }
-    100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); }
-  }
-
-  /* МОДАЛЬНЫЕ ОКНА (Повышение уровня и Профиль) */
-  .custom-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.3s ease;
-  }
+  /* --- МОДАЛЬНЫЕ ОКНА --- */
+  .custom-modal { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
   .custom-modal.hidden { display: none; }
-  .modal-card {
-    background: var(--card-bg);
-    border: 2px solid var(--accent-orange);
-    border-radius: 16px;
-    padding: 24px;
-    text-align: center;
-    width: 82%;
-    max-width: 320px;
-    box-shadow: 0 0 25px rgba(249,115,22,0.6);
-    position: relative;
-  }
+  .modal-card { background: var(--card-bg); border: 2px solid var(--accent-orange); border-radius: 16px; padding: 24px; text-align: center; width: 82%; max-width: 320px; box-shadow: 0 0 25px rgba(249,115,22,0.6); position: relative; }
   .modal-title { font-size: 20px; font-weight: bold; color: var(--accent-orange); margin-bottom: 8px; text-shadow: 0 0 10px rgba(249,115,22,0.5); }
   .modal-desc { font-size: 14px; color: var(--text-color); margin-bottom: 18px; line-height: 1.5; }
-  
-  .profile-modal-close {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    border: 1px solid rgba(34,211,238,0.5);
-    background: rgba(15,23,42,1);
-    color: var(--text-color);
-    font-size: 15px;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  }
-
+  .profile-modal-close { position: absolute; top: -12px; right: -12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,1); color: var(--text-color); font-size: 15px; cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
@@ -589,7 +211,7 @@
 
   <!-- Верхняя панель -->
   <div class="top-panel">
-    <!-- БЛОК ПРОФИЛЯ СТАЛ КЛИКАБЕЛЬНЫМ -->
+    <!-- КЛИКАБЕЛЬНЫЙ ПРОФИЛЬ -->
     <div class="user-info" id="user-profile-btn">
       <div class="avatar-placeholder" id="avatar-placeholder">VIP</div>
       <div class="stats-text">
@@ -604,14 +226,12 @@
   </div>
 
   <div class="screens">
-
     <!-- ГАРАЖ -->
     <div class="screen active" id="screen-garage">
       <div id="tap-zone" class="tap-zone">
         <div class="active-bike-name" id="active-bike-name">Honda Dio 27</div>
         <div id="points-display">0 pts</div>
         <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
-        <!-- Скутер в меню стоит ровно -->
         <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
       </div>
       <div class="section-title">Тюнинг</div>
@@ -638,32 +258,18 @@
       <div class="clan-placeholder">
         <div class="icon">👥</div>
         <div class="title">Кланы в разработке</div>
-        <div>Скоро здесь можно будет объединяться с другими райдерами и соревноваться командами.</div>
+        <div>Скоро здесь можно будет объединяться с другими райдерами.</div>
       </div>
     </div>
-
   </div>
 
   <!-- Нижняя панель -->
   <div class="nav-panel">
-    <div class="nav-item active" data-screen="garage">
-      <div class="nav-item-icon">🔧</div>
-      <div class="nav-text-label">Гараж</div>
-    </div>
-    <div class="nav-item" data-screen="shop">
-      <div class="nav-item-icon">🛒</div>
-      <div class="nav-text-label">Магазин</div>
-    </div>
-    <div class="nav-item" data-screen="missions">
-      <div class="nav-item-icon">🎯</div>
-      <div class="nav-text-label">Задания</div>
-    </div>
-    <div class="nav-item" data-screen="clan">
-      <div class="nav-item-icon">👥</div>
-      <div class="nav-text-label">Клан</div>
-    </div>
+    <div class="nav-item active" data-screen="garage"><div class="nav-item-icon">🔧</div><div class="nav-text-label">Гараж</div></div>
+    <div class="nav-item" data-screen="shop"><div class="nav-item-icon">🛒</div><div class="nav-text-label">Магазин</div></div>
+    <div class="nav-item" data-screen="missions"><div class="nav-item-icon">🎯</div><div class="nav-text-label">Задания</div></div>
+    <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
   </div>
-
 </div>
 
 <!-- СТАНТ-ЗАЕЗД (оверлей) -->
@@ -674,7 +280,6 @@
     <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
     <div class="stunt-hud-item">🪙 <span id="stunt-coins-preview">0</span></div>
   </div>
-
   <div class="stunt-scene" id="stunt-scene">
     <div class="stunt-city-bg" id="stunt-city-bg"></div>
     <div class="stunt-bike-wrap">
@@ -683,18 +288,10 @@
     </div>
     <div class="stunt-road" id="stunt-road"></div>
   </div>
-
   <div class="stunt-controls">
-    <div class="stunt-zone brake" id="stunt-brake">
-      <div class="stunt-zone-icon">🛑</div>
-      <div class="stunt-zone-label">ТОРМОЗ</div>
-    </div>
-    <div class="stunt-zone gas" id="stunt-gas">
-      <div class="stunt-zone-icon">⚡</div>
-      <div class="stunt-zone-label">ГАЗ</div>
-    </div>
+    <div class="stunt-zone brake" id="stunt-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
+    <div class="stunt-zone gas" id="stunt-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
   </div>
-
   <div class="stunt-result hidden" id="stunt-result">
     <div class="stunt-result-card">
       <div class="stunt-result-title" id="stunt-result-title">Заезд окончен!</div>
@@ -702,7 +299,6 @@
       <button id="stunt-claim-btn" class="claim-btn">Забрать награду</button>
     </div>
   </div>
-
   <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
 </div>
 
@@ -710,7 +306,7 @@
 <div id="level-up-modal" class="custom-modal hidden">
   <div class="modal-card">
     <div class="modal-title">🎉 Поздравляем!</div>
-    <div class="modal-desc" id="level-up-desc">Вы достигли 2 уровня и получаете 250 валюты.</div>
+    <div class="modal-desc" id="level-up-desc">Вы достигли уровня!</div>
     <button id="level-up-ok-btn" class="claim-btn" style="width: 100%;">Отлично!</button>
   </div>
 </div>
@@ -719,9 +315,7 @@
 <div id="profile-modal" class="custom-modal hidden">
   <div class="modal-card" style="border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(34,211,238,0.4);">
     <button id="profile-close-btn" class="profile-modal-close">✕</button>
-    
     <div class="avatar-placeholder" id="profile-avatar-large" style="width: 80px; height: 80px; margin: 0 auto 15px; font-size: 24px; border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(34,211,238,0.5);">VIP</div>
-    
     <div class="modal-title" id="profile-nickname-large" style="color: white; text-shadow: none; margin-bottom: 5px;">RIDERNICK</div>
     <div style="font-size: 14px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 20px;">Уровень <span id="profile-level-large">1</span></div>
     
@@ -741,86 +335,44 @@
 </div>
 
 <script>
-/* =========================================================
-   ФУНКЦИЯ ВЫЗОВА PNG (дио1.png)
-   ========================================================= */
 function scooterImageMarkup(cls) {
   return `<img src="дио1.png" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Скутер">`;
 }
 
-/* =========================================================
-   КАТАЛОГ МОТОЦИКЛОВ И СКУТЕРОВ
-   ========================================================= */
 const BIKE_CATALOG = {
-  scooter: {
-    label: 'Скутеры',
-    emoji: '🛵',
-    bikes: [
-      { id: 'starter',       name: 'Honda Dio 27',        price: 0,    power: 1, top: '60 км/ч', imgType: 'scooter' },
-      { id: 'honda-dio110',  name: 'Honda Dio 110 AF35',  price: 2500, power: 2, top: '65 км/ч', imgType: 'scooter' },
-      { id: 'honda-tact',    name: 'Honda Tact AF51',     price: 3500, power: 2, top: '60 км/ч', imgType: 'scooter' },
-      { id: 'suzuki-lets4',  name: "Suzuki Let's 4",      price: 4000, power: 2, top: '60 км/ч', imgType: 'scooter' },
-      { id: 'yamaha-jog',    name: 'Yamaha JOG ZR',       price: 4500, power: 3, top: '70 км/ч', imgType: 'scooter' },
-      { id: 'honda-zoomer',  name: 'Honda Zoomer',        price: 6000, power: 3, top: '75 км/ч', imgType: 'scooter' },
-    ]
-  },
-  pitbike: {
-    label: 'Питбайк',
-    emoji: '🏍️',
-    bikes: [
-      { id: 'ycf-slw150',  name: 'YCF SLW 150F',      price: 3000,  power: 2,  top: '65 км/ч' },
-      { id: 'apollo-rfz',  name: 'Apollo RFZ 150',    price: 5000,  power: 3,  top: '75 км/ч' },
-      { id: 'kayo-tt250',  name: 'KAYO TT250',        price: 9000,  power: 5,  top: '95 км/ч' },
-      { id: 'stomp-190',   name: 'Stomp Predator 190',price: 14000, power: 6,  top: '100 км/ч' },
-    ]
-  },
-  enduro: {
-    label: 'Эндуро',
-    emoji: '🏍️',
-    bikes: [
-      { id: 'ktm-300exc',    name: 'KTM 300 EXC',        price: 40000, power: 11, top: '135 км/ч' },
-      { id: 'husq-te300',    name: 'Husqvarna TE 300i',   price: 45000, power: 12, top: '138 км/ч' },
-      { id: 'beta-300rr',    name: 'Beta 300 RR',         price: 42000, power: 11, top: '132 км/ч' },
-      { id: 'yamaha-wr450f', name: 'Yamaha WR450F',       price: 52000, power: 14, top: '145 км/ч' },
-      { id: 'honda-crf450rx',name: 'Honda CRF450RX',      price: 55000, power: 15, top: '148 км/ч' },
-      { id: 'sherco-300se',  name: 'Sherco 300 SE Factory',price: 47000, power: 12, top: '134 км/ч' },
-    ]
-  },
-  motocross: {
-    label: 'Кросс',
-    emoji: '🏁',
-    bikes: [
-      { id: 'ktm-450sxf',     name: 'KTM 450 SX-F',        price: 90000,  power: 22, top: '155 км/ч' },
-      { id: 'yamaha-yz450f',  name: 'Yamaha YZ450F',       price: 92000,  power: 22, top: '156 км/ч' },
-      { id: 'honda-crf450r',  name: 'Honda CRF450R',       price: 95000,  power: 23, top: '158 км/ч' },
-      { id: 'kawasaki-kx450', name: 'Kawasaki KX450',      price: 93000,  power: 23, top: '157 км/ч' },
-      { id: 'suzuki-rmz450',  name: 'Suzuki RM-Z450',      price: 85000,  power: 21, top: '152 км/ч' },
-      { id: 'husq-fc450',     name: 'Husqvarna FC 450',    price: 96000,  power: 24, top: '159 км/ч' },
-    ]
-  }
+  scooter: { label: 'Скутеры', emoji: '🛵', bikes: [
+    { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60 км/ч', imgType: 'scooter' },
+    { id: 'honda-dio110', name: 'Honda Dio 110 AF35', price: 2500, power: 2, top: '65 км/ч', imgType: 'scooter' },
+    { id: 'honda-tact', name: 'Honda Tact AF51', price: 3500, power: 2, top: '60 км/ч', imgType: 'scooter' }
+  ]},
+  pitbike: { label: 'Питбайк', emoji: '🏍️', bikes: [
+    { id: 'ycf-slw150', name: 'YCF SLW 150F', price: 3000, power: 2, top: '65 км/ч' },
+    { id: 'kayo-tt250', name: 'KAYO TT250', price: 9000, power: 5, top: '95 км/ч' }
+  ]},
+  enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [
+    { id: 'ktm-300exc', name: 'KTM 300 EXC', price: 40000, power: 11, top: '135 км/ч' },
+    { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145 км/ч' }
+  ]},
+  motocross: { label: 'Кросс', emoji: '🏁', bikes: [
+    { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156 км/ч' }
+  ]}
 };
 
 const STARTER_BIKE = { id: 'starter', name: 'Honda Dio 27', power: 1, emoji: '🛵', imgType: 'scooter' };
 
 const TUNING_TYPES = [
-  { id: 'engine',     name: 'Двигатель', icon: '⚙️', baseCost: 400, costMult: 1.6,  powerPerLevel: 3, maxLevel: 10 },
-  { id: 'exhaust',    name: 'Выхлоп',    icon: '🔥', baseCost: 300, costMult: 1.55, powerPerLevel: 2, maxLevel: 10 },
-  { id: 'suspension', name: 'Подвеска',  icon: '🛠️', baseCost: 350, costMult: 1.55, powerPerLevel: 2, maxLevel: 10 },
-  { id: 'tires',      name: 'Резина',    icon: '🛞', baseCost: 250, costMult: 1.5,  powerPerLevel: 1, maxLevel: 10 },
+  { id: 'engine', name: 'Двигатель', icon: '⚙️', baseCost: 400, costMult: 1.6, powerPerLevel: 3, maxLevel: 10 },
+  { id: 'exhaust', name: 'Выхлоп', icon: '🔥', baseCost: 300, costMult: 1.55, powerPerLevel: 2, maxLevel: 10 },
+  { id: 'suspension', name: 'Подвеска', icon: '🛠️', baseCost: 350, costMult: 1.55, powerPerLevel: 2, maxLevel: 10 },
+  { id: 'tires', name: 'Резина', icon: '🛞', baseCost: 250, costMult: 1.5, powerPerLevel: 1, maxLevel: 10 },
 ];
 
 const MISSIONS = [
-  { id: 'taps50',  name: 'Сделать 50 тапов',            reward: 300,  type: 'taps',  target: 50 },
-  { id: 'taps200', name: 'Сделать 200 тапов',           reward: 900,  type: 'taps',  target: 200 },
-  { id: 'taps1000',name: 'Сделать 1000 тапов',          reward: 4000, type: 'taps',  target: 1000 },
-  { id: 'coins5000',name: 'Накопить 5 000 монет',       reward: 500,  type: 'coins', target: 5000 },
-  { id: 'buybike', name: 'Купить любой мотоцикл',       reward: 800,  type: 'ownedBikes', target: 1 },
-  { id: 'tune3',   name: 'Прокачать один узел до 3 ур.',reward: 700,  type: 'tuneLevel', target: 3 },
+  { id: 'taps50', name: 'Сделать 50 тапов', reward: 300, type: 'taps', target: 50 },
+  { id: 'buybike', name: 'Купить любой мотоцикл', reward: 800, type: 'ownedBikes', target: 1 },
+  { id: 'tune3', name: 'Прокачать узел до 3 ур.', reward: 700, type: 'tuneLevel', target: 3 },
 ];
 
-/* =========================================================
-   ТАБЛИЦА УРОВНЕЙ, ОПЫТА И НАГРАД (до 15 уровня)
-   ========================================================= */
 const LEVEL_REQUIREMENTS = {
   2:  { exp: 200,   reward: 1000 },
   3:  { exp: 300,   reward: 1000 },
@@ -838,22 +390,10 @@ const LEVEL_REQUIREMENTS = {
   15: { exp: 11000, reward: 7500 }
 };
 
-/* =========================================================
-   СОСТОЯНИЕ ИГРЫ
-   ========================================================= */
 const SAVE_KEY = 'motoTapalkaSave';
 
 function defaultState() {
-  return {
-    coins: 500,
-    totalTaps: 0,
-    level: 1,
-    exp: 0,
-    ownedBikeIds: [],
-    activeBikeId: 'starter',
-    tuning: { engine: 0, exhaust: 0, suspension: 0, tires: 0 },
-    claimedMissions: {}
-  };
+  return { coins: 500, totalTaps: 0, level: 1, exp: 0, ownedBikeIds: [], activeBikeId: 'starter', tuning: { engine: 0, exhaust: 0, suspension: 0, tires: 0 }, claimedMissions: {} };
 }
 
 function loadState() {
@@ -861,16 +401,11 @@ function loadState() {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return defaultState();
     return Object.assign(defaultState(), JSON.parse(raw));
-  } catch (e) {
-    return defaultState();
-  }
+  } catch (e) { return defaultState(); }
 }
 
 let state = loadState();
-
-function saveState() {
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {}
-}
+function saveState() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {} }
 
 function findBikeById(id) {
   if (id === 'starter') return STARTER_BIKE;
@@ -881,30 +416,21 @@ function findBikeById(id) {
   return STARTER_BIKE;
 }
 
-function activeBike() {
-  return findBikeById(state.activeBikeId);
-}
+function activeBike() { return findBikeById(state.activeBikeId); }
 
-function tuningCost(type, level) {
-  return Math.round(type.baseCost * Math.pow(type.costMult, level));
-}
+function tuningCost(type, level) { return Math.round(type.baseCost * Math.pow(type.costMult, level)); }
 
 function perTapValue() {
   const bike = activeBike();
   let value = bike.power || 1;
-  TUNING_TYPES.forEach(t => {
-    value += (state.tuning[t.id] || 0) * t.powerPerLevel;
-  });
+  if(state.tuning) {
+    TUNING_TYPES.forEach(t => { value += (state.tuning[t.id] || 0) * t.powerPerLevel; });
+  }
   return value;
 }
 
-function fmt(n) {
-  return Math.round(n).toLocaleString('ru-RU');
-}
+function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
 
-/* =========================================================
-   ПРОВЕРКА И НАЧИСЛЕНИЕ ОПЫТА / УРОВНЕЙ
-   ========================================================= */
 function addExp(amount) {
   state.exp += amount;
   checkLevelUp();
@@ -915,12 +441,10 @@ function addExp(amount) {
 function checkLevelUp() {
   let nextLevel = state.level + 1;
   if (LEVEL_REQUIREMENTS[nextLevel]) {
-    let reqExp = LEVEL_REQUIREMENTS[nextLevel].exp;
-    if (state.exp >= reqExp) {
+    if (state.exp >= LEVEL_REQUIREMENTS[nextLevel].exp) {
       let reward = LEVEL_REQUIREMENTS[nextLevel].reward;
       state.level = nextLevel;
       state.coins += reward;
-      
       showLevelUpModal(state.level, reward);
       checkLevelUp();
     }
@@ -929,14 +453,10 @@ function checkLevelUp() {
 
 function showLevelUpModal(lvl, reward) {
   const modal = document.getElementById('level-up-modal');
-  const desc = document.getElementById('level-up-desc');
-  desc.innerText = `Вы достигли ${lvl} уровня и получаете ${fmt(reward)} монет!`;
+  document.getElementById('level-up-desc').innerText = `Вы достигли ${lvl} уровня и получаете ${fmt(reward)} монет!`;
   modal.classList.remove('hidden');
 }
-
-document.getElementById('level-up-ok-btn').addEventListener('click', () => {
-  document.getElementById('level-up-modal').classList.add('hidden');
-});
+document.getElementById('level-up-ok-btn').addEventListener('click', () => { document.getElementById('level-up-modal').classList.add('hidden'); });
 
 function renderTop() {
   document.getElementById('coins-display').innerText = '🪙 ' + fmt(state.coins);
@@ -953,17 +473,12 @@ function renderTop() {
   document.getElementById('level-progress-bar').style.width = progressPercent + '%';
 }
 
-/* =========================================================
-   ОКНО ПРОФИЛЯ
-   ========================================================= */
 const profileModal = document.getElementById('profile-modal');
 document.getElementById('user-profile-btn').addEventListener('click', () => {
   renderProfile();
   profileModal.classList.remove('hidden');
 });
-document.getElementById('profile-close-btn').addEventListener('click', () => {
-  profileModal.classList.add('hidden');
-});
+document.getElementById('profile-close-btn').addEventListener('click', () => { profileModal.classList.add('hidden'); });
 
 function renderProfile() {
   document.getElementById('profile-nickname-large').innerText = document.getElementById('user-nickname').innerText;
@@ -978,18 +493,13 @@ function renderProfile() {
     let span = currentTargetExp - prevTargetExp;
     let currentInLevel = state.exp - prevTargetExp;
     progressPercent = Math.min(100, Math.max(0, (currentInLevel / span) * 100));
-    
     document.getElementById('profile-exp-text').innerText = `${fmt(state.exp)} / ${fmt(currentTargetExp)}`;
   } else {
     document.getElementById('profile-exp-text').innerText = `${fmt(state.exp)} (МАКС)`;
   }
-  
   document.getElementById('profile-progress-bar-large').style.width = progressPercent + '%';
 }
 
-/* =========================================================
-   РЕНДЕР ГАРАЖА
-   ========================================================= */
 function renderGarage() {
   const bike = activeBike();
   document.getElementById('active-bike-name').innerText = bike.name;
@@ -1008,7 +518,7 @@ function renderGarage() {
   const list = document.getElementById('tuning-list');
   list.innerHTML = '';
   TUNING_TYPES.forEach(t => {
-    const level = state.tuning[t.id] || 0;
+    const level = state.tuning ? (state.tuning[t.id] || 0) : 0;
     const maxed = level >= t.maxLevel;
     const cost = tuningCost(t, level);
     const canAfford = state.coins >= cost;
@@ -1047,24 +557,15 @@ function renderGarage() {
   });
 }
 
-/* =========================================================
-   МАГАЗИН И МИССИИ
-   ========================================================= */
 let activeShopTab = 'scooter';
-
 function renderShopTabs() {
   const tabsEl = document.getElementById('shop-tabs');
   tabsEl.innerHTML = '';
   Object.keys(BIKE_CATALOG).forEach(key => {
-    const cat = BIKE_CATALOG[key];
     const tab = document.createElement('div');
     tab.className = 'shop-tab' + (key === activeShopTab ? ' active' : '');
-    tab.innerText = cat.label;
-    tab.addEventListener('click', () => {
-      activeShopTab = key;
-      renderShopTabs();
-      renderBikeList();
-    });
+    tab.innerText = BIKE_CATALOG[key].label;
+    tab.addEventListener('click', () => { activeShopTab = key; renderShopTabs(); renderBikeList(); });
     tabsEl.appendChild(tab);
   });
 }
@@ -1072,36 +573,19 @@ function renderShopTabs() {
 function renderBikeList() {
   const listEl = document.getElementById('bike-list');
   listEl.innerHTML = '';
-  const cat = BIKE_CATALOG[activeShopTab];
-
-  cat.bikes.forEach(bike => {
+  BIKE_CATALOG[activeShopTab].bikes.forEach(bike => {
     const owned = bike.id === 'starter' || state.ownedBikeIds.includes(bike.id);
     const selected = state.activeBikeId === bike.id;
     const canAfford = state.coins >= bike.price;
 
     const card = document.createElement('div');
     card.className = 'bike-card';
+    let btnHtml = selected ? `<button class="bike-btn selected" disabled>Выбран</button>` : 
+                  owned ? `<button class="bike-btn select" data-select="${bike.id}">Выбрать</button>` : 
+                  `<button class="bike-btn buy" data-buy="${bike.id}" ${canAfford ? '' : 'disabled'}>🪙 ${fmt(bike.price)}</button>`;
 
-    let btnHtml;
-    if (selected) {
-      btnHtml = `<button class="bike-btn selected" disabled>Выбран</button>`;
-    } else if (owned) {
-      btnHtml = `<button class="bike-btn select" data-select="${bike.id}">Выбрать</button>`;
-    } else {
-      btnHtml = `<button class="bike-btn buy" data-buy="${bike.id}" ${canAfford ? '' : 'disabled'}>🪙 ${fmt(bike.price)}</button>`;
-    }
-
-    const iconInner = bike.imgType === 'scooter' ? scooterImageMarkup('scooter-icon-card') : cat.emoji;
-
-    card.innerHTML = `
-      <div class="bike-card-emoji">${iconInner}</div>
-      <div class="bike-card-info">
-        <div class="bike-card-name">${bike.name}</div>
-        <div class="bike-card-stats">Сила клика: ${bike.power} · Скорость: ${bike.top}</div>
-        <div class="bike-card-price">${owned ? 'Куплен' : '🪙 ' + fmt(bike.price)}</div>
-      </div>
-      ${btnHtml}
-    `;
+    const iconInner = bike.imgType === 'scooter' ? scooterImageMarkup('scooter-icon-card') : bike.emoji;
+    card.innerHTML = `<div class="bike-card-emoji">${iconInner}</div><div class="bike-card-info"><div class="bike-card-name">${bike.name}</div><div class="bike-card-stats">Сила: ${bike.power} · ${bike.top}</div></div>${btnHtml}`;
     listEl.appendChild(card);
   });
 
@@ -1113,62 +597,39 @@ function renderBikeList() {
       state.coins -= bike.price;
       state.ownedBikeIds.push(id);
       state.activeBikeId = id;
-      saveState();
-      renderTop();
-      renderBikeList();
-      renderGarage();
-      renderMissions();
+      saveState(); renderTop(); renderBikeList(); renderGarage(); renderMissions();
     });
   });
 
   listEl.querySelectorAll('button[data-select]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-select');
-      state.activeBikeId = id;
-      saveState();
-      renderBikeList();
-      renderGarage();
+      state.activeBikeId = btn.getAttribute('data-select');
+      saveState(); renderBikeList(); renderGarage();
     });
   });
 }
 
-function missionProgressValue(mission) {
-  if (mission.type === 'taps') return state.totalTaps;
-  if (mission.type === 'coins') return state.coins;
-  if (mission.type === 'ownedBikes') return state.ownedBikeIds.length;
-  if (mission.type === 'tuneLevel') return Math.max(0, ...Object.values(state.tuning));
+function missionProgressValue(m) {
+  if (m.type === 'taps') return state.totalTaps;
+  if (m.type === 'coins') return state.coins;
+  if (m.type === 'ownedBikes') return state.ownedBikeIds.length;
+  if (m.type === 'tuneLevel') return state.tuning ? Math.max(0, ...Object.values(state.tuning)) : 0;
   return 0;
 }
 
 function renderMissions() {
   const listEl = document.getElementById('missions-list');
   listEl.innerHTML = '';
-
   MISSIONS.forEach(m => {
     const progress = missionProgressValue(m);
     const complete = progress >= m.target;
     const claimed = !!state.claimedMissions[m.id];
-
     const card = document.createElement('div');
     card.className = 'mission-card';
-
-    let btnHtml;
-    if (claimed) {
-      btnHtml = `<button class="claim-btn done" disabled>Получено</button>`;
-    } else if (complete) {
-      btnHtml = `<button class="claim-btn" data-claim="${m.id}">Забрать</button>`;
-    } else {
-      btnHtml = `<button class="claim-btn" disabled>${Math.min(progress, m.target)}/${m.target}</button>`;
-    }
-
-    card.innerHTML = `
-      <div class="mission-info">
-        <div class="mission-name">${m.name}</div>
-        <div class="mission-progress">Прогресс: ${Math.min(progress, m.target)} / ${m.target}</div>
-        <div class="mission-reward">Награда: 🪙 ${fmt(m.reward)}</div>
-      </div>
-      ${btnHtml}
-    `;
+    let btnHtml = claimed ? `<button class="claim-btn done" disabled>Получено</button>` : 
+                  complete ? `<button class="claim-btn" data-claim="${m.id}">Забрать</button>` : 
+                  `<button class="claim-btn" disabled>${Math.min(progress, m.target)}/${m.target}</button>`;
+    card.innerHTML = `<div class="mission-info"><div class="mission-name">${m.name}</div><div class="mission-reward">Награда: 🪙 ${fmt(m.reward)}</div></div>${btnHtml}`;
     listEl.appendChild(card);
   });
 
@@ -1176,29 +637,19 @@ function renderMissions() {
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-claim');
       const mission = MISSIONS.find(m => m.id === id);
-      if (state.claimedMissions[id]) return;
-      if (missionProgressValue(mission) < mission.target) return;
+      if (state.claimedMissions[id] || missionProgressValue(mission) < mission.target) return;
       state.coins += mission.reward;
       state.claimedMissions[id] = true;
-      saveState();
-      renderTop();
-      renderMissions();
-      renderGarage();
+      saveState(); renderTop(); renderMissions(); renderGarage();
     });
   });
 }
 
-/* =========================================================
-   ОБРАБОТКА ТАПА В ГАРАЖЕ
-   ========================================================= */
 const tapZone = document.getElementById('tap-zone');
 tapZone.addEventListener('click', (e) => {
   const gain = perTapValue();
-  state.coins += gain;
-  state.totalTaps += 1;
-  addExp(1);
+  state.coins += gain; state.totalTaps += 1; addExp(1);
   saveState();
-
   document.getElementById('points-display').innerText = fmt(state.coins) + ' pts';
   renderTop();
 
@@ -1206,172 +657,78 @@ tapZone.addEventListener('click', (e) => {
   b.classList.add('floating-bonus');
   b.innerText = '+' + gain;
   const rect = tapZone.getBoundingClientRect();
-  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-  const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-  b.style.left = (x - 15) + 'px';
-  b.style.top = (y - 30) + 'px';
+  b.style.left = ((e.touches ? e.touches[0].clientX : e.clientX) - rect.left - 15) + 'px';
+  b.style.top = ((e.touches ? e.touches[0].clientY : e.clientY) - rect.top - 30) + 'px';
   tapZone.appendChild(b);
   setTimeout(() => b.remove(), 800);
 });
 
-/* =========================================================
-   НАВИГАЦИЯ
-   ========================================================= */
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
     const target = item.getAttribute('data-screen');
-
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
     item.classList.add('active');
-
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + target).classList.add('active');
-
     if (target === 'garage') renderGarage();
     if (target === 'shop') { renderShopTabs(); renderBikeList(); }
     if (target === 'missions') renderMissions();
   });
 });
 
-/* =========================================================
-   ТЕЛЕГРАМ ИНИТ
-   ========================================================= */
 function initTelegramUser() {
   try {
     const tg = window.Telegram && window.Telegram.WebApp;
     if (!tg) return;
-    tg.ready();
-    tg.expand();
-
+    tg.ready(); tg.expand();
     const user = tg.initDataUnsafe && tg.initDataUnsafe.user;
     if (!user) return;
-
     const nameEl = document.getElementById('user-nickname');
     const avatarEl = document.getElementById('avatar-placeholder');
-
     const displayName = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' ');
     if (displayName) nameEl.innerText = displayName;
-
-    if (user.photo_url) {
-      avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`;
-    } else {
-      const initials = (user.first_name ? user.first_name[0] : '') + (user.last_name ? user.last_name[0] : '');
-      avatarEl.innerText = initials ? initials.toUpperCase() : 'R';
-    }
+    if (user.photo_url) avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`;
+    else avatarEl.innerText = (user.first_name ? user.first_name[0] : (user.username ? user.username[0].toUpperCase() : 'R'));
   } catch (e) {}
 }
 
-/* =========================================================
-   СТАНТ-ЗАЕЗД
-   ========================================================= */
-const stuntOverlay   = document.getElementById('stunt-overlay');
-const stuntBikeEl    = document.getElementById('stunt-bike');
-const stuntRoadEl    = document.getElementById('stunt-road');
-const stuntCityBg    = document.getElementById('stunt-city-bg');
-const stuntTimerEl   = document.getElementById('stunt-timer');
-const stuntAngleEl   = document.getElementById('stunt-angle');
-const stuntSpeedEl   = document.getElementById('stunt-speed');
-const stuntCoinsEl   = document.getElementById('stunt-coins-preview');
-const stuntResultEl  = document.getElementById('stunt-result');
-const stuntResultStatsEl = document.getElementById('stunt-result-stats');
-const gasZone   = document.getElementById('stunt-gas');
-const brakeZone = document.getElementById('stunt-brake');
-const stuntSceneEl  = document.getElementById('stunt-scene');
-const sparkAnchorEl = document.getElementById('stunt-spark-anchor');
+const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg');
+const stuntTimerEl = document.getElementById('stunt-timer'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview');
+const stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
+const gasZone = document.getElementById('stunt-gas'), brakeZone = document.getElementById('stunt-brake'), stuntSceneEl = document.getElementById('stunt-scene'), sparkAnchorEl = document.getElementById('stunt-spark-anchor');
 
-const STUNT_MAX_ANGLE = 92;
-const STUNT_MIN_ANGLE = -18;
-const SPARK_ANGLE_THRESHOLD = 86;
-const SPARK_INTERVAL_MS = 40;
+let stunt = null, lastSparkTs = 0;
 
-let stunt = null; 
-let lastSparkTs = 0;
-
-function stuntCoinsForState(bestWheelieSec, maxAngle) {
-  return Math.max(1, Math.floor(bestWheelieSec * 6 + maxAngle * 1.5));
-}
-
-function clearSparks() {
-  stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
-}
+function stuntCoinsForState(bestWheelieSec, maxAngle) { return Math.max(1, Math.floor(bestWheelieSec * 6 + maxAngle * 1.5)); }
 
 function spawnSparkBurst(count) {
-  const anchorRect = sparkAnchorEl.getBoundingClientRect();
-  const sceneRect = stuntSceneEl.getBoundingClientRect();
-  const baseX = anchorRect.left - sceneRect.left;
-  const baseY = anchorRect.top - sceneRect.top;
-
+  const anchorRect = sparkAnchorEl.getBoundingClientRect(), sceneRect = stuntSceneEl.getBoundingClientRect();
+  const baseX = anchorRect.left - sceneRect.left, baseY = anchorRect.top - sceneRect.top;
   for (let i = 0; i < count; i++) {
     const el = document.createElement('div');
     el.className = 'spark-particle';
-    const angleDeg = -110 + (Math.random() * 90 - 45); 
-    const dist = 18 + Math.random() * 30;
-    const rad = angleDeg * Math.PI / 180;
-    const sx = Math.cos(rad) * dist;
-    const sy = Math.sin(rad) * dist;
-    el.style.left = baseX + 'px';
-    el.style.top = baseY + 'px';
-    el.style.setProperty('--sx', sx.toFixed(1) + 'px');
-    el.style.setProperty('--sy', sy.toFixed(1) + 'px');
+    const angleDeg = -110 + (Math.random() * 90 - 45), dist = 18 + Math.random() * 30, rad = angleDeg * Math.PI / 180;
+    el.style.left = baseX + 'px'; el.style.top = baseY + 'px';
+    el.style.setProperty('--sx', (Math.cos(rad) * dist).toFixed(1) + 'px');
+    el.style.setProperty('--sy', (Math.sin(rad) * dist).toFixed(1) + 'px');
     el.style.setProperty('--sa', (Math.random() * 360).toFixed(0) + 'deg');
     stuntSceneEl.appendChild(el);
     setTimeout(() => el.remove(), 500);
   }
 }
 
-function maybeSpawnSparks(ts) {
-  if (!stunt || stunt.crashed) return;
-  if (stunt.angle >= SPARK_ANGLE_THRESHOLD) {
-    if (ts - lastSparkTs > SPARK_INTERVAL_MS) {
-      spawnSparkBurst(3 + Math.floor(Math.random() * 3));
-      lastSparkTs = ts;
-    }
-  }
-}
-
 function openStunt() {
-  stunt = {
-    angle: 0,
-    speed: 15,
-    roadOffset: 0,
-    cityOffset: 0,
-    currentWheelie: 0,
-    bestWheelie: 0,
-    maxAngle: 0,
-    gas: false,
-    brake: false,
-    crashed: false,
-    lastTs: null,
-    rafId: null,
-  };
-  lastSparkTs = 0;
-  clearSparks();
-  stuntResultEl.classList.add('hidden');
-  stuntOverlay.classList.remove('hidden');
-
+  stunt = { angle: 0, speed: 15, roadOffset: 0, cityOffset: 0, currentWheelie: 0, bestWheelie: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null };
+  stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
+  stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
   const bike = activeBike();
-  if (bike.imgType === 'scooter') {
-    stuntBikeEl.classList.add('is-svg');
-    stuntBikeEl.innerHTML = scooterImageMarkup('scooter-icon-stunt');
-  } else {
-    stuntBikeEl.classList.remove('is-svg');
-    stuntBikeEl.innerText = bike.emoji || '🏍️';
-  }
-
-  stuntBikeEl.style.transform = 'rotate(0deg)';
-  stuntTimerEl.innerText = '0.0';
-  stuntAngleEl.innerText = '0';
-  stuntSpeedEl.innerText = '15';
-  stuntCoinsEl.innerText = '0';
+  if (bike.imgType === 'scooter') { stuntBikeEl.classList.add('is-svg'); stuntBikeEl.innerHTML = scooterImageMarkup('scooter-icon-stunt'); } 
+  else { stuntBikeEl.classList.remove('is-svg'); stuntBikeEl.innerText = bike.emoji || '🏍️'; }
+  stuntBikeEl.style.transform = 'rotate(0deg)'; stuntTimerEl.innerText = '0.0'; stuntAngleEl.innerText = '0'; stuntSpeedEl.innerText = '15'; stuntCoinsEl.innerText = '0';
   stunt.rafId = requestAnimationFrame(stuntTick);
 }
 
-function closeStunt() {
-  if (stunt && stunt.rafId) cancelAnimationFrame(stunt.rafId);
-  stunt = null;
-  clearSparks();
-  stuntOverlay.classList.add('hidden');
-}
+function closeStunt() { if (stunt && stunt.rafId) cancelAnimationFrame(stunt.rafId); stunt = null; stuntOverlay.classList.add('hidden'); }
 
 function stuntTick(ts) {
   if (!stunt || stunt.crashed) return;
@@ -1379,55 +736,63 @@ function stuntTick(ts) {
   const dt = Math.min((ts - stunt.lastTs) / 1000, 0.05);
   stunt.lastTs = ts;
 
-  if (stunt.gas) {
-    stunt.angle += 55 * dt;
-    stunt.speed = Math.min(stunt.speed + 35 * dt, 100);
-  } else {
-    stunt.speed = Math.max(stunt.speed - 12 * dt, 15);
-  }
-  if (stunt.brake) {
-    stunt.angle -= 85 * dt;
-    stunt.speed = Math.max(stunt.speed - 70 * dt, 15);
-  }
+  if (stunt.gas) { stunt.angle += 55 * dt; stunt.speed = Math.min(stunt.speed + 35 * dt, 100); } 
+  else { stunt.speed = Math.max(stunt.speed - 12 * dt, 15); }
   
-  if (!stunt.gas && !stunt.brake) {
-    stunt.angle += (stunt.angle > 0 ? -1 : 1) * 8 * dt;
-  }
+  if (stunt.brake) { stunt.angle -= 85 * dt; stunt.speed = Math.max(stunt.speed - 70 * dt, 15); }
+  if (!stunt.gas && !stunt.brake) { stunt.angle += (stunt.angle > 0 ? -1 : 1) * 8 * dt; }
 
-  if (stunt.angle > 5) {
-    stunt.currentWheelie += dt;
-    stunt.bestWheelie = Math.max(stunt.bestWheelie, stunt.currentWheelie);
-  } else {
-    stunt.currentWheelie = 0;
-  }
+  if (stunt.angle > 5) { stunt.currentWheelie += dt; stunt.bestWheelie = Math.max(stunt.bestWheelie, stunt.currentWheelie); } 
+  else { stunt.currentWheelie = 0; }
 
   stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
-  
-  stunt.roadOffset -= stunt.speed * dt * 4;
-  stunt.cityOffset -= stunt.speed * dt * 0.8;
+  stunt.roadOffset -= stunt.speed * dt * 4; stunt.cityOffset -= stunt.speed * dt * 0.8;
 
-  stuntBikeEl.style.transform = 'rotate(' + (-stunt.angle) + 'deg)';
-  stuntRoadEl.style.backgroundPosition = '0 0, ' + stunt.roadOffset + 'px 18px';
-  stuntCityBg.style.backgroundPosition = stunt.cityOffset + 'px bottom';
+  stuntBikeEl.style.transform = `rotate(${-stunt.angle}deg)`;
+  stuntRoadEl.style.backgroundPosition = `0 0, ${stunt.roadOffset}px 18px`;
+  stuntCityBg.style.backgroundPosition = `${stunt.cityOffset}px bottom`;
   
   stuntTimerEl.innerText = stunt.currentWheelie.toFixed(1);
   stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
   stuntSpeedEl.innerText = Math.round(stunt.speed);
   stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle));
 
-  maybeSpawnSparks(ts);
+  if (stunt.angle >= 86 && ts - lastSparkTs > 40) { spawnSparkBurst(3 + Math.floor(Math.random() * 3)); lastSparkTs = ts; }
 
-  if (stunt.angle >= STUNT_MAX_ANGLE || stunt.angle <= STUNT_MIN_ANGLE) {
+  if (stunt.angle >= 92 || stunt.angle <= -18) {
     stunt.crashed = true;
-    if (stunt.angle >= STUNT_MAX_ANGLE) {
-      spawnSparkBurst(20);
-    }
-    finishStunt();
+    if (stunt.angle >= 92) spawnSparkBurst(20);
+    const reward = stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle);
+    stuntResultStatsEl.innerHTML = `Рекорд: <b>${stunt.bestWheelie.toFixed(1)}с</b><br>Угол: <b>${Math.round(stunt.maxAngle)}°</b><br>Награда: <b>🪙 ${fmt(reward)}</b>`;
+    stuntResultEl.dataset.reward = reward;
+    stuntResultEl.classList.remove('hidden');
     return;
   }
-
   stunt.rafId = requestAnimationFrame(stuntTick);
 }
 
-function finishStunt() {
-  const reward = stuntCoinsForState(stunt.bestWheelie, stunt.
+document.getElementById('start-stunt-btn').addEventListener('click', openStunt);
+document.getElementById('stunt-close-btn').addEventListener('click', closeStunt);
+document.getElementById('stunt-claim-btn').addEventListener('click', () => {
+  state.coins += parseInt(stuntResultEl.dataset.reward || '0', 10);
+  addExp(Math.floor(stunt.bestWheelie * 5));
+  saveState(); renderTop(); renderGarage(); renderMissions(); closeStunt();
+});
+
+function bindHold(el, onPress, onRelease) {
+  const press = (e) => { e.preventDefault(); onPress(); }, release = (e) => { e.preventDefault(); onRelease(); };
+  el.addEventListener('pointerdown', press); el.addEventListener('pointerup', release);
+  el.addEventListener('pointerleave', release); el.addEventListener('pointercancel', release);
+}
+bindHold(gasZone, () => { if (stunt && !stunt.crashed) { stunt.gas = true; gasZone.classList.add('pressed'); } }, () => { if (stunt) stunt.gas = false; gasZone.classList.remove('pressed'); });
+bindHold(brakeZone, () => { if (stunt && !stunt.crashed) { stunt.brake = true; brakeZone.classList.add('pressed'); } }, () => { if (stunt) stunt.brake = false; brakeZone.classList.remove('pressed'); });
+
+initTelegramUser();
+renderTop();
+renderGarage();
+renderShopTabs();
+renderBikeList();
+renderMissions();
+</script>
+</body>
+</html>
