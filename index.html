@@ -49,7 +49,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* УВЕЛИЧЕН ВЕРХНИЙ ОТСТУП (30px) ЧТОБЫ НЕ ПЕРЕКРЫВАЛОСЬ ИНТЕРФЕЙСОМ ТЕЛЕГРАМА */
     padding: 30px 15px 10px 15px; 
     background: var(--ui-bg);
     border-bottom: 2px solid var(--accent-cyan);
@@ -57,7 +56,17 @@
     flex-shrink: 0;
   }
 
-  .user-info { display: flex; align-items: center; gap: 10px; }
+  /* Блок профиля теперь кликабельный */
+  .user-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    cursor: pointer;
+    transition: transform 0.1s;
+    padding: 4px;
+    border-radius: 8px;
+  }
+  .user-info:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
 
   .avatar-placeholder {
     width: 45px; height: 45px; border-radius: 50%;
@@ -354,7 +363,6 @@
   .stunt-hud {
     display: flex;
     justify-content: space-around;
-    /* УВЕЛИЧЕН ВЕРХНИЙ ОТСТУП ДЛЯ ИНТЕРФЕЙСА СТАНТА (30px) */
     padding: 30px 4px 6px;
     flex-shrink: 0;
     z-index: 5;
@@ -470,7 +478,6 @@
 
   .stunt-close-btn {
     position: absolute;
-    /* КРЕСТИК ТАКЖЕ СДВИНУТ ВНИЗ */
     top: 28px;
     right: 12px;
     width: 32px; height: 32px;
@@ -533,8 +540,8 @@
     100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); }
   }
 
-  /* Модальное окно повышения уровня */
-  .level-up-modal {
+  /* МОДАЛЬНЫЕ ОКНА (Повышение уровня и Профиль) */
+  .custom-modal {
     position: fixed;
     inset: 0;
     z-index: 200;
@@ -544,8 +551,8 @@
     justify-content: center;
     animation: fadeIn 0.3s ease;
   }
-  .level-up-modal.hidden { display: none; }
-  .level-up-card {
+  .custom-modal.hidden { display: none; }
+  .modal-card {
     background: var(--card-bg);
     border: 2px solid var(--accent-orange);
     border-radius: 16px;
@@ -554,9 +561,25 @@
     width: 82%;
     max-width: 320px;
     box-shadow: 0 0 25px rgba(249,115,22,0.6);
+    position: relative;
   }
-  .level-up-title { font-size: 20px; font-weight: bold; color: var(--accent-orange); margin-bottom: 8px; text-shadow: 0 0 10px rgba(249,115,22,0.5); }
-  .level-up-desc { font-size: 14px; color: var(--text-color); margin-bottom: 18px; line-height: 1.5; }
+  .modal-title { font-size: 20px; font-weight: bold; color: var(--accent-orange); margin-bottom: 8px; text-shadow: 0 0 10px rgba(249,115,22,0.5); }
+  .modal-desc { font-size: 14px; color: var(--text-color); margin-bottom: 18px; line-height: 1.5; }
+  
+  .profile-modal-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(34,211,238,0.5);
+    background: rgba(15,23,42,1);
+    color: var(--text-color);
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  }
+
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
@@ -566,7 +589,8 @@
 
   <!-- Верхняя панель -->
   <div class="top-panel">
-    <div class="user-info">
+    <!-- БЛОК ПРОФИЛЯ СТАЛ КЛИКАБЕЛЬНЫМ -->
+    <div class="user-info" id="user-profile-btn">
       <div class="avatar-placeholder" id="avatar-placeholder">VIP</div>
       <div class="stats-text">
         <strong id="user-nickname">RIDERNICK</strong><br>
@@ -683,11 +707,36 @@
 </div>
 
 <!-- ОКНО ПОВЫШЕНИЯ УРОВНЯ -->
-<div id="level-up-modal" class="level-up-modal hidden">
-  <div class="level-up-card">
-    <div class="level-up-title">🎉 Поздравляем!</div>
-    <div class="level-up-desc" id="level-up-desc">Вы достигли 2 уровня и получаете 250 валюты.</div>
+<div id="level-up-modal" class="custom-modal hidden">
+  <div class="modal-card">
+    <div class="modal-title">🎉 Поздравляем!</div>
+    <div class="modal-desc" id="level-up-desc">Вы достигли 2 уровня и получаете 250 валюты.</div>
     <button id="level-up-ok-btn" class="claim-btn" style="width: 100%;">Отлично!</button>
+  </div>
+</div>
+
+<!-- ОКНО ПРОФИЛЯ -->
+<div id="profile-modal" class="custom-modal hidden">
+  <div class="modal-card" style="border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(34,211,238,0.4);">
+    <button id="profile-close-btn" class="profile-modal-close">✕</button>
+    
+    <div class="avatar-placeholder" id="profile-avatar-large" style="width: 80px; height: 80px; margin: 0 auto 15px; font-size: 24px; border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(34,211,238,0.5);">VIP</div>
+    
+    <div class="modal-title" id="profile-nickname-large" style="color: white; text-shadow: none; margin-bottom: 5px;">RIDERNICK</div>
+    <div style="font-size: 14px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 20px;">Уровень <span id="profile-level-large">1</span></div>
+    
+    <div style="text-align: left; font-size: 12px; margin-bottom: 5px; display: flex; justify-content: space-between; color: var(--text-dim);">
+      <span>Опыт (EXP)</span>
+      <span id="profile-exp-text" style="color: white; font-weight: bold;">0 / 200</span>
+    </div>
+    <div class="level-bar" style="width: 100%; height: 12px; border-radius: 6px; margin-bottom: 20px; background: #1a202c; border: 1px solid rgba(34,211,238,0.3);">
+      <div class="level-progress" id="profile-progress-bar-large" style="border-radius: 6px; background-color: var(--accent-cyan);"></div>
+    </div>
+    
+    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; font-size: 13px; color: var(--text-dim); display: flex; justify-content: space-between;">
+      <span>Всего тапов:</span>
+      <span id="profile-total-taps" style="color: var(--accent-orange); font-weight: bold;">0</span>
+    </div>
   </div>
 </div>
 
@@ -770,23 +819,23 @@ const MISSIONS = [
 ];
 
 /* =========================================================
-   ТАБЛИЦА УРОВНЕЙ И ЭКСПЫ (до 15 уровня)
+   ТАБЛИЦА УРОВНЕЙ, ОПЫТА И НАГРАД (до 15 уровня)
    ========================================================= */
 const LEVEL_REQUIREMENTS = {
-  2:  { exp: 200,   reward: 250 },
-  3:  { exp: 300,   reward: 350 },
-  4:  { exp: 450,   reward: 500 },
-  5:  { exp: 700,   reward: 800 },
-  6:  { exp: 1000,  reward: 1000 },
-  7:  { exp: 1400,  reward: 1300 },
-  8:  { exp: 1900,  reward: 1700 },
-  9:  { exp: 2500,  reward: 2200 },
-  10: { exp: 3300,  reward: 3000 },
-  11: { exp: 4300,  reward: 4000 },
-  12: { exp: 5500,  reward: 5500 },
-  13: { exp: 7000,  reward: 7500 },
-  14: { exp: 8800,  reward: 10000 },
-  15: { exp: 11000, reward: 15000 }
+  2:  { exp: 200,   reward: 1000 },
+  3:  { exp: 300,   reward: 1000 },
+  4:  { exp: 450,   reward: 1000 },
+  5:  { exp: 700,   reward: 3000 },
+  6:  { exp: 1000,  reward: 1500 },
+  7:  { exp: 1400,  reward: 1500 },
+  8:  { exp: 1900,  reward: 1500 },
+  9:  { exp: 2500,  reward: 1500 },
+  10: { exp: 3300,  reward: 5000 },
+  11: { exp: 4300,  reward: 2500 },
+  12: { exp: 5500,  reward: 2500 },
+  13: { exp: 7000,  reward: 2500 },
+  14: { exp: 8800,  reward: 2500 },
+  15: { exp: 11000, reward: 7500 }
 };
 
 /* =========================================================
@@ -881,7 +930,7 @@ function checkLevelUp() {
 function showLevelUpModal(lvl, reward) {
   const modal = document.getElementById('level-up-modal');
   const desc = document.getElementById('level-up-desc');
-  desc.innerText = `Вы достигли ${lvl} уровня и получаете ${fmt(reward)} валюты.`;
+  desc.innerText = `Вы достигли ${lvl} уровня и получаете ${fmt(reward)} монет!`;
   modal.classList.remove('hidden');
 }
 
@@ -893,7 +942,7 @@ function renderTop() {
   document.getElementById('coins-display').innerText = '🪙 ' + fmt(state.coins);
   document.getElementById('user-level-label').innerText = 'Lv ' + state.level;
   
-  let progressPercent = 100; // По умолчанию 100% для максимального уровня
+  let progressPercent = 100;
   if (LEVEL_REQUIREMENTS[state.level + 1]) {
     let currentTargetExp = LEVEL_REQUIREMENTS[state.level + 1].exp;
     let prevTargetExp = state.level === 1 ? 0 : LEVEL_REQUIREMENTS[state.level].exp;
@@ -905,7 +954,41 @@ function renderTop() {
 }
 
 /* =========================================================
-   РЕНДЕР ГАРАЖА (Скутер стоит статично)
+   ОКНО ПРОФИЛЯ
+   ========================================================= */
+const profileModal = document.getElementById('profile-modal');
+document.getElementById('user-profile-btn').addEventListener('click', () => {
+  renderProfile();
+  profileModal.classList.remove('hidden');
+});
+document.getElementById('profile-close-btn').addEventListener('click', () => {
+  profileModal.classList.add('hidden');
+});
+
+function renderProfile() {
+  document.getElementById('profile-nickname-large').innerText = document.getElementById('user-nickname').innerText;
+  document.getElementById('profile-avatar-large').innerHTML = document.getElementById('avatar-placeholder').innerHTML;
+  document.getElementById('profile-level-large').innerText = state.level;
+  document.getElementById('profile-total-taps').innerText = fmt(state.totalTaps);
+
+  let progressPercent = 100;
+  if (LEVEL_REQUIREMENTS[state.level + 1]) {
+    let currentTargetExp = LEVEL_REQUIREMENTS[state.level + 1].exp;
+    let prevTargetExp = state.level === 1 ? 0 : LEVEL_REQUIREMENTS[state.level].exp;
+    let span = currentTargetExp - prevTargetExp;
+    let currentInLevel = state.exp - prevTargetExp;
+    progressPercent = Math.min(100, Math.max(0, (currentInLevel / span) * 100));
+    
+    document.getElementById('profile-exp-text').innerText = `${fmt(state.exp)} / ${fmt(currentTargetExp)}`;
+  } else {
+    document.getElementById('profile-exp-text').innerText = `${fmt(state.exp)} (МАКС)`;
+  }
+  
+  document.getElementById('profile-progress-bar-large').style.width = progressPercent + '%';
+}
+
+/* =========================================================
+   РЕНДЕР ГАРАЖА
    ========================================================= */
 function renderGarage() {
   const bike = activeBike();
@@ -1179,7 +1262,7 @@ function initTelegramUser() {
 }
 
 /* =========================================================
-   СТАНТ-ЗАЕЗД (Таймер обнуляется при опускании колеса!)
+   СТАНТ-ЗАЕЗД
    ========================================================= */
 const stuntOverlay   = document.getElementById('stunt-overlay');
 const stuntBikeEl    = document.getElementById('stunt-bike');
@@ -1205,7 +1288,6 @@ let stunt = null;
 let lastSparkTs = 0;
 
 function stuntCoinsForState(bestWheelieSec, maxAngle) {
-  // Награда теперь опирается только на ЛУЧШЕЕ время непрерывного станта
   return Math.max(1, Math.floor(bestWheelieSec * 6 + maxAngle * 1.5));
 }
 
@@ -1253,8 +1335,8 @@ function openStunt() {
     speed: 15,
     roadOffset: 0,
     cityOffset: 0,
-    currentWheelie: 0, // Текущее время на заднем колесе (сбрасывается)
-    bestWheelie: 0,    // Рекорд времени за этот заезд (не сбрасывается)
+    currentWheelie: 0,
+    bestWheelie: 0,
     maxAngle: 0,
     gas: false,
     brake: false,
@@ -1312,12 +1394,11 @@ function stuntTick(ts) {
     stunt.angle += (stunt.angle > 0 ? -1 : 1) * 8 * dt;
   }
 
-  // --- ЛОГИКА СБРОСА ТАЙМЕРА ---
   if (stunt.angle > 5) {
     stunt.currentWheelie += dt;
     stunt.bestWheelie = Math.max(stunt.bestWheelie, stunt.currentWheelie);
   } else {
-    stunt.currentWheelie = 0; // Скутер опустился - счетчик обнуляется!
+    stunt.currentWheelie = 0;
   }
 
   stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
@@ -1329,11 +1410,9 @@ function stuntTick(ts) {
   stuntRoadEl.style.backgroundPosition = '0 0, ' + stunt.roadOffset + 'px 18px';
   stuntCityBg.style.backgroundPosition = stunt.cityOffset + 'px bottom';
   
-  // На экране показываем ТЕКУЩИЙ (сбрасываемый) таймер для напряжения
   stuntTimerEl.innerText = stunt.currentWheelie.toFixed(1);
   stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
   stuntSpeedEl.innerText = Math.round(stunt.speed);
-  // А вот награда рассчитывается из ЛУЧШЕГО времени за заезд
   stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle));
 
   maybeSpawnSparks(ts);
@@ -1351,58 +1430,4 @@ function stuntTick(ts) {
 }
 
 function finishStunt() {
-  const reward = stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle);
-  stuntResultStatsEl.innerHTML =
-    'Рекорд в станте: <b>' + stunt.bestWheelie.toFixed(1) + 'с</b><br>' +
-    'Макс. угол: <b>' + Math.round(stunt.maxAngle) + '°</b><br>' +
-    'Награда: <b>🪙 ' + fmt(reward) + '</b>';
-  stuntResultEl.dataset.reward = reward;
-  stuntResultEl.classList.remove('hidden');
-}
-
-function claimStuntReward() {
-  const reward = parseInt(stuntResultEl.dataset.reward || '0', 10);
-  state.coins += reward;
-  addExp(Math.floor(stunt.bestWheelie * 5)); // Даем опыт за лучшее время на колесе
-  saveState();
-  renderTop();
-  renderGarage();
-  renderMissions();
-  closeStunt();
-}
-
-document.getElementById('start-stunt-btn').addEventListener('click', openStunt);
-document.getElementById('stunt-close-btn').addEventListener('click', closeStunt);
-document.getElementById('stunt-claim-btn').addEventListener('click', claimStuntReward);
-
-function bindHold(el, onPress, onRelease) {
-  const press = (e) => { e.preventDefault(); onPress(); };
-  const release = (e) => { e.preventDefault(); onRelease(); };
-  el.addEventListener('pointerdown', press);
-  el.addEventListener('pointerup', release);
-  el.addEventListener('pointerleave', release);
-  el.addEventListener('pointercancel', release);
-}
-
-bindHold(gasZone,
-  () => { if (stunt && !stunt.crashed) { stunt.gas = true; gasZone.classList.add('pressed'); } },
-  () => { if (stunt) { stunt.gas = false; } gasZone.classList.remove('pressed'); }
-);
-bindHold(brakeZone,
-  () => { if (stunt && !stunt.crashed) { stunt.brake = true; brakeZone.classList.add('pressed'); } },
-  () => { if (stunt) { stunt.brake = false; } brakeZone.classList.remove('pressed'); }
-);
-
-/* =========================================================
-   СТАРТ ИГРЫ
-   ========================================================= */
-initTelegramUser();
-renderTop();
-renderGarage();
-renderShopTabs();
-renderBikeList();
-renderMissions();
-</script>
-
-</body>
-</html>
+  const reward = stuntCoinsForState(stunt.bestWheelie, stunt.
