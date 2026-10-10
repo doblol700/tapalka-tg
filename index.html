@@ -44,7 +44,7 @@
     flex-direction: column;
   }
 
-  /* --- TOP PANEL (Сдвинута вниз) --- */
+  /* --- TOP PANEL --- */
   .top-panel {
     display: flex;
     justify-content: space-between;
@@ -161,36 +161,52 @@
   .nav-text-label { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-top: 3px; }
   .nav-item.active .nav-text-label { color: var(--accent-orange); }
 
-  /* --- СТАРТ СТАНТА --- */
+  /* --- СТАРТ кнопка --- */
   .start-stunt-wrap { padding: 4px 12px 18px; }
   .start-stunt-btn { width: 100%; padding: 14px 10px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; font-size: 15px; font-weight: bold; letter-spacing: 0.5px; cursor: pointer; box-shadow: 0 0 16px rgba(249,115,22,0.5); }
   .start-stunt-btn:active { transform: scale(0.98); }
 
-  /* --- СТАНТ-ЗАЕЗД: ОВЕРЛЕЙ --- */
-  .stunt-overlay { position: fixed; inset: 0; z-index: 100; background: linear-gradient(180deg, #030712 0%, #0f172a 60%, #1e1b4b 100%); display: flex; flex-direction: column; }
+  /* --- ОБЩИЕ СТИЛИ ДЛЯ ОВЕРЛЕЕВ (СТАНТ И ГОНКА) --- */
+  .stunt-overlay { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
-  .stunt-hud { display: flex; justify-content: space-around; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; }
-  .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 8px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; }
-  .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background: linear-gradient(180deg, #050b14 0%, #0f172a 50%, #1e293b 100%); }
-  .stunt-city-bg { position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; background-image: radial-gradient(circle at 15% 30%, rgba(34,211,238,0.15) 0%, transparent 40%), radial-gradient(circle at 75% 20%, rgba(249,115,22,0.15) 0%, transparent 45%), linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); background-size: 100% 100%, 100% 100%, 100% 100%, 120px 100%; background-position: bottom; z-index: 1; }
+  
+  .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; }
+  .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; }
+  
+  .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: var(--sky-color, #4ca1af); transition: background-color 2s ease; }
+  
+  .stunt-city-bg { 
+    position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; 
+    background-image: 
+      linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); 
+    background-size: 100% 100%, 120px 100%; background-position: bottom; z-index: 1; 
+    filter: brightness(var(--city-bright, 1)); transition: filter 2s ease;
+  }
+  
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; transition: transform 0.05s linear; }
   .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
+  
   .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background-color: #0f1218; background-image: linear-gradient(180deg, #1e293b 0%, #090d16 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px); background-position: 0 0, 0 18px; background-size: 100% 100%, 140px 8px; border-top: 4px solid var(--accent-cyan); box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; }
-  .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; }
+  
+  .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; }
   .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; }
   .stunt-zone-icon { font-size: 34px; }
   .stunt-zone.brake { background: rgba(239,68,68,0.15); border-top: 2px solid rgba(239,68,68,0.6); color: #fca5a5; }
   .stunt-zone.brake.pressed { background: rgba(239,68,68,0.4); }
   .stunt-zone.gas { background: rgba(249,115,22,0.15); border-top: 2px solid var(--accent-orange); color: var(--accent-orange); }
   .stunt-zone.gas.pressed { background: rgba(249,115,22,0.45); }
+  
   .stunt-close-btn { position: absolute; top: 28px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,0.75); color: var(--text-color); font-size: 15px; cursor: pointer; z-index: 10; }
+  
   .stunt-result { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); }
   .stunt-result.hidden { display: none; }
   .stunt-result-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.5); border-radius: 14px; padding: 22px 24px; text-align: center; width: 78%; max-width: 320px; box-shadow: var(--glow); }
   .stunt-result-title { font-size: 18px; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; }
   .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
   .stunt-result-stats b { color: var(--accent-cyan); }
+  
   .stunt-spark-anchor { position: absolute; bottom: 45px; left: 45px; width: 1px; height: 1px; pointer-events: none; z-index: 4; }
   .spark-particle { position: absolute; width: 7px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #fff9c4, #f97316); box-shadow: 0 0 6px 1px rgba(249,115,22,0.9); pointer-events: none; z-index: 4; animation: sparkFly 0.5s ease-out forwards; }
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
@@ -203,6 +219,12 @@
   .modal-desc { font-size: 14px; color: var(--text-color); margin-bottom: 18px; line-height: 1.5; }
   .profile-modal-close { position: absolute; top: -12px; right: -12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,1); color: var(--text-color); font-size: 15px; cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Улучшения для Меню Выбора Режима */
+  .mode-btn { width: 100%; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; margin-bottom: 10px; transition: transform 0.1s; }
+  .mode-btn:active { transform: scale(0.97); }
+  .mode-stunt { background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; }
+  .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
 </style>
 </head>
 <body>
@@ -211,7 +233,6 @@
 
   <!-- Верхняя панель -->
   <div class="top-panel">
-    <!-- КЛИКАБЕЛЬНЫЙ ПРОФИЛЬ -->
     <div class="user-info" id="user-profile-btn">
       <div class="avatar-placeholder" id="avatar-placeholder">VIP</div>
       <div class="stats-text">
@@ -237,7 +258,8 @@
       <div class="section-title">Тюнинг</div>
       <div class="tuning-list" id="tuning-list"></div>
       <div class="start-stunt-wrap">
-        <button id="start-stunt-btn" class="start-stunt-btn">🏁 СТАРТ — СТАНТ ЗАЕЗД</button>
+        <!-- КНОПКА СТАРТ (ПЕРЕИМЕНОВАНА) -->
+        <button id="main-start-btn" class="start-stunt-btn">🏁 СТАРТ</button>
       </div>
     </div>
 
@@ -258,7 +280,6 @@
       <div class="clan-placeholder">
         <div class="icon">👥</div>
         <div class="title">Кланы в разработке</div>
-        <div>Скоро здесь можно будет объединяться с другими райдерами.</div>
       </div>
     </div>
   </div>
@@ -272,14 +293,32 @@
   </div>
 </div>
 
+<!-- ============================================== -->
+<!-- МОДАЛЬНОЕ ОКНО ВЫБОРА РЕЖИМА -->
+<!-- ============================================== -->
+<div id="mode-modal" class="custom-modal hidden">
+  <div class="modal-card">
+    <button id="mode-close-btn" class="profile-modal-close">✕</button>
+    <div class="modal-title" style="margin-bottom: 20px;">Выберите режим</div>
+    <div>
+      <button id="mode-stunt-btn" class="mode-btn mode-stunt">🏍️ Стант-заезд</button>
+      <button id="mode-race-btn" class="mode-btn mode-race">🏎️ Гонка 1x1 (Бот)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================== -->
 <!-- СТАНТ-ЗАЕЗД (оверлей) -->
+<!-- ============================================== -->
 <div id="stunt-overlay" class="stunt-overlay hidden">
   <div class="stunt-hud">
     <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
     <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
     <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
     <div class="stunt-hud-item">🪙 <span id="stunt-coins-preview">0</span></div>
+    <div class="stunt-hud-item" style="min-width: 30%;">🕒 <span id="stunt-clock">08:00</span></div>
   </div>
+  
   <div class="stunt-scene" id="stunt-scene">
     <div class="stunt-city-bg" id="stunt-city-bg"></div>
     <div class="stunt-bike-wrap">
@@ -288,10 +327,12 @@
     </div>
     <div class="stunt-road" id="stunt-road"></div>
   </div>
+  
   <div class="stunt-controls">
     <div class="stunt-zone brake" id="stunt-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
     <div class="stunt-zone gas" id="stunt-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
   </div>
+  
   <div class="stunt-result hidden" id="stunt-result">
     <div class="stunt-result-card">
       <div class="stunt-result-title" id="stunt-result-title">Заезд окончен!</div>
@@ -300,6 +341,52 @@
     </div>
   </div>
   <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
+</div>
+
+<!-- ============================================== -->
+<!-- ГОНКА 1 VS 1 (оверлей) -->
+<!-- ============================================== -->
+<div id="race-overlay" class="stunt-overlay hidden">
+  <div class="stunt-hud">
+    <div class="stunt-hud-item" style="min-width: 100%; text-align: left; padding-left: 10px;">
+      🏎️ <span id="race-speed">0</span> км/ч
+    </div>
+    <div class="stunt-hud-item" style="color: var(--accent-cyan);">🏁 Вы: <span id="race-dist-player">0</span>/500м</div>
+    <div class="stunt-hud-item" style="color: #fca5a5;">🤖 Бот: <span id="race-dist-bot">0</span>/500м</div>
+  </div>
+  
+  <div class="stunt-scene" id="race-scene">
+    <div class="stunt-city-bg" id="race-city-bg"></div>
+    
+    <!-- МОТОЦИКЛ БОТА (чуть дальше и темнее) -->
+    <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 42%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
+      <!-- Добавляем hue-rotate, чтобы бот отличался по цвету -->
+      <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));">
+        <img src="дио1.png" alt="Бот">
+      </div>
+    </div>
+
+    <!-- ВАШ МОТОЦИКЛ -->
+    <div class="stunt-bike-wrap" id="race-player-wrap" style="left: 20%; z-index: 3;">
+      <div class="stunt-bike" id="race-bike-player">🏍️</div>
+    </div>
+    
+    <div class="stunt-road" id="race-road"></div>
+  </div>
+  
+  <div class="stunt-controls">
+    <div class="stunt-zone brake" id="race-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
+    <div class="stunt-zone gas" id="race-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
+  </div>
+  
+  <div class="stunt-result hidden" id="race-result">
+    <div class="stunt-result-card">
+      <div class="stunt-result-title" id="race-result-title">Гонка окончена!</div>
+      <div class="stunt-result-stats" id="race-result-stats"></div>
+      <button id="race-claim-btn" class="claim-btn">Закрыть</button>
+    </div>
+  </div>
+  <button id="race-close-btn" class="stunt-close-btn">✕</button>
 </div>
 
 <!-- ОКНО ПОВЫШЕНИЯ УРОВНЯ -->
@@ -326,7 +413,6 @@
     <div class="level-bar" style="width: 100%; height: 12px; border-radius: 6px; margin-bottom: 20px; background: #1a202c; border: 1px solid rgba(34,211,238,0.3);">
       <div class="level-progress" id="profile-progress-bar-large" style="border-radius: 6px; background-color: var(--accent-cyan);"></div>
     </div>
-    
     <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; font-size: 13px; color: var(--text-dim); display: flex; justify-content: space-between;">
       <span>Всего тапов:</span>
       <span id="profile-total-taps" style="color: var(--accent-orange); font-weight: bold;">0</span>
@@ -335,30 +421,45 @@
 </div>
 
 <script>
+// --- 1. БАЗА ДАННЫХ И КАТАЛОГ ---
 function scooterImageMarkup(cls) {
   return `<img src="дио1.png" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Скутер">`;
 }
 
 const BIKE_CATALOG = {
   scooter: { label: 'Скутеры', emoji: '🛵', bikes: [
-    { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60 км/ч', imgType: 'scooter' },
-    { id: 'honda-dio110', name: 'Honda Dio 110 AF35', price: 2500, power: 2, top: '65 км/ч', imgType: 'scooter' },
-    { id: 'honda-tact', name: 'Honda Tact AF51', price: 3500, power: 2, top: '60 км/ч', imgType: 'scooter' }
+    { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgType: 'scooter' },
+    { id: 'honda-dio110', name: 'Honda Dio 110 AF35', price: 2500, power: 2, top: '65', imgType: 'scooter' },
+    { id: 'honda-tact', name: 'Honda Tact AF51', price: 3500, power: 2, top: '60', imgType: 'scooter' },
+    { id: 'suzuki-lets4', name: "Suzuki Let's 4", price: 4000, power: 2, top: '60', imgType: 'scooter' },
+    { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgType: 'scooter' },
+    { id: 'honda-zoomer', name: 'Honda Zoomer', price: 6000, power: 3, top: '75', imgType: 'scooter' }
   ]},
   pitbike: { label: 'Питбайк', emoji: '🏍️', bikes: [
-    { id: 'ycf-slw150', name: 'YCF SLW 150F', price: 3000, power: 2, top: '65 км/ч' },
-    { id: 'kayo-tt250', name: 'KAYO TT250', price: 9000, power: 5, top: '95 км/ч' }
+    { id: 'ycf-slw150', name: 'YCF SLW 150F', price: 3000, power: 2, top: '65' },
+    { id: 'apollo-rfz', name: 'Apollo RFZ 150', price: 5000, power: 3, top: '75' },
+    { id: 'kayo-tt250', name: 'KAYO TT250', price: 9000, power: 5, top: '95' },
+    { id: 'stomp-190', name: 'Stomp Predator 190', price: 14000, power: 6, top: '100' }
   ]},
   enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [
-    { id: 'ktm-300exc', name: 'KTM 300 EXC', price: 40000, power: 11, top: '135 км/ч' },
-    { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145 км/ч' }
+    { id: 'ktm-300exc', name: 'KTM 300 EXC', price: 40000, power: 11, top: '135' },
+    { id: 'husq-te300', name: 'Husqvarna TE 300i', price: 45000, power: 12, top: '138' },
+    { id: 'beta-300rr', name: 'Beta 300 RR', price: 42000, power: 11, top: '132' },
+    { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145' },
+    { id: 'honda-crf450rx', name: 'Honda CRF450RX', price: 55000, power: 15, top: '148' },
+    { id: 'sherco-300se', name: 'Sherco 300 SE Factory', price: 47000, power: 12, top: '134' }
   ]},
   motocross: { label: 'Кросс', emoji: '🏁', bikes: [
-    { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156 км/ч' }
+    { id: 'ktm-450sxf', name: 'KTM 450 SX-F', price: 90000, power: 22, top: '155' },
+    { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156' },
+    { id: 'honda-crf450r', name: 'Honda CRF450R', price: 95000, power: 23, top: '158' },
+    { id: 'kawasaki-kx450', name: 'Kawasaki KX450', price: 93000, power: 23, top: '157' },
+    { id: 'suzuki-rmz450', name: 'Suzuki RM-Z450', price: 85000, power: 21, top: '152' },
+    { id: 'husq-fc450', name: 'Husqvarna FC 450', price: 96000, power: 24, top: '159' }
   ]}
 };
 
-const STARTER_BIKE = { id: 'starter', name: 'Honda Dio 27', power: 1, emoji: '🛵', imgType: 'scooter' };
+const STARTER_BIKE = BIKE_CATALOG.scooter.bikes[0];
 
 const TUNING_TYPES = [
   { id: 'engine', name: 'Двигатель', icon: '⚙️', baseCost: 400, costMult: 1.6, powerPerLevel: 3, maxLevel: 10 },
@@ -369,6 +470,9 @@ const TUNING_TYPES = [
 
 const MISSIONS = [
   { id: 'taps50', name: 'Сделать 50 тапов', reward: 300, type: 'taps', target: 50 },
+  { id: 'taps200', name: 'Сделать 200 тапов', reward: 900, type: 'taps', target: 200 },
+  { id: 'taps1000', name: 'Сделать 1000 тапов', reward: 4000, type: 'taps', target: 1000 },
+  { id: 'coins5000', name: 'Накопить 5 000 монет', reward: 500, type: 'coins', target: 5000 },
   { id: 'buybike', name: 'Купить любой мотоцикл', reward: 800, type: 'ownedBikes', target: 1 },
   { id: 'tune3', name: 'Прокачать узел до 3 ур.', reward: 700, type: 'tuneLevel', target: 3 },
 ];
@@ -390,23 +494,43 @@ const LEVEL_REQUIREMENTS = {
   15: { exp: 11000, reward: 7500 }
 };
 
+// --- 2. ЗАЩИЩЕННАЯ СИСТЕМА СОХРАНЕНИЙ ---
 const SAVE_KEY = 'motoTapalkaSave';
 
 function defaultState() {
-  return { coins: 500, totalTaps: 0, level: 1, exp: 0, ownedBikeIds: [], activeBikeId: 'starter', tuning: { engine: 0, exhaust: 0, suspension: 0, tires: 0 }, claimedMissions: {} };
+  return { 
+    coins: 500, totalTaps: 0, level: 1, exp: 0, 
+    ownedBikeIds: [], activeBikeId: 'starter', 
+    tuning: { engine: 0, exhaust: 0, suspension: 0, tires: 0 }, 
+    claimedMissions: {} 
+  };
 }
 
 function loadState() {
+  const def = defaultState();
   try {
     const raw = localStorage.getItem(SAVE_KEY);
-    if (!raw) return defaultState();
-    return Object.assign(defaultState(), JSON.parse(raw));
-  } catch (e) { return defaultState(); }
+    if (!raw) return def;
+    const parsed = JSON.parse(raw);
+    return {
+      coins: typeof parsed.coins === 'number' ? parsed.coins : def.coins,
+      totalTaps: typeof parsed.totalTaps === 'number' ? parsed.totalTaps : def.totalTaps,
+      level: typeof parsed.level === 'number' ? parsed.level : def.level,
+      exp: typeof parsed.exp === 'number' ? parsed.exp : def.exp,
+      ownedBikeIds: Array.isArray(parsed.ownedBikeIds) ? parsed.ownedBikeIds : def.ownedBikeIds,
+      activeBikeId: parsed.activeBikeId || def.activeBikeId,
+      tuning: parsed.tuning || def.tuning,
+      claimedMissions: parsed.claimedMissions || def.claimedMissions
+    };
+  } catch (e) {
+    return def;
+  }
 }
 
 let state = loadState();
 function saveState() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {} }
 
+// --- 3. ОБЩИЕ ФУНКЦИИ ---
 function findBikeById(id) {
   if (id === 'starter') return STARTER_BIKE;
   for (const cat of Object.values(BIKE_CATALOG)) {
@@ -417,20 +541,17 @@ function findBikeById(id) {
 }
 
 function activeBike() { return findBikeById(state.activeBikeId); }
-
 function tuningCost(type, level) { return Math.round(type.baseCost * Math.pow(type.costMult, level)); }
-
 function perTapValue() {
-  const bike = activeBike();
-  let value = bike.power || 1;
+  let value = activeBike().power || 1;
   if(state.tuning) {
     TUNING_TYPES.forEach(t => { value += (state.tuning[t.id] || 0) * t.powerPerLevel; });
   }
   return value;
 }
-
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
 
+// --- 4. УРОВНИ И ОПЫТ ---
 function addExp(amount) {
   state.exp += amount;
   checkLevelUp();
@@ -443,10 +564,10 @@ function checkLevelUp() {
   if (LEVEL_REQUIREMENTS[nextLevel]) {
     if (state.exp >= LEVEL_REQUIREMENTS[nextLevel].exp) {
       let reward = LEVEL_REQUIREMENTS[nextLevel].reward;
-      state.level = nextLevel;
+      state.level = nextLevel; 
       state.coins += reward;
       showLevelUpModal(state.level, reward);
-      checkLevelUp();
+      checkLevelUp(); 
     }
   }
 }
@@ -473,11 +594,9 @@ function renderTop() {
   document.getElementById('level-progress-bar').style.width = progressPercent + '%';
 }
 
+// --- 5. ПРОФИЛЬ ---
 const profileModal = document.getElementById('profile-modal');
-document.getElementById('user-profile-btn').addEventListener('click', () => {
-  renderProfile();
-  profileModal.classList.remove('hidden');
-});
+document.getElementById('user-profile-btn').addEventListener('click', () => { renderProfile(); profileModal.classList.remove('hidden'); });
 document.getElementById('profile-close-btn').addEventListener('click', () => { profileModal.classList.add('hidden'); });
 
 function renderProfile() {
@@ -500,6 +619,7 @@ function renderProfile() {
   document.getElementById('profile-progress-bar-large').style.width = progressPercent + '%';
 }
 
+// --- 6. РЕНДЕР ГАРАЖА ---
 function renderGarage() {
   const bike = activeBike();
   document.getElementById('active-bike-name').innerText = bike.name;
@@ -518,7 +638,7 @@ function renderGarage() {
   const list = document.getElementById('tuning-list');
   list.innerHTML = '';
   TUNING_TYPES.forEach(t => {
-    const level = state.tuning ? (state.tuning[t.id] || 0) : 0;
+    const level = (state.tuning && state.tuning[t.id]) || 0;
     const maxed = level >= t.maxLevel;
     const cost = tuningCost(t, level);
     const canAfford = state.coins >= cost;
@@ -543,11 +663,12 @@ function renderGarage() {
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-tune');
       const type = TUNING_TYPES.find(t => t.id === id);
-      const level = state.tuning[id] || 0;
+      const level = (state.tuning && state.tuning[id]) || 0;
       if (level >= type.maxLevel) return;
       const cost = tuningCost(type, level);
       if (state.coins < cost) return;
       state.coins -= cost;
+      if(!state.tuning) state.tuning = {};
       state.tuning[id] = level + 1;
       saveState();
       renderTop();
@@ -557,14 +678,16 @@ function renderGarage() {
   });
 }
 
+// --- 7. МАГАЗИН И МИССИИ ---
 let activeShopTab = 'scooter';
 function renderShopTabs() {
   const tabsEl = document.getElementById('shop-tabs');
   tabsEl.innerHTML = '';
   Object.keys(BIKE_CATALOG).forEach(key => {
+    const cat = BIKE_CATALOG[key];
     const tab = document.createElement('div');
     tab.className = 'shop-tab' + (key === activeShopTab ? ' active' : '');
-    tab.innerText = BIKE_CATALOG[key].label;
+    tab.innerText = cat.label;
     tab.addEventListener('click', () => { activeShopTab = key; renderShopTabs(); renderBikeList(); });
     tabsEl.appendChild(tab);
   });
@@ -585,22 +708,18 @@ function renderBikeList() {
                   `<button class="bike-btn buy" data-buy="${bike.id}" ${canAfford ? '' : 'disabled'}>🪙 ${fmt(bike.price)}</button>`;
 
     const iconInner = bike.imgType === 'scooter' ? scooterImageMarkup('scooter-icon-card') : bike.emoji;
-    card.innerHTML = `<div class="bike-card-emoji">${iconInner}</div><div class="bike-card-info"><div class="bike-card-name">${bike.name}</div><div class="bike-card-stats">Сила: ${bike.power} · ${bike.top}</div></div>${btnHtml}`;
+    card.innerHTML = `<div class="bike-card-emoji">${iconInner}</div><div class="bike-card-info"><div class="bike-card-name">${bike.name}</div><div class="bike-card-stats">Сила: ${bike.power} · ${bike.top} км/ч</div><div class="bike-card-price">${owned ? 'Куплен' : '🪙 ' + fmt(bike.price)}</div></div>${btnHtml}`;
     listEl.appendChild(card);
   });
 
   listEl.querySelectorAll('button[data-buy]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-buy');
-      const bike = findBikeById(id);
+      const id = btn.getAttribute('data-buy'), bike = findBikeById(id);
       if (state.coins < bike.price) return;
-      state.coins -= bike.price;
-      state.ownedBikeIds.push(id);
-      state.activeBikeId = id;
+      state.coins -= bike.price; state.ownedBikeIds.push(id); state.activeBikeId = id;
       saveState(); renderTop(); renderBikeList(); renderGarage(); renderMissions();
     });
   });
-
   listEl.querySelectorAll('button[data-select]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.activeBikeId = btn.getAttribute('data-select');
@@ -621,41 +740,33 @@ function renderMissions() {
   const listEl = document.getElementById('missions-list');
   listEl.innerHTML = '';
   MISSIONS.forEach(m => {
-    const progress = missionProgressValue(m);
-    const complete = progress >= m.target;
-    const claimed = !!state.claimedMissions[m.id];
+    const progress = missionProgressValue(m), complete = progress >= m.target, claimed = !!state.claimedMissions[m.id];
     const card = document.createElement('div');
     card.className = 'mission-card';
-    let btnHtml = claimed ? `<button class="claim-btn done" disabled>Получено</button>` : 
-                  complete ? `<button class="claim-btn" data-claim="${m.id}">Забрать</button>` : 
-                  `<button class="claim-btn" disabled>${Math.min(progress, m.target)}/${m.target}</button>`;
-    card.innerHTML = `<div class="mission-info"><div class="mission-name">${m.name}</div><div class="mission-reward">Награда: 🪙 ${fmt(m.reward)}</div></div>${btnHtml}`;
+    let btnHtml = claimed ? `<button class="claim-btn done" disabled>Получено</button>` : complete ? `<button class="claim-btn" data-claim="${m.id}">Забрать</button>` : `<button class="claim-btn" disabled>${Math.min(progress, m.target)}/${m.target}</button>`;
+    card.innerHTML = `<div class="mission-info"><div class="mission-name">${m.name}</div><div class="mission-progress">Прогресс: ${Math.min(progress, m.target)} / ${m.target}</div><div class="mission-reward">Награда: 🪙 ${fmt(m.reward)}</div></div>${btnHtml}`;
     listEl.appendChild(card);
   });
-
   listEl.querySelectorAll('button[data-claim]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-claim');
-      const mission = MISSIONS.find(m => m.id === id);
+      const id = btn.getAttribute('data-claim'), mission = MISSIONS.find(m => m.id === id);
       if (state.claimedMissions[id] || missionProgressValue(mission) < mission.target) return;
-      state.coins += mission.reward;
-      state.claimedMissions[id] = true;
+      state.coins += mission.reward; state.claimedMissions[id] = true;
       saveState(); renderTop(); renderMissions(); renderGarage();
     });
   });
 }
 
+// --- 8. ОБРАБОТКА ТАПОВ И НАВИГАЦИЯ ---
 const tapZone = document.getElementById('tap-zone');
 tapZone.addEventListener('click', (e) => {
   const gain = perTapValue();
   state.coins += gain; state.totalTaps += 1; addExp(1);
   saveState();
   document.getElementById('points-display').innerText = fmt(state.coins) + ' pts';
-  renderTop();
-
+  
   const b = document.createElement('div');
-  b.classList.add('floating-bonus');
-  b.innerText = '+' + gain;
+  b.classList.add('floating-bonus'); b.innerText = '+' + gain;
   const rect = tapZone.getBoundingClientRect();
   b.style.left = ((e.touches ? e.touches[0].clientX : e.clientX) - rect.left - 15) + 'px';
   b.style.top = ((e.touches ? e.touches[0].clientY : e.clientY) - rect.top - 30) + 'px';
@@ -666,10 +777,8 @@ tapZone.addEventListener('click', (e) => {
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
     const target = item.getAttribute('data-screen');
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    item.classList.add('active');
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('screen-' + target).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); item.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById('screen-' + target).classList.add('active');
     if (target === 'garage') renderGarage();
     if (target === 'shop') { renderShopTabs(); renderBikeList(); }
     if (target === 'missions') renderMissions();
@@ -683,20 +792,37 @@ function initTelegramUser() {
     tg.ready(); tg.expand();
     const user = tg.initDataUnsafe && tg.initDataUnsafe.user;
     if (!user) return;
-    const nameEl = document.getElementById('user-nickname');
+    document.getElementById('user-nickname').innerText = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' ');
     const avatarEl = document.getElementById('avatar-placeholder');
-    const displayName = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' ');
-    if (displayName) nameEl.innerText = displayName;
     if (user.photo_url) avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`;
     else avatarEl.innerText = (user.first_name ? user.first_name[0] : (user.username ? user.username[0].toUpperCase() : 'R'));
   } catch (e) {}
 }
 
-const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg');
-const stuntTimerEl = document.getElementById('stunt-timer'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview');
-const stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
-const gasZone = document.getElementById('stunt-gas'), brakeZone = document.getElementById('stunt-brake'), stuntSceneEl = document.getElementById('stunt-scene'), sparkAnchorEl = document.getElementById('stunt-spark-anchor');
+// --- 9. ЛОГИКА МЕНЮ ВЫБОРА РЕЖИМА ГОНКИ ---
+document.getElementById('main-start-btn').addEventListener('click', () => {
+  document.getElementById('mode-modal').classList.remove('hidden');
+});
+document.getElementById('mode-close-btn').addEventListener('click', () => {
+  document.getElementById('mode-modal').classList.add('hidden');
+});
+document.getElementById('mode-stunt-btn').addEventListener('click', () => {
+  document.getElementById('mode-modal').classList.add('hidden');
+  openStunt();
+});
+document.getElementById('mode-race-btn').addEventListener('click', () => {
+  document.getElementById('mode-modal').classList.add('hidden');
+  openRace();
+});
 
+
+// --- 10. СТАНТ-ЗАЕЗД ---
+const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg');
+const stuntTimerEl = document.getElementById('stunt-timer'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntClockEl = document.getElementById('stunt-clock');
+const stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
+const stuntGasZone = document.getElementById('stunt-gas'), stuntBrakeZone = document.getElementById('stunt-brake'), stuntSceneEl = document.getElementById('stunt-scene'), sparkAnchorEl = document.getElementById('stunt-spark-anchor');
+
+const STUNT_MAX_ANGLE = 92, STUNT_MIN_ANGLE = -18, SPARK_ANGLE_THRESHOLD = 86, SPARK_INTERVAL_MS = 40;
 let stunt = null, lastSparkTs = 0;
 
 function stuntCoinsForState(bestWheelieSec, maxAngle) { return Math.max(1, Math.floor(bestWheelieSec * 6 + maxAngle * 1.5)); }
@@ -705,21 +831,17 @@ function spawnSparkBurst(count) {
   const anchorRect = sparkAnchorEl.getBoundingClientRect(), sceneRect = stuntSceneEl.getBoundingClientRect();
   const baseX = anchorRect.left - sceneRect.left, baseY = anchorRect.top - sceneRect.top;
   for (let i = 0; i < count; i++) {
-    const el = document.createElement('div');
-    el.className = 'spark-particle';
-    const angleDeg = -110 + (Math.random() * 90 - 45), dist = 18 + Math.random() * 30, rad = angleDeg * Math.PI / 180;
+    const el = document.createElement('div'); el.className = 'spark-particle';
+    const rad = (-110 + (Math.random() * 90 - 45)) * Math.PI / 180, dist = 18 + Math.random() * 30;
     el.style.left = baseX + 'px'; el.style.top = baseY + 'px';
-    el.style.setProperty('--sx', (Math.cos(rad) * dist).toFixed(1) + 'px');
-    el.style.setProperty('--sy', (Math.sin(rad) * dist).toFixed(1) + 'px');
-    el.style.setProperty('--sa', (Math.random() * 360).toFixed(0) + 'deg');
-    stuntSceneEl.appendChild(el);
-    setTimeout(() => el.remove(), 500);
+    el.style.setProperty('--sx', (Math.cos(rad) * dist).toFixed(1) + 'px'); el.style.setProperty('--sy', (Math.sin(rad) * dist).toFixed(1) + 'px'); el.style.setProperty('--sa', (Math.random() * 360).toFixed(0) + 'deg');
+    stuntSceneEl.appendChild(el); setTimeout(() => el.remove(), 500);
   }
 }
 
 function openStunt() {
-  stunt = { angle: 0, speed: 15, roadOffset: 0, cityOffset: 0, currentWheelie: 0, bestWheelie: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null };
-  stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
+  stunt = { angle: 0, speed: 15, roadOffset: 0, cityOffset: 0, currentWheelie: 0, bestWheelie: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null, gameTimeMinutes: 8 * 60, currentSkyClass: '' };
+  lastSparkTs = 0; stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
   stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
   const bike = activeBike();
   if (bike.imgType === 'scooter') { stuntBikeEl.classList.add('is-svg'); stuntBikeEl.innerHTML = scooterImageMarkup('scooter-icon-stunt'); } 
@@ -736,15 +858,11 @@ function stuntTick(ts) {
   const dt = Math.min((ts - stunt.lastTs) / 1000, 0.05);
   stunt.lastTs = ts;
 
-  if (stunt.gas) { stunt.angle += 55 * dt; stunt.speed = Math.min(stunt.speed + 35 * dt, 100); } 
-  else { stunt.speed = Math.max(stunt.speed - 12 * dt, 15); }
-  
+  if (stunt.gas) { stunt.angle += 55 * dt; stunt.speed = Math.min(stunt.speed + 35 * dt, 100); } else { stunt.speed = Math.max(stunt.speed - 12 * dt, 15); }
   if (stunt.brake) { stunt.angle -= 85 * dt; stunt.speed = Math.max(stunt.speed - 70 * dt, 15); }
   if (!stunt.gas && !stunt.brake) { stunt.angle += (stunt.angle > 0 ? -1 : 1) * 8 * dt; }
 
-  if (stunt.angle > 5) { stunt.currentWheelie += dt; stunt.bestWheelie = Math.max(stunt.bestWheelie, stunt.currentWheelie); } 
-  else { stunt.currentWheelie = 0; }
-
+  if (stunt.angle > 5) { stunt.currentWheelie += dt; stunt.bestWheelie = Math.max(stunt.bestWheelie, stunt.currentWheelie); } else { stunt.currentWheelie = 0; }
   stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
   stunt.roadOffset -= stunt.speed * dt * 4; stunt.cityOffset -= stunt.speed * dt * 0.8;
 
@@ -759,19 +877,26 @@ function stuntTick(ts) {
 
   if (stunt.angle >= 86 && ts - lastSparkTs > 40) { spawnSparkBurst(3 + Math.floor(Math.random() * 3)); lastSparkTs = ts; }
 
+  // Смена дня и ночи
+  stunt.gameTimeMinutes += dt * 10;
+  let hours = Math.floor((stunt.gameTimeMinutes % 1440) / 60), mins = Math.floor((stunt.gameTimeMinutes % 1440) % 60);
+  stuntClockEl.innerText = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+
+  let newSky, newBright;
+  if (hours >= 22 || hours < 6) { newSky = '#050b14'; newBright = 0.3; } else if (hours >= 6 && hours < 10) { newSky = '#ff7e5f'; newBright = 0.7; } else if (hours >= 10 && hours < 18) { newSky = '#4ca1af'; newBright = 1.0; } else { newSky = '#ffb347'; newBright = 0.6; }
+  if (stunt.currentSkyClass !== newSky) { stuntSceneEl.style.setProperty('--sky-color', newSky); stuntCityBg.style.setProperty('--city-bright', newBright); stunt.currentSkyClass = newSky; }
+
   if (stunt.angle >= 92 || stunt.angle <= -18) {
     stunt.crashed = true;
     if (stunt.angle >= 92) spawnSparkBurst(20);
     const reward = stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle);
     stuntResultStatsEl.innerHTML = `Рекорд: <b>${stunt.bestWheelie.toFixed(1)}с</b><br>Угол: <b>${Math.round(stunt.maxAngle)}°</b><br>Награда: <b>🪙 ${fmt(reward)}</b>`;
-    stuntResultEl.dataset.reward = reward;
-    stuntResultEl.classList.remove('hidden');
+    stuntResultEl.dataset.reward = reward; stuntResultEl.classList.remove('hidden');
     return;
   }
   stunt.rafId = requestAnimationFrame(stuntTick);
 }
 
-document.getElementById('start-stunt-btn').addEventListener('click', openStunt);
 document.getElementById('stunt-close-btn').addEventListener('click', closeStunt);
 document.getElementById('stunt-claim-btn').addEventListener('click', () => {
   state.coins += parseInt(stuntResultEl.dataset.reward || '0', 10);
@@ -779,20 +904,157 @@ document.getElementById('stunt-claim-btn').addEventListener('click', () => {
   saveState(); renderTop(); renderGarage(); renderMissions(); closeStunt();
 });
 
+
+// --- 11. ГОНКА 1 VS 1 ПРОТИВ БОТА ---
+const raceOverlay = document.getElementById('race-overlay');
+const raceSpeedEl = document.getElementById('race-speed');
+const raceDistPlayerEl = document.getElementById('race-dist-player');
+const raceDistBotEl = document.getElementById('race-dist-bot');
+const raceBotWrap = document.getElementById('race-bot-wrap');
+const raceRoad = document.getElementById('race-road');
+const racePlayerBike = document.getElementById('race-bike-player');
+const raceResultEl = document.getElementById('race-result');
+const raceResultTitle = document.getElementById('race-result-title');
+const raceResultStats = document.getElementById('race-result-stats');
+const raceGasZone = document.getElementById('race-gas');
+const raceBrakeZone = document.getElementById('race-brake');
+
+let race = null;
+
+function openRace() {
+  const bike = activeBike();
+  let baseSpeed = parseInt(bike.top);
+  let playerMaxSpeed = baseSpeed + (state.tuning ? (state.tuning.engine || 0) * 3 : 0);
+  
+  race = {
+    playerDist: 0, botDist: 0,
+    playerSpeed: 0, botSpeed: 0,
+    playerMax: playerMaxSpeed,
+    botMax: playerMaxSpeed * (0.9 + Math.random() * 0.2), // Бот на 10% быстрее или медленнее
+    gas: false, brake: false, finished: false, lastTs: null, rafId: null, roadOffset: 0
+  };
+
+  raceResultEl.classList.add('hidden');
+  raceOverlay.classList.remove('hidden');
+
+  if (bike.imgType === 'scooter') {
+    racePlayerBike.classList.add('is-svg');
+    racePlayerBike.innerHTML = scooterImageMarkup('scooter-icon-stunt');
+  } else {
+    racePlayerBike.classList.remove('is-svg');
+    racePlayerBike.innerText = bike.emoji || '🏍️';
+  }
+
+  raceSpeedEl.innerText = '0';
+  raceDistPlayerEl.innerText = '0';
+  raceDistBotEl.innerText = '0';
+  raceBotWrap.style.transform = `translateX(0px) scale(0.85)`;
+
+  race.rafId = requestAnimationFrame(raceTick);
+}
+
+function closeRace() {
+  if (race && race.rafId) cancelAnimationFrame(race.rafId);
+  race = null;
+  raceOverlay.classList.add('hidden');
+}
+
+function raceTick(ts) {
+  if (!race || race.finished) return;
+  if (!race.lastTs) race.lastTs = ts;
+  const dt = Math.min((ts - race.lastTs) / 1000, 0.05);
+  race.lastTs = ts;
+
+  // Физика Игрока
+  if (race.gas) {
+    race.playerSpeed = Math.min(race.playerSpeed + 40 * dt, race.playerMax);
+  } else {
+    race.playerSpeed = Math.max(race.playerSpeed - 15 * dt, 0);
+  }
+  if (race.brake) {
+    race.playerSpeed = Math.max(race.playerSpeed - 80 * dt, 0);
+  }
+
+  // Физика Бота (Бот всегда газует, слегка адаптируется)
+  let botAcc = 35;
+  if (race.botDist < race.playerDist - 30) botAcc = 50; 
+  race.botSpeed = Math.min(race.botSpeed + botAcc * dt, race.botMax);
+
+  // Дистанция = Скорость (м/с) * время * множитель(3) для динамики
+  race.playerDist += (race.playerSpeed / 3.6) * dt * 3;
+  race.botDist += (race.botSpeed / 3.6) * dt * 3;
+
+  race.roadOffset -= race.playerSpeed * dt * 4;
+  raceRoad.style.backgroundPosition = `0 0, ${race.roadOffset}px 18px`;
+
+  // Смещение бота относительно игрока (1 метр разницы = 4 пикселя)
+  let botOffsetPx = (race.botDist - race.playerDist) * 4;
+  raceBotWrap.style.transform = `translateX(${botOffsetPx}px) scale(0.85)`;
+
+  raceSpeedEl.innerText = Math.round(race.playerSpeed);
+  raceDistPlayerEl.innerText = Math.floor(race.playerDist);
+  raceDistBotEl.innerText = Math.floor(race.botDist);
+
+  // Проверка финиша 500 метров
+  if (race.playerDist >= 500 || race.botDist >= 500) {
+    race.finished = true;
+    let playerWon = race.playerDist >= 500;
+    let reward = playerWon ? 3000 : 500;
+    
+    raceResultTitle.innerText = playerWon ? "🏆 Победа!" : "💥 Поражение!";
+    if(playerWon) {
+      raceResultStats.innerHTML = `Вы первыми пересекли финиш!<br>Награда: <b>🪙 ${fmt(reward)}</b>`;
+    } else {
+      raceResultStats.innerHTML = `Бот оказался быстрее.<br>Утешительный приз: <b>🪙 ${fmt(reward)}</b>`;
+    }
+    
+    raceResultEl.dataset.reward = reward;
+    raceResultEl.classList.remove('hidden');
+    return;
+  }
+
+  race.rafId = requestAnimationFrame(raceTick);
+}
+
+document.getElementById('race-close-btn').addEventListener('click', closeRace);
+document.getElementById('race-claim-btn').addEventListener('click', () => {
+  state.coins += parseInt(raceResultEl.dataset.reward || '0', 10);
+  addExp(20); // Немного опыта за любую гонку
+  saveState(); renderTop(); renderGarage(); renderMissions(); closeRace();
+});
+
+
+// Управление удержанием кнопок (для станта и гонки)
 function bindHold(el, onPress, onRelease) {
   const press = (e) => { e.preventDefault(); onPress(); }, release = (e) => { e.preventDefault(); onRelease(); };
   el.addEventListener('pointerdown', press); el.addEventListener('pointerup', release);
   el.addEventListener('pointerleave', release); el.addEventListener('pointercancel', release);
 }
-bindHold(gasZone, () => { if (stunt && !stunt.crashed) { stunt.gas = true; gasZone.classList.add('pressed'); } }, () => { if (stunt) stunt.gas = false; gasZone.classList.remove('pressed'); });
-bindHold(brakeZone, () => { if (stunt && !stunt.crashed) { stunt.brake = true; brakeZone.classList.add('pressed'); } }, () => { if (stunt) stunt.brake = false; brakeZone.classList.remove('pressed'); });
 
-initTelegramUser();
-renderTop();
-renderGarage();
-renderShopTabs();
-renderBikeList();
-renderMissions();
+// Стант
+bindHold(stuntGasZone, () => { if (stunt && !stunt.crashed) { stunt.gas = true; stuntGasZone.classList.add('pressed'); } }, () => { if (stunt) stunt.gas = false; stuntGasZone.classList.remove('pressed'); });
+bindHold(stuntBrakeZone, () => { if (stunt && !stunt.crashed) { stunt.brake = true; stuntBrakeZone.classList.add('pressed'); } }, () => { if (stunt) stunt.brake = false; stuntBrakeZone.classList.remove('pressed'); });
+
+// Гонка
+bindHold(raceGasZone, () => { if (race && !race.finished) { race.gas = true; raceGasZone.classList.add('pressed'); } }, () => { if (race) race.gas = false; raceGasZone.classList.remove('pressed'); });
+bindHold(raceBrakeZone, () => { if (race && !race.finished) { race.brake = true; raceBrakeZone.classList.add('pressed'); } }, () => { if (race) race.brake = false; raceBrakeZone.classList.remove('pressed'); });
+
+
+// --- 12. ИНИЦИАЛИЗАЦИЯ И ОТЛОВ ОШИБОК ---
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    initTelegramUser();
+    renderTop();
+    renderGarage();
+    renderShopTabs();
+    renderBikeList();
+    renderMissions();
+  } catch (err) {
+    alert("Ошибка запуска игры: " + err.message);
+    // При жесткой ошибке сбрасываем сейв, чтобы не блокировать игру навсегда
+    localStorage.removeItem(SAVE_KEY); 
+  }
+});
 </script>
 </body>
 </html>
