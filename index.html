@@ -7,7 +7,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   :root {
-    --bg-color: #0d1117; --text-color: #e2e8f0; --text-dim: #93a3b8;
+    --bg-color: #050b14; --text-color: #e2e8f0; --text-dim: #93a3b8;
     --accent-orange: #f97316; --accent-cyan: #22d3ee;
     --ui-bg: rgba(13, 17, 23, 0.88); --card-bg: rgba(22, 30, 41, 0.92);
     --glow: 0 0 10px var(--accent-cyan); --glow-orange: 0 0 10px var(--accent-orange);
@@ -15,17 +15,22 @@
 
   * { box-sizing: border-box; }
 
+  /* ЦЕНТРИРОВАНИЕ ДЛЯ ПК */
   body, html {
     margin: 0; padding: 0; height: 100%; width: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
+    display: flex; justify-content: center; align-items: center; /* Центрируем контейнер на широком экране */
   }
 
+  /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА */
   #app-container {
-    height: 100%; width: 100%;
+    height: 100%; width: 100%; max-width: 480px; /* Мобильная ширина для ПК */
+    position: relative; /* Важно для удержания оверлеев внутри */
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow: hidden;
   }
 
   /* --- TOP PANEL --- */
@@ -33,7 +38,7 @@
     display: flex; justify-content: space-between; align-items: center;
     padding: 30px 15px 10px 15px; 
     background: var(--ui-bg); border-bottom: 2px solid var(--accent-cyan);
-    box-shadow: var(--glow); flex-shrink: 0;
+    box-shadow: var(--glow); flex-shrink: 0; z-index: 10;
   }
   .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.1s; padding: 4px; border-radius: 8px; }
   .user-info:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
@@ -124,8 +129,8 @@
   .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
-  /* --- ОБЩИЕ ОВЕРЛЕИ --- */
-  .stunt-overlay { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
+  /* --- ОБЩИЕ ОВЕРЛЕИ (ТЕПЕРЬ ABSOLUTE) --- */
+  .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; }
@@ -171,8 +176,8 @@
   .chase-obstacle { position: absolute; width: 50px; height: 50px; z-index: 3; display: flex; align-items: center; justify-content: center; font-size: 40px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); }
   .swipe-indicator { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 24px; font-weight: bold; pointer-events: none; text-align: center; }
 
-  /* --- МОДАЛЬНЫЕ ОКНА --- */
-  .custom-modal { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
+  /* --- МОДАЛЬНЫЕ ОКНА (ТЕПЕРЬ ABSOLUTE ДЛЯ ПК) --- */
+  .custom-modal { position: absolute; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
   .custom-modal.hidden { display: none; }
   .modal-card { background: var(--card-bg); border: 2px solid var(--accent-orange); border-radius: 16px; padding: 24px; text-align: center; width: 82%; max-width: 320px; box-shadow: 0 0 25px rgba(249,115,22,0.6); position: relative; }
   .modal-title { font-size: 20px; font-weight: bold; color: var(--accent-orange); margin-bottom: 8px; text-shadow: 0 0 10px rgba(249,115,22,0.5); }
@@ -198,6 +203,7 @@
 </head>
 <body>
 
+<!-- ВЕСЬ КОНТЕНТ И ОВЕРЛЕИ ТЕПЕРЬ СТРОГО ВНУТРИ APP-CONTAINER ДЛЯ ПК -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
@@ -259,176 +265,177 @@
     <div class="nav-item" data-screen="missions"><div class="nav-item-icon">🎯</div><div class="nav-text-label">Задания</div></div>
     <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
   </div>
-</div>
 
-<!-- ============================================== -->
-<!-- МОДАЛЬНОЕ ОКНО ВЫБОРА РЕЖИМА -->
-<!-- ============================================== -->
-<div id="mode-modal" class="custom-modal hidden">
-  <div class="modal-card">
-    <button id="mode-close-btn" class="profile-modal-close">✕</button>
-    <div class="modal-title" style="margin-bottom: 20px;">Выберите режим</div>
-    <div>
-      <button id="mode-stunt-btn" class="mode-btn mode-stunt">🏍️ Стант-заезд</button>
-      <button id="mode-race-btn" class="mode-btn mode-race">🏎️ Гонка 1x1 (Бот)</button>
-      <button id="mode-chase-btn" class="mode-btn mode-chase">🚓 Погоня (ДПС)</button>
+  <!-- ============================================== -->
+  <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА РЕЖИМА -->
+  <!-- ============================================== -->
+  <div id="mode-modal" class="custom-modal hidden">
+    <div class="modal-card">
+      <button id="mode-close-btn" class="profile-modal-close">✕</button>
+      <div class="modal-title" style="margin-bottom: 20px;">Выберите режим</div>
+      <div>
+        <button id="mode-stunt-btn" class="mode-btn mode-stunt">🏍️ Стант-заезд</button>
+        <button id="mode-race-btn" class="mode-btn mode-race">🏎️ Гонка 1x1 (Бот)</button>
+        <button id="mode-chase-btn" class="mode-btn mode-chase">🚓 Погоня (ДПС)</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ============================================== -->
-<!-- СТАНТ-ЗАЕЗД -->
-<!-- ============================================== -->
-<div id="stunt-overlay" class="stunt-overlay hidden">
-  <div class="stunt-hud">
-    <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
-    <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
-    <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
-    <div class="stunt-hud-item">🪙 <span id="stunt-coins-preview">0</span></div>
-    <div class="stunt-hud-item" style="min-width: 30%;">🕒 <span id="stunt-clock">08:00</span></div>
-  </div>
-  <div class="stunt-scene" id="stunt-scene">
-    <div class="stunt-city-bg" id="stunt-city-bg"></div>
-    <div class="stunt-bike-wrap">
-      <div class="stunt-bike" id="stunt-bike">🏍️</div>
-      <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div> 
+  <!-- ============================================== -->
+  <!-- СТАНТ-ЗАЕЗД -->
+  <!-- ============================================== -->
+  <div id="stunt-overlay" class="stunt-overlay hidden">
+    <div class="stunt-hud">
+      <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
+      <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
+      <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
+      <div class="stunt-hud-item">🪙 <span id="stunt-coins-preview">0</span></div>
+      <div class="stunt-hud-item" style="min-width: 30%;">🕒 <span id="stunt-clock">08:00</span></div>
     </div>
-    <div class="stunt-road" id="stunt-road"></div>
-  </div>
-  <div class="stunt-controls">
-    <div class="stunt-zone brake" id="stunt-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
-    <div class="stunt-zone gas" id="stunt-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
-  </div>
-  <div class="stunt-result hidden" id="stunt-result">
-    <div class="stunt-result-card">
-      <div class="stunt-result-title" id="stunt-result-title">Заезд окончен!</div>
-      <div class="stunt-result-stats" id="stunt-result-stats"></div>
-      <button id="stunt-claim-btn" class="claim-btn">Забрать награду</button>
+    <div class="stunt-scene" id="stunt-scene">
+      <div class="stunt-city-bg" id="stunt-city-bg"></div>
+      <div class="stunt-bike-wrap">
+        <div class="stunt-bike" id="stunt-bike">🏍️</div>
+        <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div> 
+      </div>
+      <div class="stunt-road" id="stunt-road"></div>
     </div>
+    <div class="stunt-controls">
+      <div class="stunt-zone brake" id="stunt-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
+      <div class="stunt-zone gas" id="stunt-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
+    </div>
+    <div class="stunt-result hidden" id="stunt-result">
+      <div class="stunt-result-card">
+        <div class="stunt-result-title" id="stunt-result-title">Заезд окончен!</div>
+        <div class="stunt-result-stats" id="stunt-result-stats"></div>
+        <button id="stunt-claim-btn" class="claim-btn">Забрать награду</button>
+      </div>
+    </div>
+    <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
   </div>
-  <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
-</div>
 
-<!-- ============================================== -->
-<!-- ГОНКА 1 VS 1 -->
-<!-- ============================================== -->
-<div id="race-overlay" class="stunt-overlay hidden">
-  <div class="stunt-hud">
-    <div class="stunt-hud-item" style="min-width: 100%; text-align: left; padding-left: 10px;">🏎️ <span id="race-speed">0</span> км/ч</div>
-    <div class="stunt-hud-item" style="color: var(--accent-cyan);">🏁 Вы: <span id="race-dist-player">0</span>/500м</div>
-    <div class="stunt-hud-item" style="color: #fca5a5;">🤖 Бот: <span id="race-dist-bot">0</span>/500м</div>
-  </div>
-  <div class="stunt-scene" id="race-scene">
-    <div class="stunt-city-bg" id="race-city-bg"></div>
-    <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 42%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
-      <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));" id="race-bike-bot">🏍️</div>
+  <!-- ============================================== -->
+  <!-- ГОНКА 1 VS 1 -->
+  <!-- ============================================== -->
+  <div id="race-overlay" class="stunt-overlay hidden">
+    <div class="stunt-hud">
+      <div class="stunt-hud-item" style="min-width: 100%; text-align: left; padding-left: 10px;">🏎️ <span id="race-speed">0</span> км/ч</div>
+      <div class="stunt-hud-item" style="color: var(--accent-cyan);">🏁 Вы: <span id="race-dist-player">0</span>/500м</div>
+      <div class="stunt-hud-item" style="color: #fca5a5;">🤖 Бот: <span id="race-dist-bot">0</span>/500м</div>
     </div>
-    <div class="stunt-bike-wrap" id="race-player-wrap" style="left: 20%; z-index: 3;"><div class="stunt-bike" id="race-bike-player">🏍️</div></div>
-    <div class="stunt-road" id="race-road"></div>
-  </div>
-  <div class="stunt-controls">
-    <div class="stunt-zone brake" id="race-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
-    <div class="stunt-zone gas" id="race-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
-  </div>
-  <div class="stunt-result hidden" id="race-result">
-    <div class="stunt-result-card">
-      <div class="stunt-result-title" id="race-result-title">Гонка окончена!</div>
-      <div class="stunt-result-stats" id="race-result-stats"></div>
-      <button id="race-claim-btn" class="claim-btn">Закрыть</button>
+    <div class="stunt-scene" id="race-scene">
+      <div class="stunt-city-bg" id="race-city-bg"></div>
+      <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 42%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
+        <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));" id="race-bike-bot">🏍️</div>
+      </div>
+      <div class="stunt-bike-wrap" id="race-player-wrap" style="left: 20%; z-index: 3;"><div class="stunt-bike" id="race-bike-player">🏍️</div></div>
+      <div class="stunt-road" id="race-road"></div>
     </div>
+    <div class="stunt-controls">
+      <div class="stunt-zone brake" id="race-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
+      <div class="stunt-zone gas" id="race-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
+    </div>
+    <div class="stunt-result hidden" id="race-result">
+      <div class="stunt-result-card">
+        <div class="stunt-result-title" id="race-result-title">Гонка окончена!</div>
+        <div class="stunt-result-stats" id="race-result-stats"></div>
+        <button id="race-claim-btn" class="claim-btn">Закрыть</button>
+      </div>
+    </div>
+    <button id="race-close-btn" class="stunt-close-btn">✕</button>
   </div>
-  <button id="race-close-btn" class="stunt-close-btn">✕</button>
-</div>
 
-<!-- ============================================== -->
-<!-- ПОГОНЯ (ДПС) -->
-<!-- ============================================== -->
-<div id="chase-overlay" class="stunt-overlay hidden">
-  <div class="stunt-hud" style="background: rgba(0,0,0,0.9);">
-    <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
-    <div class="stunt-hud-item" style="color: var(--accent-cyan); min-width: 40%;">Счет: <span id="chase-score">0</span></div>
-  </div>
-  
-  <div class="stunt-scene" id="chase-scene" style="background-color: #0f172a; touch-action: none;">
-    <div class="stunt-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.4);"></div>
+  <!-- ============================================== -->
+  <!-- ПОГОНЯ (ДПС) -->
+  <!-- ============================================== -->
+  <div id="chase-overlay" class="stunt-overlay hidden">
+    <div class="stunt-hud" style="background: rgba(0,0,0,0.9);">
+      <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
+      <div class="stunt-hud-item" style="color: var(--accent-cyan); min-width: 40%;">Счет: <span id="chase-score">0</span></div>
+    </div>
     
-    <div class="chase-road" id="chase-road">
-      <div class="chase-line" style="top: 33%;"></div>
-      <div class="chase-line" style="top: 66%;"></div>
+    <div class="stunt-scene" id="chase-scene" style="background-color: #0f172a; touch-action: none;">
+      <div class="stunt-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.4);"></div>
       
-      <!-- МАШИНА ДПС (ГИФКА) -->
-      <div class="chase-police" id="chase-police">
-        <img src="pogonya1.gif" style="width: 170px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС">
+      <div class="chase-road" id="chase-road">
+        <div class="chase-line" style="top: 33%;"></div>
+        <div class="chase-line" style="top: 66%;"></div>
+        
+        <!-- МАШИНА ДПС (ГИФКА) -->
+        <div class="chase-police" id="chase-police">
+          <img src="pogonya1.gif" style="width: 170px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС">
+        </div>
+        
+        <div class="chase-player" id="chase-player">🏍️</div>
+        <div id="chase-obstacles-container"></div>
       </div>
       
-      <div class="chase-player" id="chase-player">🏍️</div>
-      <div id="chase-obstacles-container"></div>
+      <div class="swipe-indicator">
+        <div>СВАЙП ВВЕРХ / ВНИЗ</div>
+        <div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div>
+      </div>
     </div>
     
-    <div class="swipe-indicator">
-      <div>СВАЙП ВВЕРХ / ВНИЗ</div>
-      <div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div>
+    <div class="stunt-result hidden" id="chase-result">
+      <div class="stunt-result-card" style="border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.6);">
+        <div class="stunt-result-title" style="color: #ef4444;">🚨 ПОЙМАЛИ!</div>
+        <div class="stunt-result-stats" id="chase-result-stats"></div>
+        <button id="chase-claim-btn" class="claim-btn" style="background: #ef4444; width: 100%;">Понятно</button>
+      </div>
     </div>
+    <button id="chase-close-btn" class="stunt-close-btn">✕</button>
   </div>
-  
-  <div class="stunt-result hidden" id="chase-result">
-    <div class="stunt-result-card" style="border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.6);">
-      <div class="stunt-result-title" style="color: #ef4444;">🚨 ПОЙМАЛИ!</div>
-      <div class="stunt-result-stats" id="chase-result-stats"></div>
-      <button id="chase-claim-btn" class="claim-btn" style="background: #ef4444; width: 100%;">Понятно</button>
-    </div>
-  </div>
-  <button id="chase-close-btn" class="stunt-close-btn">✕</button>
-</div>
 
-<!-- ============================================== -->
-<!-- МОДАЛЬНЫЕ ОКНА: УРОВЕНЬ, ПРОФИЛЬ, БОНУС -->
-<!-- ============================================== -->
-<div id="level-up-modal" class="custom-modal hidden">
-  <div class="modal-card">
-    <div class="modal-title">🎉 Поздравляем!</div>
-    <div class="modal-desc" id="level-up-desc">Вы достигли уровня!</div>
-    <button id="level-up-ok-btn" class="claim-btn" style="width: 100%;">Отлично!</button>
-  </div>
-</div>
-
-<div id="profile-modal" class="custom-modal hidden">
-  <div class="modal-card" style="border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(34,211,238,0.4);">
-    <button id="profile-close-btn" class="profile-modal-close">✕</button>
-    <div class="avatar-placeholder" id="profile-avatar-large" style="width: 80px; height: 80px; margin: 0 auto 15px; font-size: 24px; border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(34,211,238,0.5);">VIP</div>
-    <div class="modal-title" id="profile-nickname-large" style="color: white; text-shadow: none; margin-bottom: 5px;">RIDERNICK</div>
-    <div style="font-size: 14px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 20px;">Уровень <span id="profile-level-large">1</span></div>
-    <div style="text-align: left; font-size: 12px; margin-bottom: 5px; display: flex; justify-content: space-between; color: var(--text-dim);">
-      <span>Опыт (EXP)</span>
-      <span id="profile-exp-text" style="color: white; font-weight: bold;">0 / 200</span>
-    </div>
-    <div class="level-bar" style="width: 100%; height: 12px; border-radius: 6px; margin-bottom: 20px; background: #1a202c; border: 1px solid rgba(34,211,238,0.3);"><div class="level-progress" id="profile-progress-bar-large" style="border-radius: 6px; background-color: var(--accent-cyan);"></div></div>
-    
-    <!-- ВЛАДКА: ЕЖЕДНЕВНЫЕ БОНУСЫ -->
-    <div id="profile-daily-btn" class="profile-daily-btn">
-      <span style="font-size: 14px; font-weight: bold; color: var(--accent-cyan);">🎁 Ежедневные бонусы</span>
-      <span style="font-size: 12px; color: var(--text-dim);">Посмотреть ➔</span>
-    </div>
-
-    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; font-size: 13px; color: var(--text-dim); display: flex; justify-content: space-between;">
-      <span>Всего тапов:</span>
-      <span id="profile-total-taps" style="color: var(--accent-orange); font-weight: bold;">0</span>
+  <!-- ============================================== -->
+  <!-- МОДАЛЬНЫЕ ОКНА: УРОВЕНЬ, ПРОФИЛЬ, БОНУС -->
+  <!-- ============================================== -->
+  <div id="level-up-modal" class="custom-modal hidden">
+    <div class="modal-card">
+      <div class="modal-title">🎉 Поздравляем!</div>
+      <div class="modal-desc" id="level-up-desc">Вы достигли уровня!</div>
+      <button id="level-up-ok-btn" class="claim-btn" style="width: 100%;">Отлично!</button>
     </div>
   </div>
-</div>
 
-<!-- ЕЖЕДНЕВНЫЙ БОНУС -->
-<div id="daily-bonus-modal" class="custom-modal hidden">
-  <div class="modal-card" style="max-width: 350px;">
-    <button id="daily-close-btn" class="profile-modal-close">✕</button>
-    <div class="modal-title">🎁 Ежедневный бонус!</div>
-    <div class="modal-desc" style="font-size: 12px;">Заходите каждый день, чтобы забирать награды! Пропуск дня сбросит прогресс.</div>
-    
-    <div id="daily-bonus-grid" class="daily-bonus-grid"></div>
-    
-    <button id="daily-bonus-claim-btn" class="claim-btn" style="width: 100%; font-size: 15px; padding: 12px;">Забрать бонус</button>
+  <div id="profile-modal" class="custom-modal hidden">
+    <div class="modal-card" style="border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(34,211,238,0.4);">
+      <button id="profile-close-btn" class="profile-modal-close">✕</button>
+      <div class="avatar-placeholder" id="profile-avatar-large" style="width: 80px; height: 80px; margin: 0 auto 15px; font-size: 24px; border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(34,211,238,0.5);">VIP</div>
+      <div class="modal-title" id="profile-nickname-large" style="color: white; text-shadow: none; margin-bottom: 5px;">RIDERNICK</div>
+      <div style="font-size: 14px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 20px;">Уровень <span id="profile-level-large">1</span></div>
+      <div style="text-align: left; font-size: 12px; margin-bottom: 5px; display: flex; justify-content: space-between; color: var(--text-dim);">
+        <span>Опыт (EXP)</span>
+        <span id="profile-exp-text" style="color: white; font-weight: bold;">0 / 200</span>
+      </div>
+      <div class="level-bar" style="width: 100%; height: 12px; border-radius: 6px; margin-bottom: 20px; background: #1a202c; border: 1px solid rgba(34,211,238,0.3);"><div class="level-progress" id="profile-progress-bar-large" style="border-radius: 6px; background-color: var(--accent-cyan);"></div></div>
+      
+      <!-- ВЛАДКА: ЕЖЕДНЕВНЫЕ БОНУСЫ -->
+      <div id="profile-daily-btn" class="profile-daily-btn">
+        <span style="font-size: 14px; font-weight: bold; color: var(--accent-cyan);">🎁 Ежедневные бонусы</span>
+        <span style="font-size: 12px; color: var(--text-dim);">Посмотреть ➔</span>
+      </div>
+
+      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; font-size: 13px; color: var(--text-dim); display: flex; justify-content: space-between;">
+        <span>Всего тапов:</span>
+        <span id="profile-total-taps" style="color: var(--accent-orange); font-weight: bold;">0</span>
+      </div>
+    </div>
   </div>
-</div>
+
+  <!-- ЕЖЕДНЕВНЫЙ БОНУС -->
+  <div id="daily-bonus-modal" class="custom-modal hidden">
+    <div class="modal-card" style="max-width: 350px;">
+      <button id="daily-close-btn" class="profile-modal-close">✕</button>
+      <div class="modal-title">🎁 Ежедневный бонус!</div>
+      <div class="modal-desc" style="font-size: 12px;">Заходите каждый день, чтобы забирать награды! Пропуск дня сбросит прогресс.</div>
+      
+      <div id="daily-bonus-grid" class="daily-bonus-grid"></div>
+      
+      <button id="daily-bonus-claim-btn" class="claim-btn" style="width: 100%; font-size: 15px; padding: 12px;">Забрать бонус</button>
+    </div>
+  </div>
+
+</div> <!-- КОНЕЦ APP-CONTAINER -->
 
 <script>
 // --- 1. БАЗА ДАННЫХ И КАТАЛОГ ---
@@ -461,7 +468,6 @@ const LEVEL_REQUIREMENTS = {
   10: { exp: 3300, reward: 5000 }, 11: { exp: 4300, reward: 2500 }, 12: { exp: 5500, reward: 2500 }, 13: { exp: 7000, reward: 2500 }, 14: { exp: 8800, reward: 2500 }, 15: { exp: 11000, reward: 7500 }
 };
 
-// Ежедневные награды 
 const DAILY_REWARDS = [
   { day: 1, coins: 1500, exp: 75 },
   { day: 2, coins: 2500, exp: 150 },
@@ -522,76 +528,31 @@ function renderTop() {
 // --- ЕЖЕДНЕВНЫЙ БОНУС ---
 let pendingStreak = 1;
 function checkDailyBonus() {
-  const now = new Date();
-  const todayDateStr = now.toDateString();
-  const lastDateStr = state.lastBonusDate;
-
+  const now = new Date(); const todayDateStr = now.toDateString(); const lastDateStr = state.lastBonusDate;
   if (lastDateStr !== todayDateStr) {
-    const yesterday = new Date();
-    yesterday.setDate(now.getDate() - 1);
-    if (lastDateStr === yesterday.toDateString()) {
-      pendingStreak = (state.loginStreak || 0) + 1;
-      if (pendingStreak > 7) pendingStreak = 1; 
-    } else {
-      pendingStreak = 1;
-    }
+    const yesterday = new Date(); yesterday.setDate(now.getDate() - 1);
+    if (lastDateStr === yesterday.toDateString()) { pendingStreak = (state.loginStreak || 0) + 1; if (pendingStreak > 7) pendingStreak = 1; } else { pendingStreak = 1; }
     showDailyBonusModal(pendingStreak, true);
   }
 }
 
-// Функция показа окна бонусов. Параметр canClaim определяет, доступно ли получение сегодня
 function showDailyBonusModal(displayStreak, canClaim) {
-  const grid = document.getElementById('daily-bonus-grid');
-  grid.innerHTML = '';
-  
+  const grid = document.getElementById('daily-bonus-grid'); grid.innerHTML = '';
   DAILY_REWARDS.forEach((r) => {
     let cls = 'future';
-    if (canClaim) {
-      if (r.day === displayStreak) cls = 'current';
-      else if (r.day < displayStreak) cls = 'past';
-    } else {
-      if (r.day <= displayStreak) cls = 'past';
-    }
-    
+    if (canClaim) { if (r.day === displayStreak) cls = 'current'; else if (r.day < displayStreak) cls = 'past'; } else { if (r.day <= displayStreak) cls = 'past'; }
     let expHtml = r.exp > 0 ? `<div style="font-size:10px; color:${cls === 'current' ? '#1a1a1a' : 'var(--accent-cyan)'}; margin-top:2px;">+${r.exp} XP</div>` : '';
     let spanHtml = r.day === 7 ? 'grid-column: span 3;' : '';
-
-    grid.innerHTML += `
-      <div class="daily-card ${cls}" style="${spanHtml}">
-        <div style="font-size: 10px; font-weight: bold; margin-bottom: 4px;">День ${r.day}</div>
-        <div style="font-size: 13px;">🪙 ${fmt(r.coins)}</div>
-        ${expHtml}
-      </div>
-    `;
+    grid.innerHTML += `<div class="daily-card ${cls}" style="${spanHtml}"><div style="font-size: 10px; font-weight: bold; margin-bottom: 4px;">День ${r.day}</div><div style="font-size: 13px;">🪙 ${fmt(r.coins)}</div>${expHtml}</div>`;
   });
-  
   const claimBtn = document.getElementById('daily-bonus-claim-btn');
-  if (canClaim) {
-    claimBtn.innerText = 'Забрать бонус';
-    claimBtn.disabled = false;
-    claimBtn.style.background = 'var(--accent-orange)';
-    claimBtn.style.color = '#1a1a1a';
-  } else {
-    claimBtn.innerText = 'Награда уже получена';
-    claimBtn.disabled = true;
-    claimBtn.style.background = '#4a5568';
-    claimBtn.style.color = '#8a97a8';
-  }
-  
+  if (canClaim) { claimBtn.innerText = 'Забрать бонус'; claimBtn.disabled = false; claimBtn.style.background = 'var(--accent-orange)'; claimBtn.style.color = '#1a1a1a'; } else { claimBtn.innerText = 'Награда уже получена'; claimBtn.disabled = true; claimBtn.style.background = '#4a5568'; claimBtn.style.color = '#8a97a8'; }
   document.getElementById('daily-bonus-modal').classList.remove('hidden');
 }
 
 document.getElementById('daily-bonus-claim-btn').addEventListener('click', () => {
-  state.loginStreak = pendingStreak;
-  const reward = DAILY_REWARDS[state.loginStreak - 1];
-  state.coins += reward.coins;
-  if (reward.exp > 0) addExp(reward.exp);
-  
-  state.lastBonusDate = new Date().toDateString();
-  saveState();
-  renderTop();
-  renderGarage();
-  document.getElementById('daily-bonus-modal').classList.add('hidden');
+  state.loginStreak = pendingStreak; const reward = DAILY_REWARDS[state.loginStreak - 1]; state.coins += reward.coins; if (reward.exp > 0) addExp(reward.exp);
+  state.lastBonusDate = new Date().toDateString(); saveState(); renderTop(); renderGarage(); document.getElementById('daily-bonus-modal').classList.add('hidden');
 });
 document.getElementById('daily-close-btn').addEventListener('click', () => { document.getElementById('daily-bonus-modal').classList.add('hidden'); });
 
@@ -608,36 +569,19 @@ document.getElementById('user-profile-btn').addEventListener('click', () => {
 });
 document.getElementById('profile-close-btn').addEventListener('click', () => profileModal.classList.add('hidden'));
 
-// КЛИК ПО ВКЛАДКЕ БОНУСОВ ИЗ ПРОФИЛЯ
 document.getElementById('profile-daily-btn').addEventListener('click', () => {
-  profileModal.classList.add('hidden');
-  const now = new Date();
+  profileModal.classList.add('hidden'); const now = new Date();
   if (state.lastBonusDate !== now.toDateString()) {
-    const yesterday = new Date();
-    yesterday.setDate(now.getDate() - 1);
-    if (state.lastBonusDate === yesterday.toDateString()) {
-      pendingStreak = (state.loginStreak || 0) + 1;
-      if (pendingStreak > 7) pendingStreak = 1;
-    } else {
-      pendingStreak = 1;
-    }
+    const yesterday = new Date(); yesterday.setDate(now.getDate() - 1);
+    if (state.lastBonusDate === yesterday.toDateString()) { pendingStreak = (state.loginStreak || 0) + 1; if (pendingStreak > 7) pendingStreak = 1; } else { pendingStreak = 1; }
     showDailyBonusModal(pendingStreak, true);
-  } else {
-    let displayStreak = state.loginStreak === 0 ? 1 : state.loginStreak;
-    showDailyBonusModal(displayStreak, false);
-  }
+  } else { showDailyBonusModal(state.loginStreak === 0 ? 1 : state.loginStreak, false); }
 });
 
 function renderGarage() {
   const bike = activeBike(); document.getElementById('active-bike-name').innerText = bike.name; document.getElementById('points-display').innerText = fmt(state.coins) + ' pts'; document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
   const iconEl = document.getElementById('bike-emoji');
-  
-  if (bike.imgSrc) { 
-    iconEl.classList.add('is-svg'); iconEl.innerHTML = bikeImageMarkup('scooter-icon-garage', bike.imgSrc); 
-  } else { 
-    iconEl.classList.remove('is-svg'); iconEl.innerText = bike.emoji || '🏍️'; 
-  }
-  
+  if (bike.imgSrc) { iconEl.classList.add('is-svg'); iconEl.innerHTML = bikeImageMarkup('scooter-icon-garage', bike.imgSrc); } else { iconEl.classList.remove('is-svg'); iconEl.innerText = bike.emoji || '🏍️'; }
   const list = document.getElementById('tuning-list'); list.innerHTML = '';
   TUNING_TYPES.forEach(t => {
     const level = (state.tuning && state.tuning[t.id]) || 0, maxed = level >= t.maxLevel, cost = tuningCost(t, level), canAfford = state.coins >= cost;
@@ -661,7 +605,6 @@ function renderBikeList() {
     const owned = bike.id === 'starter' || state.ownedBikeIds.includes(bike.id), selected = state.activeBikeId === bike.id, canAfford = state.coins >= bike.price;
     const card = document.createElement('div'); card.className = 'bike-card';
     let btnHtml = selected ? `<button class="bike-btn selected" disabled>Выбран</button>` : owned ? `<button class="bike-btn select" data-select="${bike.id}">Выбрать</button>` : `<button class="bike-btn buy" data-buy="${bike.id}" ${canAfford ? '' : 'disabled'}>🪙 ${fmt(bike.price)}</button>`;
-    
     const iconInner = bike.imgSrc ? bikeImageMarkup('scooter-icon-card', bike.imgSrc) : bike.emoji;
     card.innerHTML = `<div class="bike-card-emoji">${iconInner}</div><div class="bike-card-info"><div class="bike-card-name">${bike.name}</div><div class="bike-card-stats">Сила: ${bike.power} · ${bike.top} км/ч</div><div class="bike-card-price">${owned ? 'Куплен' : '🪙 ' + fmt(bike.price)}</div></div>${btnHtml}`;
     listEl.appendChild(card);
