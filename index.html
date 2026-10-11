@@ -186,6 +186,14 @@
   .daily-card.past { background: #1e293b; border: 1px solid #334155; color: #64748b; }
   .daily-card.current { background: var(--accent-orange); border: 2px solid #fff; color: #1a1a1a; box-shadow: var(--glow-orange); transform: scale(1.05); }
   .daily-card.future { background: #0f172a; border: 1px solid rgba(34,211,238,0.3); color: #e2e8f0; }
+
+  /* Кнопка ежедневного бонуса в профиле */
+  .profile-daily-btn {
+    background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4);
+    border-radius: 8px; padding: 12px; margin-bottom: 15px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s;
+  }
+  .profile-daily-btn:active { transform: scale(0.97); background: rgba(34,211,238,0.2); }
 </style>
 </head>
 <body>
@@ -395,6 +403,13 @@
       <span id="profile-exp-text" style="color: white; font-weight: bold;">0 / 200</span>
     </div>
     <div class="level-bar" style="width: 100%; height: 12px; border-radius: 6px; margin-bottom: 20px; background: #1a202c; border: 1px solid rgba(34,211,238,0.3);"><div class="level-progress" id="profile-progress-bar-large" style="border-radius: 6px; background-color: var(--accent-cyan);"></div></div>
+    
+    <!-- НОВАЯ ВЛАДКА: ЕЖЕДНЕВНЫЕ БОНУСЫ -->
+    <div id="profile-daily-btn" class="profile-daily-btn">
+      <span style="font-size: 14px; font-weight: bold; color: var(--accent-cyan);">🎁 Ежедневные бонусы</span>
+      <span style="font-size: 12px; color: var(--text-dim);">Посмотреть ➔</span>
+    </div>
+
     <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; font-size: 13px; color: var(--text-dim); display: flex; justify-content: space-between;">
       <span>Всего тапов:</span>
       <span id="profile-total-taps" style="color: var(--accent-orange); font-weight: bold;">0</span>
@@ -402,7 +417,7 @@
   </div>
 </div>
 
-<!-- ЕЖЕДНЕВНЫЙ БОНУС (НОВОЕ ОКНО) -->
+<!-- ЕЖЕДНЕВНЫЙ БОНУС -->
 <div id="daily-bonus-modal" class="custom-modal hidden">
   <div class="modal-card" style="max-width: 350px;">
     <button id="daily-close-btn" class="profile-modal-close">✕</button>
@@ -504,28 +519,31 @@ function checkDailyBonus() {
   if (lastDateStr !== todayDateStr) {
     const yesterday = new Date();
     yesterday.setDate(now.getDate() - 1);
-    
-    // Если заходили вчера - продолжаем серию, иначе начинаем с 1
     if (lastDateStr === yesterday.toDateString()) {
       pendingStreak = (state.loginStreak || 0) + 1;
-      if (pendingStreak > 7) pendingStreak = 1; // Цикл 7 дней
+      if (pendingStreak > 7) pendingStreak = 1; 
     } else {
       pendingStreak = 1;
     }
-    showDailyBonusModal(pendingStreak);
+    showDailyBonusModal(pendingStreak, true);
   }
 }
 
-function showDailyBonusModal(currentStreak) {
+// Функция показа окна бонусов. Параметр canClaim определяет, доступно ли получение сегодня
+function showDailyBonusModal(displayStreak, canClaim) {
   const grid = document.getElementById('daily-bonus-grid');
   grid.innerHTML = '';
   
-  DAILY_REWARDS.forEach((r, idx) => {
-    const isCurrent = (r.day === currentStreak);
-    const isPassed = (r.day < currentStreak);
-    let cls = isCurrent ? 'current' : (isPassed ? 'past' : 'future');
+  DAILY_REWARDS.forEach((r) => {
+    let cls = 'future';
+    if (canClaim) {
+      if (r.day === displayStreak) cls = 'current';
+      else if (r.day < displayStreak) cls = 'past';
+    } else {
+      if (r.day <= displayStreak) cls = 'past';
+    }
     
-    let expHtml = r.exp > 0 ? `<div style="font-size:10px; color:${isCurrent ? '#1a1a1a' : 'var(--accent-cyan)'}; margin-top:2px;">+${r.exp} XP</div>` : '';
+    let expHtml = r.exp > 0 ? `<div style="font-size:10px; color:${cls === 'current' ? '#1a1a1a' : 'var(--accent-cyan)'}; margin-top:2px;">+${r.exp} XP</div>` : '';
     let spanHtml = r.day === 7 ? 'grid-column: span 3;' : '';
 
     grid.innerHTML += `
@@ -536,6 +554,19 @@ function showDailyBonusModal(currentStreak) {
       </div>
     `;
   });
+  
+  const claimBtn = document.getElementById('daily-bonus-claim-btn');
+  if (canClaim) {
+    claimBtn.innerText = 'Забрать бонус';
+    claimBtn.disabled = false;
+    claimBtn.style.background = 'var(--accent-orange)';
+    claimBtn.style.color = '#1a1a1a';
+  } else {
+    claimBtn.innerText = 'Награда уже получена';
+    claimBtn.disabled = true;
+    claimBtn.style.background = '#4a5568';
+    claimBtn.style.color = '#8a97a8';
+  }
   
   document.getElementById('daily-bonus-modal').classList.remove('hidden');
 }
@@ -566,6 +597,28 @@ document.getElementById('user-profile-btn').addEventListener('click', () => {
   profileModal.classList.remove('hidden');
 });
 document.getElementById('profile-close-btn').addEventListener('click', () => profileModal.classList.add('hidden'));
+
+// КЛИК ПО ВКЛАДКЕ БОНУСОВ ИЗ ПРОФИЛЯ
+document.getElementById('profile-daily-btn').addEventListener('click', () => {
+  profileModal.classList.add('hidden');
+  const now = new Date();
+  if (state.lastBonusDate !== now.toDateString()) {
+    // Еще не забрали бонус сегодня - проверяем серию и даем забрать
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    if (state.lastBonusDate === yesterday.toDateString()) {
+      pendingStreak = (state.loginStreak || 0) + 1;
+      if (pendingStreak > 7) pendingStreak = 1;
+    } else {
+      pendingStreak = 1;
+    }
+    showDailyBonusModal(pendingStreak, true);
+  } else {
+    // Уже забирали сегодня - просто показываем текущий прогресс
+    let displayStreak = state.loginStreak === 0 ? 1 : state.loginStreak;
+    showDailyBonusModal(displayStreak, false);
+  }
+});
 
 function renderGarage() {
   const bike = activeBike(); document.getElementById('active-bike-name').innerText = bike.name; document.getElementById('points-display').innerText = fmt(state.coins) + ' pts'; document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
