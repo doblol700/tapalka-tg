@@ -21,13 +21,12 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
-    display: flex; justify-content: center; align-items: center; /* Центрируем контейнер на широком экране */
+    display: flex; justify-content: center; align-items: center;
   }
 
   /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА */
   #app-container {
-    height: 100%; width: 100%; max-width: 480px; /* Мобильная ширина для ПК */
-    position: relative; /* Важно для удержания оверлеев внутри */
+    height: 100%; width: 100%; max-width: 480px; position: relative;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
     box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow: hidden;
@@ -129,7 +128,7 @@
   .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
-  /* --- ОБЩИЕ ОВЕРЛЕИ (ТЕПЕРЬ ABSOLUTE) --- */
+  /* --- ОБЩИЕ ОВЕРЛЕИ (ABSOLUTE) --- */
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
@@ -176,7 +175,7 @@
   .chase-obstacle { position: absolute; width: 50px; height: 50px; z-index: 3; display: flex; align-items: center; justify-content: center; font-size: 40px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); }
   .swipe-indicator { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 24px; font-weight: bold; pointer-events: none; text-align: center; }
 
-  /* --- МОДАЛЬНЫЕ ОКНА (ТЕПЕРЬ ABSOLUTE ДЛЯ ПК) --- */
+  /* --- МОДАЛЬНЫЕ ОКНА --- */
   .custom-modal { position: absolute; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
   .custom-modal.hidden { display: none; }
   .modal-card { background: var(--card-bg); border: 2px solid var(--accent-orange); border-radius: 16px; padding: 24px; text-align: center; width: 82%; max-width: 320px; box-shadow: 0 0 25px rgba(249,115,22,0.6); position: relative; }
@@ -191,19 +190,12 @@
   .daily-card.past { background: #1e293b; border: 1px solid #334155; color: #64748b; }
   .daily-card.current { background: var(--accent-orange); border: 2px solid #fff; color: #1a1a1a; box-shadow: var(--glow-orange); transform: scale(1.05); }
   .daily-card.future { background: #0f172a; border: 1px solid rgba(34,211,238,0.3); color: #e2e8f0; }
-
-  /* Кнопка ежедневного бонуса в профиле */
-  .profile-daily-btn {
-    background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4);
-    border-radius: 8px; padding: 12px; margin-bottom: 15px; cursor: pointer;
-    display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s;
-  }
+  .profile-daily-btn { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 12px; margin-bottom: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
   .profile-daily-btn:active { transform: scale(0.97); background: rgba(34,211,238,0.2); }
 </style>
 </head>
 <body>
 
-<!-- ВЕСЬ КОНТЕНТ И ОВЕРЛЕИ ТЕПЕРЬ СТРОГО ВНУТРИ APP-CONTAINER ДЛЯ ПК -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
@@ -266,9 +258,7 @@
     <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
   </div>
 
-  <!-- ============================================== -->
   <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА РЕЖИМА -->
-  <!-- ============================================== -->
   <div id="mode-modal" class="custom-modal hidden">
     <div class="modal-card">
       <button id="mode-close-btn" class="profile-modal-close">✕</button>
@@ -281,9 +271,7 @@
     </div>
   </div>
 
-  <!-- ============================================== -->
   <!-- СТАНТ-ЗАЕЗД -->
-  <!-- ============================================== -->
   <div id="stunt-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud">
       <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
@@ -314,9 +302,7 @@
     <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
-  <!-- ============================================== -->
   <!-- ГОНКА 1 VS 1 -->
-  <!-- ============================================== -->
   <div id="race-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud">
       <div class="stunt-hud-item" style="min-width: 100%; text-align: left; padding-left: 10px;">🏎️ <span id="race-speed">0</span> км/ч</div>
@@ -345,18 +331,14 @@
     <button id="race-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
-  <!-- ============================================== -->
   <!-- ПОГОНЯ (ДПС) -->
-  <!-- ============================================== -->
   <div id="chase-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud" style="background: rgba(0,0,0,0.9);">
       <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
       <div class="stunt-hud-item" style="color: var(--accent-cyan); min-width: 40%;">Счет: <span id="chase-score">0</span></div>
     </div>
-    
     <div class="stunt-scene" id="chase-scene" style="background-color: #0f172a; touch-action: none;">
       <div class="stunt-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.4);"></div>
-      
       <div class="chase-road" id="chase-road">
         <div class="chase-line" style="top: 33%;"></div>
         <div class="chase-line" style="top: 66%;"></div>
@@ -369,13 +351,11 @@
         <div class="chase-player" id="chase-player">🏍️</div>
         <div id="chase-obstacles-container"></div>
       </div>
-      
       <div class="swipe-indicator">
         <div>СВАЙП ВВЕРХ / ВНИЗ</div>
         <div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div>
       </div>
     </div>
-    
     <div class="stunt-result hidden" id="chase-result">
       <div class="stunt-result-card" style="border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.6);">
         <div class="stunt-result-title" style="color: #ef4444;">🚨 ПОЙМАЛИ!</div>
@@ -386,9 +366,7 @@
     <button id="chase-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
-  <!-- ============================================== -->
   <!-- МОДАЛЬНЫЕ ОКНА: УРОВЕНЬ, ПРОФИЛЬ, БОНУС -->
-  <!-- ============================================== -->
   <div id="level-up-modal" class="custom-modal hidden">
     <div class="modal-card">
       <div class="modal-title">🎉 Поздравляем!</div>
@@ -428,9 +406,7 @@
       <button id="daily-close-btn" class="profile-modal-close">✕</button>
       <div class="modal-title">🎁 Ежедневный бонус!</div>
       <div class="modal-desc" style="font-size: 12px;">Заходите каждый день, чтобы забирать награды! Пропуск дня сбросит прогресс.</div>
-      
       <div id="daily-bonus-grid" class="daily-bonus-grid"></div>
-      
       <button id="daily-bonus-claim-btn" class="claim-btn" style="width: 100%; font-size: 15px; padding: 12px;">Забрать бонус</button>
     </div>
   </div>
@@ -447,11 +423,11 @@ const BIKE_CATALOG = {
     { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png' } 
   ]},
   pitbike: { label: 'Питбайки', emoji: '🏍️', bikes: [ 
-    { id: 'kayo-tt125', name: 'Kayo TT 125', price: 2000, power: 2, top: '80', imgSrc: 'kayott125.jpg' },
-    { id: 'apollo-rfz125', name: 'Apollo RFZ 125', price: 3500, power: 3, top: '85', imgSrc: 'apollorfz125.jpg' },
+    { id: 'kayo-tt125', name: 'Kayo TT 125', price: 2000, power: 2, top: '80', imgSrc: 'kayott125.png' },
+    { id: 'apollo-rfz125', name: 'Apollo RFZ 125', price: 3500, power: 3, top: '85', imgSrc: 'apollorfz125.png' },
     { id: 'bse-ph125', name: 'BSE PH 125', price: 5000, power: 4, top: '90', imgSrc: 'bseph125.png' },
-    { id: 'progasi-smart125', name: 'Progasi Smart 125', price: 6500, power: 5, top: '95', imgSrc: 'progasismart125.jpg' },
-    { id: 'sharmax-miami145', name: 'Sharmax Miami 145', price: 8000, power: 6, top: '105', imgSrc: 'sharmaxmiami145.jpg' },
+    { id: 'progasi-smart125', name: 'Progasi Smart 125', price: 6500, power: 5, top: '95', imgSrc: 'progasismart125.png' },
+    { id: 'sharmax-miami145', name: 'Sharmax Miami 145', price: 8000, power: 6, top: '105', imgSrc: 'sharmaxmiami145.png' },
     { id: 'kayo-tt250', name: 'KAYO TT250', price: 12000, power: 8, top: '115' } 
   ]},
   enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [ { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145' } ]},
