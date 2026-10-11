@@ -15,18 +15,20 @@
 
   * { box-sizing: border-box; }
 
-  /* ЦЕНТРИРОВАНИЕ ДЛЯ ПК */
+  /* --- НАДЕЖНОЕ ЦЕНТРИРОВАНИЕ ДЛЯ ПК --- */
   body, html {
     margin: 0; padding: 0; height: 100%; width: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
-    display: flex; justify-content: center; align-items: center;
+    /* Убрали display: flex, чтобы не конфликтовать с окном Telegram */
   }
 
   /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА */
   #app-container {
-    height: 100%; width: 100%; max-width: 480px; position: relative;
+    height: 100%; width: 100%; max-width: 480px; 
+    margin: 0 auto; /* Строгое выравнивание по центру экрана */
+    position: relative;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
     box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow: hidden;
@@ -128,7 +130,7 @@
   .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
-  /* --- ОБЩИЕ ОВЕРЛЕИ (ABSOLUTE) --- */
+  /* --- ОБЩИЕ ОВЕРЛЕИ (ABSOLUTE ДЛЯ ПК) --- */
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
@@ -190,12 +192,19 @@
   .daily-card.past { background: #1e293b; border: 1px solid #334155; color: #64748b; }
   .daily-card.current { background: var(--accent-orange); border: 2px solid #fff; color: #1a1a1a; box-shadow: var(--glow-orange); transform: scale(1.05); }
   .daily-card.future { background: #0f172a; border: 1px solid rgba(34,211,238,0.3); color: #e2e8f0; }
-  .profile-daily-btn { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 12px; margin-bottom: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
+
+  /* Кнопка ежедневного бонуса в профиле */
+  .profile-daily-btn {
+    background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4);
+    border-radius: 8px; padding: 12px; margin-bottom: 15px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s;
+  }
   .profile-daily-btn:active { transform: scale(0.97); background: rgba(34,211,238,0.2); }
 </style>
 </head>
 <body>
 
+<!-- КОНТЕНТ СТРОГО ВНУТРИ APP-CONTAINER -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
