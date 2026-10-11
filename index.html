@@ -164,36 +164,12 @@
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
 
   /* --- СТИЛИ ДЛЯ РЕЖИМА ПОГОНИ --- */
-  .chase-road {
-    position: absolute; left: 0; right: 0; bottom: 0; height: 60%;
-    background-color: #1a1c23; border-top: 5px solid #475569; z-index: 2;
-    overflow: hidden;
-  }
-  .chase-line {
-    position: absolute; width: 100%; height: 4px;
-    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0, rgba(255,255,255,0.7) 60px, transparent 60px, transparent 120px);
-  }
-  .chase-player {
-    position: absolute; left: 120px; width: 120px; height: 90px;
-    transition: top 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 4;
-    display: flex; align-items: flex-end;
-  }
-  .chase-police {
-    position: absolute; left: -20px; width: 150px; height: 80px;
-    transition: top 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), left 1s ease; z-index: 4;
-    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  }
-  
-  .chase-obstacle {
-    position: absolute; width: 50px; height: 50px; z-index: 3;
-    display: flex; align-items: center; justify-content: center; font-size: 40px;
-    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8));
-  }
-  
-  .swipe-indicator {
-    position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 24px; font-weight: bold; pointer-events: none; text-align: center;
-  }
+  .chase-road { position: absolute; left: 0; right: 0; bottom: 0; height: 60%; background-color: #1a1c23; border-top: 5px solid #475569; z-index: 2; overflow: hidden; }
+  .chase-line { position: absolute; width: 100%; height: 4px; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0, rgba(255,255,255,0.7) 60px, transparent 60px, transparent 120px); }
+  .chase-player { position: absolute; left: 120px; width: 120px; height: 90px; transition: top 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 4; display: flex; align-items: flex-end; }
+  .chase-police { position: absolute; left: -20px; transition: top 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), left 1s ease; z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+  .chase-obstacle { position: absolute; width: 50px; height: 50px; z-index: 3; display: flex; align-items: center; justify-content: center; font-size: 40px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); }
+  .swipe-indicator { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 24px; font-weight: bold; pointer-events: none; text-align: center; }
 
   /* --- МОДАЛЬНЫЕ ОКНА --- */
   .custom-modal { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
@@ -201,8 +177,15 @@
   .modal-card { background: var(--card-bg); border: 2px solid var(--accent-orange); border-radius: 16px; padding: 24px; text-align: center; width: 82%; max-width: 320px; box-shadow: 0 0 25px rgba(249,115,22,0.6); position: relative; }
   .modal-title { font-size: 20px; font-weight: bold; color: var(--accent-orange); margin-bottom: 8px; text-shadow: 0 0 10px rgba(249,115,22,0.5); }
   .modal-desc { font-size: 14px; color: var(--text-color); margin-bottom: 18px; line-height: 1.5; }
-  .profile-modal-close { position: absolute; top: -12px; right: -12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,1); color: var(--text-color); font-size: 15px; cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+  .profile-modal-close { position: absolute; top: -12px; right: -12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,1); color: var(--text-color); font-size: 15px; cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 205; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Ежедневный бонус сетка */
+  .daily-bonus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
+  .daily-card { border-radius: 8px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+  .daily-card.past { background: #1e293b; border: 1px solid #334155; color: #64748b; }
+  .daily-card.current { background: var(--accent-orange); border: 2px solid #fff; color: #1a1a1a; box-shadow: var(--glow-orange); transform: scale(1.05); }
+  .daily-card.future { background: #0f172a; border: 1px solid rgba(34,211,238,0.3); color: #e2e8f0; }
 </style>
 </head>
 <body>
@@ -390,7 +373,9 @@
   <button id="chase-close-btn" class="stunt-close-btn">✕</button>
 </div>
 
-<!-- ОКНА -->
+<!-- ============================================== -->
+<!-- МОДАЛЬНЫЕ ОКНА: УРОВЕНЬ, ПРОФИЛЬ, БОНУС -->
+<!-- ============================================== -->
 <div id="level-up-modal" class="custom-modal hidden">
   <div class="modal-card">
     <div class="modal-title">🎉 Поздравляем!</div>
@@ -417,6 +402,19 @@
   </div>
 </div>
 
+<!-- ЕЖЕДНЕВНЫЙ БОНУС (НОВОЕ ОКНО) -->
+<div id="daily-bonus-modal" class="custom-modal hidden">
+  <div class="modal-card" style="max-width: 350px;">
+    <button id="daily-close-btn" class="profile-modal-close">✕</button>
+    <div class="modal-title">🎁 Ежедневный бонус!</div>
+    <div class="modal-desc" style="font-size: 12px;">Заходите каждый день, чтобы забирать награды! Пропуск дня сбросит прогресс.</div>
+    
+    <div id="daily-bonus-grid" class="daily-bonus-grid"></div>
+    
+    <button id="daily-bonus-claim-btn" class="claim-btn" style="width: 100%; font-size: 15px; padding: 12px;">Забрать бонус</button>
+  </div>
+</div>
+
 <script>
 // --- 1. БАЗА ДАННЫХ И КАТАЛОГ ---
 function scooterImageMarkup(cls) { return `<img src="дио1.png" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Скутер">`; }
@@ -438,14 +436,36 @@ const LEVEL_REQUIREMENTS = {
   10: { exp: 3300, reward: 5000 }, 11: { exp: 4300, reward: 2500 }, 12: { exp: 5500, reward: 2500 }, 13: { exp: 7000, reward: 2500 }, 14: { exp: 8800, reward: 2500 }, 15: { exp: 11000, reward: 7500 }
 };
 
+// Ежедневные награды
+const DAILY_REWARDS = [
+  { day: 1, coins: 1500, exp: 0 },
+  { day: 2, coins: 2500, exp: 0 },
+  { day: 3, coins: 3500, exp: 300 },
+  { day: 4, coins: 5000, exp: 500 },
+  { day: 5, coins: 7500, exp: 800 },
+  { day: 6, coins: 10000, exp: 1000 },
+  { day: 7, coins: 15000, exp: 1500 }
+];
+
 // --- 2. СИСТЕМА СОХРАНЕНИЙ ---
 const SAVE_KEY = 'motoTapalkaSave';
-function defaultState() { return { coins: 500, totalTaps: 0, level: 1, exp: 0, ownedBikeIds: [], activeBikeId: 'starter', tuning: {}, claimedMissions: {} }; }
+function defaultState() { return { coins: 500, totalTaps: 0, level: 1, exp: 0, ownedBikeIds: [], activeBikeId: 'starter', tuning: {}, claimedMissions: {}, lastBonusDate: null, loginStreak: 0 }; }
 function loadState() {
   const def = defaultState();
   try {
     const raw = localStorage.getItem(SAVE_KEY); if (!raw) return def; const parsed = JSON.parse(raw);
-    return { coins: typeof parsed.coins === 'number' ? parsed.coins : def.coins, totalTaps: typeof parsed.totalTaps === 'number' ? parsed.totalTaps : def.totalTaps, level: typeof parsed.level === 'number' ? parsed.level : def.level, exp: typeof parsed.exp === 'number' ? parsed.exp : def.exp, ownedBikeIds: Array.isArray(parsed.ownedBikeIds) ? parsed.ownedBikeIds : def.ownedBikeIds, activeBikeId: parsed.activeBikeId || def.activeBikeId, tuning: parsed.tuning || def.tuning, claimedMissions: parsed.claimedMissions || def.claimedMissions };
+    return { 
+      coins: typeof parsed.coins === 'number' ? parsed.coins : def.coins, 
+      totalTaps: typeof parsed.totalTaps === 'number' ? parsed.totalTaps : def.totalTaps, 
+      level: typeof parsed.level === 'number' ? parsed.level : def.level, 
+      exp: typeof parsed.exp === 'number' ? parsed.exp : def.exp, 
+      ownedBikeIds: Array.isArray(parsed.ownedBikeIds) ? parsed.ownedBikeIds : def.ownedBikeIds, 
+      activeBikeId: parsed.activeBikeId || def.activeBikeId, 
+      tuning: parsed.tuning || def.tuning, 
+      claimedMissions: parsed.claimedMissions || def.claimedMissions,
+      lastBonusDate: parsed.lastBonusDate || def.lastBonusDate,
+      loginStreak: typeof parsed.loginStreak === 'number' ? parsed.loginStreak : def.loginStreak
+    };
   } catch (e) { return def; }
 }
 let state = loadState();
@@ -474,7 +494,67 @@ function renderTop() {
   document.getElementById('level-progress-bar').style.width = p + '%';
 }
 
-// --- 5. ПРОФИЛЬ И ГАРАЖ ---
+// --- ЕЖЕДНЕВНЫЙ БОНУС ---
+let pendingStreak = 1;
+function checkDailyBonus() {
+  const now = new Date();
+  const todayDateStr = now.toDateString();
+  const lastDateStr = state.lastBonusDate;
+
+  if (lastDateStr !== todayDateStr) {
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    
+    // Если заходили вчера - продолжаем серию, иначе начинаем с 1
+    if (lastDateStr === yesterday.toDateString()) {
+      pendingStreak = (state.loginStreak || 0) + 1;
+      if (pendingStreak > 7) pendingStreak = 1; // Цикл 7 дней
+    } else {
+      pendingStreak = 1;
+    }
+    showDailyBonusModal(pendingStreak);
+  }
+}
+
+function showDailyBonusModal(currentStreak) {
+  const grid = document.getElementById('daily-bonus-grid');
+  grid.innerHTML = '';
+  
+  DAILY_REWARDS.forEach((r, idx) => {
+    const isCurrent = (r.day === currentStreak);
+    const isPassed = (r.day < currentStreak);
+    let cls = isCurrent ? 'current' : (isPassed ? 'past' : 'future');
+    
+    let expHtml = r.exp > 0 ? `<div style="font-size:10px; color:${isCurrent ? '#1a1a1a' : 'var(--accent-cyan)'}; margin-top:2px;">+${r.exp} XP</div>` : '';
+    let spanHtml = r.day === 7 ? 'grid-column: span 3;' : '';
+
+    grid.innerHTML += `
+      <div class="daily-card ${cls}" style="${spanHtml}">
+        <div style="font-size: 10px; font-weight: bold; margin-bottom: 4px;">День ${r.day}</div>
+        <div style="font-size: 13px;">🪙 ${fmt(r.coins)}</div>
+        ${expHtml}
+      </div>
+    `;
+  });
+  
+  document.getElementById('daily-bonus-modal').classList.remove('hidden');
+}
+
+document.getElementById('daily-bonus-claim-btn').addEventListener('click', () => {
+  state.loginStreak = pendingStreak;
+  const reward = DAILY_REWARDS[state.loginStreak - 1];
+  state.coins += reward.coins;
+  if (reward.exp > 0) addExp(reward.exp);
+  
+  state.lastBonusDate = new Date().toDateString();
+  saveState();
+  renderTop();
+  renderGarage();
+  document.getElementById('daily-bonus-modal').classList.add('hidden');
+});
+document.getElementById('daily-close-btn').addEventListener('click', () => { document.getElementById('daily-bonus-modal').classList.add('hidden'); });
+
+// --- ПРОФИЛЬ И ГАРАЖ ---
 const profileModal = document.getElementById('profile-modal');
 document.getElementById('user-profile-btn').addEventListener('click', () => {
   document.getElementById('profile-nickname-large').innerText = document.getElementById('user-nickname').innerText;
@@ -505,7 +585,7 @@ function renderGarage() {
   }));
 }
 
-// --- 7. МАГАЗИН И МИССИИ ---
+// --- МАГАЗИН И МИССИИ ---
 let activeShopTab = 'scooter';
 function renderShopTabs() { const tabsEl = document.getElementById('shop-tabs'); tabsEl.innerHTML = ''; Object.keys(BIKE_CATALOG).forEach(key => { const cat = BIKE_CATALOG[key]; const tab = document.createElement('div'); tab.className = 'shop-tab' + (key === activeShopTab ? ' active' : ''); tab.innerText = cat.label; tab.addEventListener('click', () => { activeShopTab = key; renderShopTabs(); renderBikeList(); }); tabsEl.appendChild(tab); }); }
 function renderBikeList() {
@@ -532,7 +612,7 @@ function renderMissions() {
   listEl.querySelectorAll('button[data-claim]').forEach(btn => btn.addEventListener('click', () => { const id = btn.getAttribute('data-claim'); if (state.claimedMissions[id]) return; state.coins += MISSIONS.find(m => m.id === id).reward; state.claimedMissions[id] = true; saveState(); renderTop(); renderMissions(); renderGarage(); }));
 }
 
-// --- 8. ОБРАБОТКА ТАПОВ И НАВИГАЦИЯ ---
+// --- ОБРАБОТКА ТАПОВ И НАВИГАЦИЯ ---
 const tapZone = document.getElementById('tap-zone');
 tapZone.addEventListener('click', (e) => {
   const gain = perTapValue(); state.coins += gain; state.totalTaps += 1; addExp(1); saveState();
@@ -549,7 +629,7 @@ function initTelegramUser() {
   try { const tg = window.Telegram && window.Telegram.WebApp; if (!tg) return; tg.ready(); tg.expand(); const user = tg.initDataUnsafe && tg.initDataUnsafe.user; if (!user) return; document.getElementById('user-nickname').innerText = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' '); const avatarEl = document.getElementById('avatar-placeholder'); if (user.photo_url) avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`; else avatarEl.innerText = (user.first_name ? user.first_name[0] : (user.username ? user.username[0].toUpperCase() : 'R')); } catch (e) {}
 }
 
-// --- 9. ЛОГИКА МЕНЮ ВЫБОРА РЕЖИМА ---
+// --- ЛОГИКА МЕНЮ ВЫБОРА РЕЖИМА ---
 document.getElementById('main-start-btn').addEventListener('click', () => document.getElementById('mode-modal').classList.remove('hidden'));
 document.getElementById('mode-close-btn').addEventListener('click', () => document.getElementById('mode-modal').classList.add('hidden'));
 document.getElementById('mode-stunt-btn').addEventListener('click', () => { document.getElementById('mode-modal').classList.add('hidden'); openStunt(); });
@@ -557,9 +637,8 @@ document.getElementById('mode-race-btn').addEventListener('click', () => { docum
 document.getElementById('mode-chase-btn').addEventListener('click', () => { document.getElementById('mode-modal').classList.add('hidden'); openChase(); });
 
 
-// --- 10. СТАНТ И ГОНКА ---
+// --- СТАНТ И ГОНКА ---
 const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg'), stuntTimerEl = document.getElementById('stunt-timer'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntClockEl = document.getElementById('stunt-clock'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats'), stuntGasZone = document.getElementById('stunt-gas'), stuntBrakeZone = document.getElementById('stunt-brake'), stuntSceneEl = document.getElementById('stunt-scene'), sparkAnchorEl = document.getElementById('stunt-spark-anchor');
-
 const STUNT_MAX_ANGLE = 92, STUNT_MIN_ANGLE = -18, SPARK_ANGLE_THRESHOLD = 86, SPARK_INTERVAL_MS = 40;
 let stunt = null, lastSparkTs = 0;
 
@@ -582,8 +661,7 @@ function openStunt() {
   lastSparkTs = 0; stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
   stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
   const bike = activeBike();
-  if (bike.imgType === 'scooter') { stuntBikeEl.classList.add('is-svg'); stuntBikeEl.innerHTML = scooterImageMarkup('scooter-icon-stunt'); } 
-  else { stuntBikeEl.classList.remove('is-svg'); stuntBikeEl.innerText = bike.emoji || '🏍️'; }
+  if (bike.imgType === 'scooter') { stuntBikeEl.classList.add('is-svg'); stuntBikeEl.innerHTML = scooterImageMarkup('scooter-icon-stunt'); } else { stuntBikeEl.classList.remove('is-svg'); stuntBikeEl.innerText = bike.emoji || '🏍️'; }
   stuntBikeEl.style.transform = 'rotate(0deg)'; stuntTimerEl.innerText = '0.0'; stuntAngleEl.innerText = '0'; stuntSpeedEl.innerText = '15'; stuntCoinsEl.innerText = '0';
   stunt.rafId = requestAnimationFrame(stuntTick);
 }
@@ -682,7 +760,7 @@ bindHold(stuntBrakeZone, () => { if (stunt && !stunt.crashed) stunt.brake = true
 bindHold(raceGasZone, () => { if (race && !race.finished) race.gas = true; raceGasZone.classList.add('pressed'); }, () => { if (race) race.gas = false; raceGasZone.classList.remove('pressed'); });
 bindHold(raceBrakeZone, () => { if (race && !race.finished) race.brake = true; raceBrakeZone.classList.add('pressed'); }, () => { if (race) race.brake = false; raceBrakeZone.classList.remove('pressed'); });
 
-// --- 11. НОВЫЙ РЕЖИМ: ПОГОНЯ (ДПС) ---
+// --- 11. ПОГОНЯ (ДПС) ---
 const chaseOverlay = document.getElementById('chase-overlay'), chaseScene = document.getElementById('chase-scene'), chasePlayer = document.getElementById('chase-player'), chasePolice = document.getElementById('chase-police'), chaseObstaclesContainer = document.getElementById('chase-obstacles-container'), chaseScoreEl = document.getElementById('chase-score'), chaseWantedEl = document.getElementById('chase-wanted-stars'), chaseResultEl = document.getElementById('chase-result'), chaseResultStats = document.getElementById('chase-result-stats');
 let chase = null; const CHASE_LANE_Y = ['5%', '38%', '70%']; const OBSTACLE_TYPES = ['🚧', '🦺', '🕳️'];
 
@@ -692,8 +770,7 @@ function openChase() {
   const bike = activeBike();
   chase = { lane: 1, speed: 350, score: 0, wantedLevel: 1, elapsed: 0, obstacles: [], spawnTimer: 0, finished: false, lastTs: null, rafId: null };
   chaseObstaclesContainer.innerHTML = ''; chaseResultEl.classList.add('hidden'); chaseOverlay.classList.remove('hidden');
-  if (bike.imgType === 'scooter') { chasePlayer.innerHTML = scooterImageMarkup('scooter-icon-chase'); chasePlayer.querySelector('img').style.width = '100px'; } 
-  else { chasePlayer.innerText = bike.emoji || '🏍️'; chasePlayer.style.fontSize = '80px'; }
+  if (bike.imgType === 'scooter') { chasePlayer.innerHTML = scooterImageMarkup('scooter-icon-chase'); chasePlayer.querySelector('img').style.width = '100px'; } else { chasePlayer.innerText = bike.emoji || '🏍️'; chasePlayer.style.fontSize = '80px'; }
   chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; chasePolice.style.top = CHASE_LANE_Y[chase.lane]; chasePolice.style.left = '-20px';
   updateWantedStars(); chase.rafId = requestAnimationFrame(chaseTick);
 }
@@ -730,7 +807,7 @@ function chaseTick(ts) {
     if (obs.lane === chase.lane && obs.x < playerX + playerW - 20 && obs.x + obs.width > playerX + 20) {
       chase.finished = true; chasePolice.style.left = '90px'; chasePolice.style.top = CHASE_LANE_Y[chase.lane];
       let reward = Math.floor(chase.score / 2);
-      chaseResultStats.innerHTML = `Вы продержались: <b>${chase.elapsed.toFixed(1)}с</b><br>Уровень розыска: <b>${chase.wantedLevel} ⭐</b><br>Награда: <b>🪙 ${fmt(reward)}</b>`;
+      chaseResultStats.innerHTML = `Вы продержались: <b>${chase.elapsed.toFixed(1)}с</b><br>Розыск: <b>${chase.wantedLevel} ⭐</b><br>Награда: <b>🪙 ${fmt(reward)}</b>`;
       chaseResultEl.dataset.reward = reward; chaseResultEl.classList.remove('hidden'); return;
     }
     if (obs.x < -60) { obs.el.remove(); chase.obstacles.splice(i, 1); }
@@ -760,7 +837,7 @@ chaseScene.addEventListener('mouseup', e => {
 
 // --- 12. ИНИЦИАЛИЗАЦИЯ И ОТЛОВ ОШИБОК ---
 document.addEventListener("DOMContentLoaded", () => {
-  try { initTelegramUser(); renderTop(); renderGarage(); renderShopTabs(); renderBikeList(); renderMissions(); } 
+  try { initTelegramUser(); renderTop(); renderGarage(); renderShopTabs(); renderBikeList(); renderMissions(); checkDailyBonus(); } 
   catch (err) { alert("Ошибка запуска: " + err.message); localStorage.removeItem(SAVE_KEY); }
 });
 </script>
