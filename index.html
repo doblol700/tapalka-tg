@@ -321,7 +321,7 @@
   <div class="stunt-scene" id="race-scene">
     <div class="stunt-city-bg" id="race-city-bg"></div>
     <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 42%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
-      <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));"><img src="дио1.png" alt="Бот"></div>
+      <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));" id="race-bike-bot">🏍️</div>
     </div>
     <div class="stunt-bike-wrap" id="race-player-wrap" style="left: 20%; z-index: 3;"><div class="stunt-bike" id="race-bike-player">🏍️</div></div>
     <div class="stunt-road" id="race-road"></div>
@@ -404,7 +404,7 @@
     </div>
     <div class="level-bar" style="width: 100%; height: 12px; border-radius: 6px; margin-bottom: 20px; background: #1a202c; border: 1px solid rgba(34,211,238,0.3);"><div class="level-progress" id="profile-progress-bar-large" style="border-radius: 6px; background-color: var(--accent-cyan);"></div></div>
     
-    <!-- НОВАЯ ВЛАДКА: ЕЖЕДНЕВНЫЕ БОНУСЫ -->
+    <!-- ВЛАДКА: ЕЖЕДНЕВНЫЕ БОНУСЫ -->
     <div id="profile-daily-btn" class="profile-daily-btn">
       <span style="font-size: 14px; font-weight: bold; color: var(--accent-cyan);">🎁 Ежедневные бонусы</span>
       <span style="font-size: 12px; color: var(--text-dim);">Посмотреть ➔</span>
@@ -432,11 +432,21 @@
 
 <script>
 // --- 1. БАЗА ДАННЫХ И КАТАЛОГ ---
-function scooterImageMarkup(cls) { return `<img src="дио1.png" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Скутер">`; }
+function bikeImageMarkup(cls, src) { return `<img src="${src}" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Мотоцикл">`; }
 
 const BIKE_CATALOG = {
-  scooter: { label: 'Скутеры', emoji: '🛵', bikes: [ { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgType: 'scooter' }, { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgType: 'scooter' } ]},
-  pitbike: { label: 'Питбайк', emoji: '🏍️', bikes: [ { id: 'kayo-tt250', name: 'KAYO TT250', price: 9000, power: 5, top: '95' } ]},
+  scooter: { label: 'Скутеры', emoji: '🛵', bikes: [ 
+    { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgSrc: 'дио1.png' }, 
+    { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png' } 
+  ]},
+  pitbike: { label: 'Питбайки', emoji: '🏍️', bikes: [ 
+    { id: 'kayo-tt125', name: 'Kayo TT 125', price: 2000, power: 2, top: '80', imgSrc: 'kayott125.jpg' },
+    { id: 'apollo-rfz125', name: 'Apollo RFZ 125', price: 3500, power: 3, top: '85', imgSrc: 'apollorfz125.jpg' },
+    { id: 'bse-ph125', name: 'BSE PH 125', price: 5000, power: 4, top: '90', imgSrc: 'bseph125.png' },
+    { id: 'progasi-smart125', name: 'Progasi Smart 125', price: 6500, power: 5, top: '95', imgSrc: 'progasismart125.jpg' },
+    { id: 'sharmax-miami145', name: 'Sharmax Miami 145', price: 8000, power: 6, top: '105', imgSrc: 'sharmaxmiami145.jpg' },
+    { id: 'kayo-tt250', name: 'KAYO TT250', price: 12000, power: 8, top: '115' } 
+  ]},
   enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [ { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145' } ]},
   motocross: { label: 'Кросс', emoji: '🏁', bikes: [ { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156' } ]}
 };
@@ -451,10 +461,10 @@ const LEVEL_REQUIREMENTS = {
   10: { exp: 3300, reward: 5000 }, 11: { exp: 4300, reward: 2500 }, 12: { exp: 5500, reward: 2500 }, 13: { exp: 7000, reward: 2500 }, 14: { exp: 8800, reward: 2500 }, 15: { exp: 11000, reward: 7500 }
 };
 
-// Ежедневные награды
+// Ежедневные награды 
 const DAILY_REWARDS = [
-  { day: 1, coins: 1500, exp: 0 },
-  { day: 2, coins: 2500, exp: 0 },
+  { day: 1, coins: 1500, exp: 75 },
+  { day: 2, coins: 2500, exp: 150 },
   { day: 3, coins: 3500, exp: 300 },
   { day: 4, coins: 5000, exp: 500 },
   { day: 5, coins: 7500, exp: 800 },
@@ -603,7 +613,6 @@ document.getElementById('profile-daily-btn').addEventListener('click', () => {
   profileModal.classList.add('hidden');
   const now = new Date();
   if (state.lastBonusDate !== now.toDateString()) {
-    // Еще не забрали бонус сегодня - проверяем серию и даем забрать
     const yesterday = new Date();
     yesterday.setDate(now.getDate() - 1);
     if (state.lastBonusDate === yesterday.toDateString()) {
@@ -614,7 +623,6 @@ document.getElementById('profile-daily-btn').addEventListener('click', () => {
     }
     showDailyBonusModal(pendingStreak, true);
   } else {
-    // Уже забирали сегодня - просто показываем текущий прогресс
     let displayStreak = state.loginStreak === 0 ? 1 : state.loginStreak;
     showDailyBonusModal(displayStreak, false);
   }
@@ -623,7 +631,13 @@ document.getElementById('profile-daily-btn').addEventListener('click', () => {
 function renderGarage() {
   const bike = activeBike(); document.getElementById('active-bike-name').innerText = bike.name; document.getElementById('points-display').innerText = fmt(state.coins) + ' pts'; document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
   const iconEl = document.getElementById('bike-emoji');
-  if (bike.imgType === 'scooter') { iconEl.classList.add('is-svg'); iconEl.innerHTML = scooterImageMarkup('scooter-icon-garage'); } else { iconEl.classList.remove('is-svg'); iconEl.innerText = bike.emoji || '🏍️'; }
+  
+  if (bike.imgSrc) { 
+    iconEl.classList.add('is-svg'); iconEl.innerHTML = bikeImageMarkup('scooter-icon-garage', bike.imgSrc); 
+  } else { 
+    iconEl.classList.remove('is-svg'); iconEl.innerText = bike.emoji || '🏍️'; 
+  }
+  
   const list = document.getElementById('tuning-list'); list.innerHTML = '';
   TUNING_TYPES.forEach(t => {
     const level = (state.tuning && state.tuning[t.id]) || 0, maxed = level >= t.maxLevel, cost = tuningCost(t, level), canAfford = state.coins >= cost;
@@ -647,7 +661,8 @@ function renderBikeList() {
     const owned = bike.id === 'starter' || state.ownedBikeIds.includes(bike.id), selected = state.activeBikeId === bike.id, canAfford = state.coins >= bike.price;
     const card = document.createElement('div'); card.className = 'bike-card';
     let btnHtml = selected ? `<button class="bike-btn selected" disabled>Выбран</button>` : owned ? `<button class="bike-btn select" data-select="${bike.id}">Выбрать</button>` : `<button class="bike-btn buy" data-buy="${bike.id}" ${canAfford ? '' : 'disabled'}>🪙 ${fmt(bike.price)}</button>`;
-    const iconInner = bike.imgType === 'scooter' ? scooterImageMarkup('scooter-icon-card') : bike.emoji;
+    
+    const iconInner = bike.imgSrc ? bikeImageMarkup('scooter-icon-card', bike.imgSrc) : bike.emoji;
     card.innerHTML = `<div class="bike-card-emoji">${iconInner}</div><div class="bike-card-info"><div class="bike-card-name">${bike.name}</div><div class="bike-card-stats">Сила: ${bike.power} · ${bike.top} км/ч</div><div class="bike-card-price">${owned ? 'Куплен' : '🪙 ' + fmt(bike.price)}</div></div>${btnHtml}`;
     listEl.appendChild(card);
   });
@@ -714,7 +729,7 @@ function openStunt() {
   lastSparkTs = 0; stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
   stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
   const bike = activeBike();
-  if (bike.imgType === 'scooter') { stuntBikeEl.classList.add('is-svg'); stuntBikeEl.innerHTML = scooterImageMarkup('scooter-icon-stunt'); } else { stuntBikeEl.classList.remove('is-svg'); stuntBikeEl.innerText = bike.emoji || '🏍️'; }
+  if (bike.imgSrc) { stuntBikeEl.classList.add('is-svg'); stuntBikeEl.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); } else { stuntBikeEl.classList.remove('is-svg'); stuntBikeEl.innerText = bike.emoji || '🏍️'; }
   stuntBikeEl.style.transform = 'rotate(0deg)'; stuntTimerEl.innerText = '0.0'; stuntAngleEl.innerText = '0'; stuntSpeedEl.innerText = '15'; stuntCoinsEl.innerText = '0';
   stunt.rafId = requestAnimationFrame(stuntTick);
 }
@@ -768,7 +783,7 @@ function openRace() {
   const bike = activeBike(); let baseSpeed = parseInt(bike.top); let playerMaxSpeed = baseSpeed + (state.tuning ? (state.tuning.engine || 0) * 3 : 0);
   race = { playerDist: 0, botDist: 0, playerSpeed: 0, botSpeed: 0, playerMax: playerMaxSpeed, botMax: playerMaxSpeed * (0.9 + Math.random() * 0.2), gas: false, brake: false, finished: false, lastTs: null, rafId: null, roadOffset: 0 };
   raceResultEl.classList.add('hidden'); raceOverlay.classList.remove('hidden');
-  if (bike.imgType === 'scooter') { racePlayerBike.classList.add('is-svg'); racePlayerBike.innerHTML = scooterImageMarkup('scooter-icon-stunt'); } else { racePlayerBike.classList.remove('is-svg'); racePlayerBike.innerText = bike.emoji || '🏍️'; }
+  if (bike.imgSrc) { racePlayerBike.classList.add('is-svg'); racePlayerBike.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); } else { racePlayerBike.classList.remove('is-svg'); racePlayerBike.innerText = bike.emoji || '🏍️'; }
   raceSpeedEl.innerText = '0'; raceDistPlayerEl.innerText = '0'; raceDistBotEl.innerText = '0'; raceBotWrap.style.transform = `translateX(0px) scale(0.85)`;
   race.rafId = requestAnimationFrame(raceTick);
 }
@@ -823,7 +838,7 @@ function openChase() {
   const bike = activeBike();
   chase = { lane: 1, speed: 350, score: 0, wantedLevel: 1, elapsed: 0, obstacles: [], spawnTimer: 0, finished: false, lastTs: null, rafId: null };
   chaseObstaclesContainer.innerHTML = ''; chaseResultEl.classList.add('hidden'); chaseOverlay.classList.remove('hidden');
-  if (bike.imgType === 'scooter') { chasePlayer.innerHTML = scooterImageMarkup('scooter-icon-chase'); chasePlayer.querySelector('img').style.width = '100px'; } else { chasePlayer.innerText = bike.emoji || '🏍️'; chasePlayer.style.fontSize = '80px'; }
+  if (bike.imgSrc) { chasePlayer.innerHTML = bikeImageMarkup('scooter-icon-chase', bike.imgSrc); chasePlayer.querySelector('img').style.width = '100px'; } else { chasePlayer.innerText = bike.emoji || '🏍️'; chasePlayer.style.fontSize = '80px'; }
   chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; chasePolice.style.top = CHASE_LANE_Y[chase.lane]; chasePolice.style.left = '-20px';
   updateWantedStars(); chase.rafId = requestAnimationFrame(chaseTick);
 }
