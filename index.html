@@ -15,23 +15,33 @@
 
   * { box-sizing: border-box; }
 
-  /* --- НАДЕЖНОЕ ЦЕНТРИРОВАНИЕ ДЛЯ ПК --- */
-  body, html {
-    margin: 0; padding: 0; height: 100%; width: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-color); color: var(--text-color);
-    overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
-    /* Убрали display: flex, чтобы не конфликтовать с окном Telegram */
+  /* --- ЖЕЛЕЗОБЕТОННОЕ ЦЕНТРИРОВАНИЕ ДЛЯ ПК --- */
+  html {
+    height: 100%;
+    background-color: var(--bg-color); /* Темный фон по краям на широких экранах */
   }
 
-  /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА */
-  #app-container {
-    height: 100%; width: 100%; max-width: 480px; 
-    margin: 0 auto; /* Строгое выравнивание по центру экрана */
+  body {
+    margin: 0 auto; /* Строго по центру */
+    padding: 0;
+    width: 100%;
+    max-width: 480px; /* Фиксируем ширину "под телефон" */
+    height: 100%;
     position: relative;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8); /* Тень для отделения игры от фона */
+    background-color: #0b1220;
+  }
+
+  #app-container {
+    height: 100%; width: 100%;
+    position: absolute; top: 0; left: 0;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
-    background-color: #0b1220; display: flex; flex-direction: column;
-    box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow: hidden;
+    display: flex; flex-direction: column;
   }
 
   /* --- TOP PANEL --- */
@@ -130,7 +140,7 @@
   .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
-  /* --- ОБЩИЕ ОВЕРЛЕИ (ABSOLUTE ДЛЯ ПК) --- */
+  /* --- ОБЩИЕ ОВЕРЛЕИ --- */
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
@@ -204,7 +214,6 @@
 </head>
 <body>
 
-<!-- КОНТЕНТ СТРОГО ВНУТРИ APP-CONTAINER -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
@@ -267,7 +276,9 @@
     <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
   </div>
 
+  <!-- ============================================== -->
   <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА РЕЖИМА -->
+  <!-- ============================================== -->
   <div id="mode-modal" class="custom-modal hidden">
     <div class="modal-card">
       <button id="mode-close-btn" class="profile-modal-close">✕</button>
@@ -280,7 +291,9 @@
     </div>
   </div>
 
+  <!-- ============================================== -->
   <!-- СТАНТ-ЗАЕЗД -->
+  <!-- ============================================== -->
   <div id="stunt-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud">
       <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
@@ -311,7 +324,9 @@
     <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
+  <!-- ============================================== -->
   <!-- ГОНКА 1 VS 1 -->
+  <!-- ============================================== -->
   <div id="race-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud">
       <div class="stunt-hud-item" style="min-width: 100%; text-align: left; padding-left: 10px;">🏎️ <span id="race-speed">0</span> км/ч</div>
@@ -340,14 +355,18 @@
     <button id="race-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
+  <!-- ============================================== -->
   <!-- ПОГОНЯ (ДПС) -->
+  <!-- ============================================== -->
   <div id="chase-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud" style="background: rgba(0,0,0,0.9);">
       <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
       <div class="stunt-hud-item" style="color: var(--accent-cyan); min-width: 40%;">Счет: <span id="chase-score">0</span></div>
     </div>
+    
     <div class="stunt-scene" id="chase-scene" style="background-color: #0f172a; touch-action: none;">
       <div class="stunt-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.4);"></div>
+      
       <div class="chase-road" id="chase-road">
         <div class="chase-line" style="top: 33%;"></div>
         <div class="chase-line" style="top: 66%;"></div>
@@ -360,11 +379,13 @@
         <div class="chase-player" id="chase-player">🏍️</div>
         <div id="chase-obstacles-container"></div>
       </div>
+      
       <div class="swipe-indicator">
         <div>СВАЙП ВВЕРХ / ВНИЗ</div>
         <div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div>
       </div>
     </div>
+    
     <div class="stunt-result hidden" id="chase-result">
       <div class="stunt-result-card" style="border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.6);">
         <div class="stunt-result-title" style="color: #ef4444;">🚨 ПОЙМАЛИ!</div>
@@ -375,7 +396,9 @@
     <button id="chase-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
+  <!-- ============================================== -->
   <!-- МОДАЛЬНЫЕ ОКНА: УРОВЕНЬ, ПРОФИЛЬ, БОНУС -->
+  <!-- ============================================== -->
   <div id="level-up-modal" class="custom-modal hidden">
     <div class="modal-card">
       <div class="modal-title">🎉 Поздравляем!</div>
@@ -415,7 +438,9 @@
       <button id="daily-close-btn" class="profile-modal-close">✕</button>
       <div class="modal-title">🎁 Ежедневный бонус!</div>
       <div class="modal-desc" style="font-size: 12px;">Заходите каждый день, чтобы забирать награды! Пропуск дня сбросит прогресс.</div>
+      
       <div id="daily-bonus-grid" class="daily-bonus-grid"></div>
+      
       <button id="daily-bonus-claim-btn" class="claim-btn" style="width: 100%; font-size: 15px; padding: 12px;">Забрать бонус</button>
     </div>
   </div>
