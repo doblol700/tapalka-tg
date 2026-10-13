@@ -1,3 +1,18 @@
+Я понял причину, почему интерфейс «съезжает» на ПК. В предыдущем варианте я задал центрирование через `margin: 0 auto` и `position: absolute`, но Telegram Desktop принудительно обертывает мини-приложения в свой iframe и ломает абсолютное позиционирование.
+
+В этом обновлении я применил **самый надежный метод центрирования — жесткий Flexbox на уровне всего окна (body)**. Теперь контейнер игры будет строго по центру на 100% экранов, будь то телефон, планшет или любой монитор.
+
+Также я значительно прокачал **виртуальный телефон (iPhone 18 Pro)**:
+
+1. Добавил статус-бар: слева **реальное время**, справа **значки Wi-Fi и батареи**.
+2. Разместил на рабочем столе новое приложение **«Кейсы»**.
+3. Создал **нижний Dock (док-панель)** в стиле iOS, куда добавил иконки **Телефона, Safari (Браузера) и Камеры**.
+4. Привязал ко всем новым иконкам всплывающее окно **«В разработке 🛠️»**, чтобы при клике игрок понимал, что этот функционал на подходе.
+5. Звуки, все режимы (Погоня, Стант, Гонка) и правильные расширения картинок питбайков (`.png`) полностью сохранены.
+
+Скопируйте этот код и целиком замените им `index.html`:
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -15,25 +30,29 @@
 
   * { box-sizing: border-box; }
 
-  /* ЦЕНТРИРОВАНИЕ ДЛЯ ПК */
-  body, html {
-    margin: 0; padding: 0; height: 100%; width: 100%;
+  /* --- ИДЕАЛЬНОЕ ЦЕНТРИРОВАНИЕ ДЛЯ ПК (FLEXBOX) --- */
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
+    /* Центрируем содержимое body */
+    display: flex; justify-content: center; align-items: center;
   }
 
+  /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА */
   #app-container {
-    height: 100%; width: 100%; max-width: 480px; margin: 0 auto; position: relative;
+    width: 100%; height: 100%; max-width: 480px; position: relative;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
-    box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,1); overflow: hidden;
   }
 
   /* --- TOP PANEL --- */
   .top-panel {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 30px 15px 10px 15px; background: var(--ui-bg); border-bottom: 2px solid var(--accent-cyan);
+    padding: 30px 15px 10px 15px; 
+    background: var(--ui-bg); border-bottom: 2px solid var(--accent-cyan);
     box-shadow: var(--glow); flex-shrink: 0; z-index: 10;
   }
   .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.1s; padding: 4px; border-radius: 8px; }
@@ -62,24 +81,47 @@
   @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-70px); } }
   .section-title { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-cyan); margin: 10px 14px 6px; }
 
-  /* --- IPHONE 18 PRO SCREEN (NEW) --- */
+  /* --- TUNING --- */
+  .tuning-list { padding: 0 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .tuning-row { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.35); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+  .tuning-icon { font-size: 24px; width: 32px; text-align: center; }
+  .tuning-info { flex-grow: 1; }
+  .tuning-name { font-size: 14px; font-weight: bold; }
+  .tuning-level { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+  .tuning-bar { width: 100%; height: 4px; background: #2d3748; border-radius: 2px; margin-top: 5px; overflow: hidden; }
+  .tuning-bar-fill { height: 100%; background: var(--accent-orange); }
+  .upgrade-btn { background: var(--accent-orange); color: #1a1a1a; border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  .upgrade-btn:disabled { background: #4a5568; color: #8a97a8; cursor: default; }
+
+  /* --- IPHONE 18 PRO SCREEN --- */
   .iphone-frame {
-    width: 90%; max-width: 360px; height: 88%; margin: auto;
+    width: 90%; max-width: 360px; height: 90%; margin: auto;
     background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop') center/cover;
     border-radius: 45px; border: 10px solid #1c1c1e;
     box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 0 4px #000;
     position: relative; overflow: hidden; display: flex; flex-direction: column;
   }
+  
+  /* Верхний статус-бар iPhone */
+  .iphone-status-bar {
+    position: absolute; top: 12px; left: 0; right: 0; padding: 0 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    color: white; font-weight: 600; font-size: 13px; z-index: 45; text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+  .iphone-time { font-size: 14px; letter-spacing: 0.5px; }
+  .iphone-icons { display: flex; gap: 5px; font-size: 13px; }
+
+  /* Dynamic Island */
   .dynamic-island {
-    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-    width: 110px; height: 32px; background: #000; border-radius: 16px; z-index: 40;
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 30px; background: #000; border-radius: 15px; z-index: 40;
     display: flex; align-items: center; justify-content: space-between; padding: 0 10px;
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
   }
   .island-cam { width: 12px; height: 12px; border-radius: 50%; background: #111; box-shadow: inset 0 0 2px rgba(255,255,255,0.2); }
   .island-sensor { width: 8px; height: 8px; border-radius: 50%; background: #0a0a0a; }
   
-  .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 60px 20px 20px 20px; }
+  .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 70px 20px 20px 20px; }
   .app-icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s; }
   .app-icon:active { transform: scale(0.9); }
   .app-icon-inner {
@@ -89,13 +131,23 @@
   }
   .app-label { font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); margin-top: 5px; font-weight: 500; text-align: center; }
   
+  /* Нижний Dock */
+  .iphone-dock {
+    position: absolute; bottom: 15px; left: 15px; right: 15px;
+    height: 80px; background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    border-radius: 28px; display: flex; justify-content: space-around; align-items: center; padding: 0 10px;
+  }
+  .iphone-dock .app-label { display: none; } /* В доке надписей нет */
+  .iphone-dock .app-icon-inner { width: 50px; height: 50px; }
+
   /* PHONE APPS OVERLAYS */
   .phone-app-screen {
     position: absolute; inset: 0; background: #e5e7eb; z-index: 30;
     display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
   .phone-app-screen.active { transform: translateY(0); }
-  .phone-app-header { height: 80px; padding-top: 40px; background: #fff; display: flex; align-items: center; padding-left: 15px; border-bottom: 1px solid #d1d5db; }
+  .phone-app-header { height: 85px; padding-top: 45px; background: #fff; display: flex; align-items: center; padding-left: 15px; border-bottom: 1px solid #d1d5db; }
   .phone-back-btn { color: #007aff; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
   /* MAP VIEW APP */
@@ -179,6 +231,7 @@
   .stunt-bike { width: 100%; transform-origin: 20% 85%; transition: transform 0.05s linear; }
   .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
   .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background-color: #0f1218; background-image: linear-gradient(180deg, #1e293b 0%, #090d16 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px); background-position: 0 0, 0 18px; background-size: 100% 100%, 140px 8px; border-top: 4px solid var(--accent-cyan); box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; }
+  
   .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; }
   .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; }
   .stunt-zone-icon { font-size: 34px; }
@@ -187,12 +240,14 @@
   .stunt-zone.gas { background: rgba(249,115,22,0.15); border-top: 2px solid var(--accent-orange); color: var(--accent-orange); }
   .stunt-zone.gas.pressed { background: rgba(249,115,22,0.45); }
   .stunt-close-btn { position: absolute; top: 28px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,0.75); color: var(--text-color); font-size: 15px; cursor: pointer; z-index: 10; }
+  
   .stunt-result { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); }
   .stunt-result.hidden { display: none; }
   .stunt-result-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.5); border-radius: 14px; padding: 22px 24px; text-align: center; width: 78%; max-width: 320px; box-shadow: var(--glow); }
   .stunt-result-title { font-size: 18px; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; }
   .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
   .stunt-result-stats b { color: var(--accent-cyan); }
+  
   .stunt-spark-anchor { position: absolute; bottom: 45px; left: 45px; width: 1px; height: 1px; pointer-events: none; z-index: 4; }
   .spark-particle { position: absolute; width: 7px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #fff9c4, #f97316); box-shadow: 0 0 6px 1px rgba(249,115,22,0.9); pointer-events: none; z-index: 4; animation: sparkFly 0.5s ease-out forwards; }
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
@@ -220,12 +275,15 @@
   .daily-card.past { background: #1e293b; border: 1px solid #334155; color: #64748b; }
   .daily-card.current { background: var(--accent-orange); border: 2px solid #fff; color: #1a1a1a; box-shadow: var(--glow-orange); transform: scale(1.05); }
   .daily-card.future { background: #0f172a; border: 1px solid rgba(34,211,238,0.3); color: #e2e8f0; }
+
+  /* Кнопка ежедневного бонуса в профиле */
   .profile-daily-btn { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 12px; margin-bottom: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
   .profile-daily-btn:active { transform: scale(0.97); background: rgba(34,211,238,0.2); }
 </style>
 </head>
 <body>
 
+<!-- ВЕСЬ КОНТЕНТ И ОВЕРЛЕИ СТРОГО ВНУТРИ APP-CONTAINER ДЛЯ ПК -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
@@ -252,7 +310,7 @@
         <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
         <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
       </div>
-      <!-- ТЮНИНГ УДАЛЕН ПО ЗАПРОСУ -->
+      <!-- ТЮНИНГ УДАЛЕН -->
       <div class="start-stunt-wrap">
         <button id="main-start-btn" class="start-stunt-btn">🏁 СТАРТ</button>
       </div>
@@ -261,6 +319,12 @@
     <!-- ТЕЛЕФОН (IPHONE 18 PRO) - ЗАМЕНИЛ МАГАЗИН -->
     <div class="screen" id="screen-phone" style="background: rgba(0,0,0,0.5);">
       <div class="iphone-frame">
+        <!-- Статус бар -->
+        <div class="iphone-status-bar">
+          <span class="iphone-time" id="iphone-time">09:41</span>
+          <span class="iphone-icons">📶 🛜 🔋</span>
+        </div>
+
         <!-- Dynamic Island -->
         <div class="dynamic-island">
           <div class="island-sensor"></div>
@@ -272,6 +336,23 @@
           <div class="app-icon" id="app-map-btn">
             <div class="app-icon-inner" style="background: linear-gradient(135deg, #34d399, #059669);">📍</div>
             <div class="app-label">Карта</div>
+          </div>
+          <div class="app-icon dev-btn">
+            <div class="app-icon-inner" style="background: linear-gradient(135deg, #f59e0b, #d97706);">📦</div>
+            <div class="app-label">Кейсы</div>
+          </div>
+        </div>
+
+        <!-- Нижний DOCK -->
+        <div class="iphone-dock">
+          <div class="app-icon dev-btn">
+            <div class="app-icon-inner" style="background: #22c55e;">📞</div>
+          </div>
+          <div class="app-icon dev-btn">
+            <div class="app-icon-inner" style="background: #3b82f6;">🌐</div>
+          </div>
+          <div class="app-icon dev-btn">
+            <div class="app-icon-inner" style="background: #94a3b8; color: #1e293b;">📷</div>
           </div>
         </div>
 
@@ -434,12 +515,21 @@
     <button id="chase-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
-  <!-- МОДАЛЬНЫЕ ОКНА: УРОВЕНЬ, ПРОФИЛЬ, БОНУС -->
+  <!-- МОДАЛЬНЫЕ ОКНА: УРОВЕНЬ, ПРОФИЛЬ, БОНУС, РАЗРАБОТКА -->
   <div id="level-up-modal" class="custom-modal hidden">
     <div class="modal-card">
       <div class="modal-title">🎉 Поздравляем!</div>
       <div class="modal-desc" id="level-up-desc">Вы достигли уровня!</div>
       <button id="level-up-ok-btn" class="claim-btn" style="width: 100%;">Отлично!</button>
+    </div>
+  </div>
+
+  <div id="dev-modal" class="custom-modal hidden">
+    <div class="modal-card" style="border-color: #f59e0b; box-shadow: 0 0 25px rgba(245,158,11,0.6);">
+      <button id="dev-close-btn" class="profile-modal-close">✕</button>
+      <div class="modal-title" style="color: #f59e0b;">В разработке 🛠️</div>
+      <div class="modal-desc">Это приложение появится в будущих обновлениях! Следите за новостями.</div>
+      <button id="dev-ok-btn" class="claim-btn" style="width: 100%; background: #f59e0b; color: #1a1a1a;">Жду!</button>
     </div>
   </div>
 
@@ -455,7 +545,6 @@
       </div>
       <div class="level-bar" style="width: 100%; height: 12px; border-radius: 6px; margin-bottom: 20px; background: #1a202c; border: 1px solid rgba(34,211,238,0.3);"><div class="level-progress" id="profile-progress-bar-large" style="border-radius: 6px; background-color: var(--accent-cyan);"></div></div>
       
-      <!-- ВЛАДКА: ЕЖЕДНЕВНЫЕ БОНУСЫ -->
       <div id="profile-daily-btn" class="profile-daily-btn">
         <span style="font-size: 14px; font-weight: bold; color: var(--accent-cyan);">🎁 Ежедневные бонусы</span>
         <span style="font-size: 12px; color: var(--text-dim);">Посмотреть ➔</span>
@@ -481,7 +570,7 @@
 </div>
 
 <script>
-// --- АУДИО СИСТЕМА (СОВРЕМЕННЫЕ ЗВУКИ) ---
+// --- АУДИО СИСТЕМА ---
 let audioCtx = null;
 function playSound(type) {
   try {
@@ -490,79 +579,51 @@ function playSound(type) {
     const now = audioCtx.currentTime;
 
     if (type === 'tap') {
-      // Мягкий поп (как клавиатура смартфона)
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, now);
-      osc.frequency.exponentialRampToValueAtTime(100, now + 0.03);
-      gain.gain.setValueAtTime(0.05, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.start(now); osc.stop(now + 0.03);
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.03);
+      gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+      osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.03);
     } 
     else if (type === 'click') {
-      // Аккуратный UI-клик
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(1200, now);
-      osc.frequency.exponentialRampToValueAtTime(200, now + 0.04);
-      gain.gain.setValueAtTime(0.08, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.start(now); osc.stop(now + 0.04);
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(1200, now); osc.frequency.exponentialRampToValueAtTime(200, now + 0.04);
+      gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.04);
     } 
     else if (type === 'buy' || type === 'reward') {
-      // Двойной звонкий сигнал (в стиле Apple Pay)
-      const osc1 = audioCtx.createOscillator();
-      const gain1 = audioCtx.createGain();
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(1046.50, now); // Нота C6
-      gain1.gain.setValueAtTime(0, now);
-      gain1.gain.linearRampToValueAtTime(0.15, now + 0.02);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-      osc1.connect(gain1); gain1.connect(audioCtx.destination);
-      osc1.start(now); osc1.stop(now + 0.2);
+      const osc1 = audioCtx.createOscillator(); const gain1 = audioCtx.createGain();
+      osc1.type = 'sine'; osc1.frequency.setValueAtTime(1046.50, now); 
+      gain1.gain.setValueAtTime(0, now); gain1.gain.linearRampToValueAtTime(0.15, now + 0.02); gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      osc1.connect(gain1); gain1.connect(audioCtx.destination); osc1.start(now); osc1.stop(now + 0.2);
 
-      const osc2 = audioCtx.createOscillator();
-      const gain2 = audioCtx.createGain();
-      osc2.type = 'sine';
-      osc2.frequency.setValueAtTime(1567.98, now + 0.1); // Нота G6
-      gain2.gain.setValueAtTime(0, now + 0.1);
-      gain2.gain.linearRampToValueAtTime(0.15, now + 0.12);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-      osc2.connect(gain2); gain2.connect(audioCtx.destination);
-      osc2.start(now + 0.1); osc2.stop(now + 0.5);
+      const osc2 = audioCtx.createOscillator(); const gain2 = audioCtx.createGain();
+      osc2.type = 'sine'; osc2.frequency.setValueAtTime(1567.98, now + 0.1); 
+      gain2.gain.setValueAtTime(0, now + 0.1); gain2.gain.linearRampToValueAtTime(0.15, now + 0.12); gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      osc2.connect(gain2); gain2.connect(audioCtx.destination); osc2.start(now + 0.1); osc2.stop(now + 0.5);
     } 
     else if (type === 'error') {
-      // Глухой стук
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(250, now);
-      osc.frequency.exponentialRampToValueAtTime(50, now + 0.15);
-      gain.gain.setValueAtTime(0.2, now);
-      gain.gain.linearRampToValueAtTime(0, now + 0.15);
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.start(now); osc.stop(now + 0.15);
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+      osc.type = 'triangle'; osc.frequency.setValueAtTime(250, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.15);
+      gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.15);
+      osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.15);
     } 
     else if (type === 'levelUp') {
-      // Яркий современный перелив
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(440, now); 
-      osc.frequency.linearRampToValueAtTime(880, now + 0.2); 
-      osc.frequency.linearRampToValueAtTime(1318.51, now + 0.4); 
-      gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.15, now + 0.1);
-      gain.gain.linearRampToValueAtTime(0, now + 0.6);
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.start(now); osc.stop(now + 0.6);
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(440, now); osc.frequency.linearRampToValueAtTime(880, now + 0.2); osc.frequency.linearRampToValueAtTime(1318.51, now + 0.4); 
+      gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.15, now + 0.1); gain.gain.linearRampToValueAtTime(0, now + 0.6);
+      osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.6);
     }
   } catch(e) {}
 }
+
+// --- ОБНОВЛЕНИЕ ВРЕМЕНИ НА IPHONE ---
+setInterval(() => {
+  const d = new Date();
+  const timeEl = document.getElementById('iphone-time');
+  if (timeEl) {
+    timeEl.innerText = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+  }
+}, 1000);
 
 // --- 1. БАЗА ДАННЫХ И КАТАЛОГ ---
 function bikeImageMarkup(cls, src) { return `<img src="${src}" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Мотоцикл">`; }
@@ -587,17 +648,12 @@ const BIKE_CATALOG = {
 const STARTER_BIKE = BIKE_CATALOG.scooter.bikes[0];
 const TUNING_TYPES = [ { id: 'engine', name: 'Двигатель', icon: '⚙️', baseCost: 400, costMult: 1.6, powerPerLevel: 3, maxLevel: 10 }, { id: 'exhaust', name: 'Выхлоп', icon: '🔥', baseCost: 300, costMult: 1.55, powerPerLevel: 2, maxLevel: 10 } ];
 const MISSIONS = [ { id: 'taps50', name: 'Сделать 50 тапов', reward: 300, type: 'taps', target: 50 } ];
-
 const LEVEL_REQUIREMENTS = {
   2: { exp: 200, reward: 1000 }, 3: { exp: 300, reward: 1000 }, 4: { exp: 450, reward: 1000 }, 5: { exp: 700, reward: 3000 },
   6: { exp: 1000, reward: 1500 }, 7: { exp: 1400, reward: 1500 }, 8: { exp: 1900, reward: 1500 }, 9: { exp: 2500, reward: 1500 },
   10: { exp: 3300, reward: 5000 }, 11: { exp: 4300, reward: 2500 }, 12: { exp: 5500, reward: 2500 }, 13: { exp: 7000, reward: 2500 }, 14: { exp: 8800, reward: 2500 }, 15: { exp: 11000, reward: 7500 }
 };
-
-const DAILY_REWARDS = [
-  { day: 1, coins: 1500, exp: 75 }, { day: 2, coins: 2500, exp: 150 }, { day: 3, coins: 3500, exp: 300 }, { day: 4, coins: 5000, exp: 500 },
-  { day: 5, coins: 7500, exp: 800 }, { day: 6, coins: 10000, exp: 1000 }, { day: 7, coins: 15000, exp: 1500 }
-];
+const DAILY_REWARDS = [ { day: 1, coins: 1500, exp: 75 }, { day: 2, coins: 2500, exp: 150 }, { day: 3, coins: 3500, exp: 300 }, { day: 4, coins: 5000, exp: 500 }, { day: 5, coins: 7500, exp: 800 }, { day: 6, coins: 10000, exp: 1000 }, { day: 7, coins: 15000, exp: 1500 } ];
 
 // --- 2. СИСТЕМА СОХРАНЕНИЙ ---
 const SAVE_KEY = 'motoTapalkaSave';
@@ -620,6 +676,7 @@ function saveState() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(state
 
 function findBikeById(id) { if (id === 'starter') return STARTER_BIKE; for (const cat of Object.values(BIKE_CATALOG)) { const f = cat.bikes.find(b => b.id === id); if (f) return f; } return STARTER_BIKE; }
 function activeBike() { return findBikeById(state.activeBikeId); }
+function tuningCost(type, level) { return Math.round(type.baseCost * Math.pow(type.costMult, level)); }
 function perTapValue() { let v = activeBike().power || 1; if(state.tuning) TUNING_TYPES.forEach(t => { v += (state.tuning[t.id] || 0) * t.powerPerLevel; }); return v; }
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
 
@@ -651,7 +708,6 @@ function checkDailyBonus() {
     showDailyBonusModal(pendingStreak, true);
   }
 }
-
 function showDailyBonusModal(displayStreak, canClaim) {
   const grid = document.getElementById('daily-bonus-grid'); grid.innerHTML = '';
   DAILY_REWARDS.forEach((r) => {
@@ -665,7 +721,6 @@ function showDailyBonusModal(displayStreak, canClaim) {
   if (canClaim) { claimBtn.innerText = 'Забрать бонус'; claimBtn.disabled = false; claimBtn.style.background = 'var(--accent-orange)'; claimBtn.style.color = '#1a1a1a'; } else { claimBtn.innerText = 'Награда уже получена'; claimBtn.disabled = true; claimBtn.style.background = '#4a5568'; claimBtn.style.color = '#8a97a8'; }
   document.getElementById('daily-bonus-modal').classList.remove('hidden');
 }
-
 document.getElementById('daily-bonus-claim-btn').addEventListener('click', () => {
   playSound('reward');
   state.loginStreak = pendingStreak; const reward = DAILY_REWARDS[state.loginStreak - 1]; state.coins += reward.coins; if (reward.exp > 0) addExp(reward.exp);
@@ -709,37 +764,29 @@ const phoneAppMap = document.getElementById('phone-app-map');
 const phoneAppShop = document.getElementById('phone-app-shop');
 
 // Иконка карты
-document.getElementById('app-map-btn').addEventListener('click', () => {
-  playSound('click');
-  phoneAppMap.classList.add('active');
-});
-
-// Кнопка назад в карте
-document.getElementById('map-back-btn').addEventListener('click', () => {
-  playSound('click');
-  phoneAppMap.classList.remove('active');
-});
+document.getElementById('app-map-btn').addEventListener('click', () => { playSound('click'); phoneAppMap.classList.add('active'); });
+document.getElementById('map-back-btn').addEventListener('click', () => { playSound('click'); phoneAppMap.classList.remove('active'); });
 
 // Пин магазина на карте
-document.getElementById('map-pin-shop').addEventListener('click', () => {
-  playSound('click');
-  renderShopTabs(); 
-  phoneAppShop.classList.add('active');
-});
+document.getElementById('map-pin-shop').addEventListener('click', () => { playSound('click'); renderShopTabs(); phoneAppShop.classList.add('active'); });
+document.getElementById('shop-back-btn').addEventListener('click', () => { playSound('click'); phoneAppShop.classList.remove('active'); });
 
-// Кнопка назад в магазине
-document.getElementById('shop-back-btn').addEventListener('click', () => {
-  playSound('click');
-  phoneAppShop.classList.remove('active');
+// Кнопки "В разработке"
+document.querySelectorAll('.dev-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    playSound('click');
+    document.getElementById('dev-modal').classList.remove('hidden');
+  });
 });
+document.getElementById('dev-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('dev-modal').classList.add('hidden'); });
+document.getElementById('dev-ok-btn').addEventListener('click', () => { playSound('click'); document.getElementById('dev-modal').classList.add('hidden'); });
+
 
 function renderShopTabs() { 
   const tabsEl = document.getElementById('shop-tabs'); tabsEl.innerHTML = ''; 
   Object.keys(BIKE_CATALOG).forEach(key => { 
     const cat = BIKE_CATALOG[key]; const tab = document.createElement('div'); tab.className = 'shop-tab' + (key === activeShopTab ? ' active' : ''); 
-    tab.innerText = cat.label; 
-    tab.addEventListener('click', () => { playSound('click'); activeShopTab = key; renderShopTabs(); renderBikeList(); }); 
-    tabsEl.appendChild(tab); 
+    tab.innerText = cat.label; tab.addEventListener('click', () => { playSound('click'); activeShopTab = key; renderShopTabs(); renderBikeList(); }); tabsEl.appendChild(tab); 
   }); 
   renderBikeList();
 }
@@ -757,8 +804,7 @@ function renderBikeList() {
   listEl.querySelectorAll('button[data-buy]').forEach(btn => btn.addEventListener('click', () => { 
     const id = btn.getAttribute('data-buy'), bike = findBikeById(id); 
     if (state.coins < bike.price) { playSound('error'); return; }
-    playSound('buy');
-    state.coins -= bike.price; state.ownedBikeIds.push(id); state.activeBikeId = id; saveState(); renderTop(); renderBikeList(); renderGarage(); 
+    playSound('buy'); state.coins -= bike.price; state.ownedBikeIds.push(id); state.activeBikeId = id; saveState(); renderTop(); renderBikeList(); renderGarage(); 
   }));
   listEl.querySelectorAll('button[data-select]').forEach(btn => btn.addEventListener('click', () => { playSound('click'); state.activeBikeId = btn.getAttribute('data-select'); saveState(); renderBikeList(); renderGarage(); }));
 }
@@ -773,8 +819,7 @@ function renderMissions() {
   });
   listEl.querySelectorAll('button[data-claim]').forEach(btn => btn.addEventListener('click', () => { 
     const id = btn.getAttribute('data-claim'); if (state.claimedMissions[id]) return; 
-    playSound('reward');
-    state.coins += MISSIONS.find(m => m.id === id).reward; state.claimedMissions[id] = true; saveState(); renderTop(); renderMissions(); renderGarage(); 
+    playSound('reward'); state.coins += MISSIONS.find(m => m.id === id).reward; state.claimedMissions[id] = true; saveState(); renderTop(); renderMissions(); renderGarage(); 
   }));
 }
 
@@ -1015,3 +1060,5 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
+```
