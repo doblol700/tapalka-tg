@@ -21,12 +21,10 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
-    display: flex; justify-content: center; align-items: center;
   }
 
-  /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА */
   #app-container {
-    height: 100%; width: 100%; max-width: 480px; position: relative;
+    height: 100%; width: 100%; max-width: 480px; margin: 0 auto; position: relative;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
     box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow: hidden;
@@ -35,8 +33,7 @@
   /* --- TOP PANEL --- */
   .top-panel {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 30px 15px 10px 15px; 
-    background: var(--ui-bg); border-bottom: 2px solid var(--accent-cyan);
+    padding: 30px 15px 10px 15px; background: var(--ui-bg); border-bottom: 2px solid var(--accent-cyan);
     box-shadow: var(--glow); flex-shrink: 0; z-index: 10;
   }
   .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.1s; padding: 4px; border-radius: 8px; }
@@ -55,7 +52,7 @@
   .screen.active { display: flex; }
 
   /* --- GARAGE --- */
-  .tap-zone { flex-shrink: 0; position: relative; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px 10px 10px; min-height: 240px; }
+  .tap-zone { flex-shrink: 0; position: relative; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px 10px 10px; min-height: 350px; }
   .active-bike-name { font-size: 13px; color: var(--accent-cyan); text-shadow: 0 0 8px rgba(34,211,238,0.6); margin-bottom: 4px; text-align: center; }
   #points-display { font-size: 44px; font-weight: bold; color: #ffffff; text-shadow: 0 0 20px rgba(0,0,0,0.9), 0 0 10px var(--accent-orange); z-index: 3; pointer-events: none; text-align: center; margin-bottom: 6px; }
   .per-tap-display { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; pointer-events: none; }
@@ -65,23 +62,64 @@
   @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-70px); } }
   .section-title { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-cyan); margin: 10px 14px 6px; }
 
-  /* --- TUNING --- */
-  .tuning-list { padding: 0 12px 16px; display: flex; flex-direction: column; gap: 8px; }
-  .tuning-row { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.35); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
-  .tuning-icon { font-size: 24px; width: 32px; text-align: center; }
-  .tuning-info { flex-grow: 1; }
-  .tuning-name { font-size: 14px; font-weight: bold; }
-  .tuning-level { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
-  .tuning-bar { width: 100%; height: 4px; background: #2d3748; border-radius: 2px; margin-top: 5px; overflow: hidden; }
-  .tuning-bar-fill { height: 100%; background: var(--accent-orange); }
-  .upgrade-btn { background: var(--accent-orange); color: #1a1a1a; border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-  .upgrade-btn:disabled { background: #4a5568; color: #8a97a8; cursor: default; }
+  /* --- IPHONE 18 PRO SCREEN (NEW) --- */
+  .iphone-frame {
+    width: 90%; max-width: 360px; height: 88%; margin: auto;
+    background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop') center/cover;
+    border-radius: 45px; border: 10px solid #1c1c1e;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 0 4px #000;
+    position: relative; overflow: hidden; display: flex; flex-direction: column;
+  }
+  .dynamic-island {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 32px; background: #000; border-radius: 16px; z-index: 40;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  }
+  .island-cam { width: 12px; height: 12px; border-radius: 50%; background: #111; box-shadow: inset 0 0 2px rgba(255,255,255,0.2); }
+  .island-sensor { width: 8px; height: 8px; border-radius: 50%; background: #0a0a0a; }
+  
+  .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 60px 20px 20px 20px; }
+  .app-icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s; }
+  .app-icon:active { transform: scale(0.9); }
+  .app-icon-inner {
+    width: 55px; height: 55px; border-radius: 14px; background: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 28px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  .app-label { font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); margin-top: 5px; font-weight: 500; text-align: center; }
+  
+  /* PHONE APPS OVERLAYS */
+  .phone-app-screen {
+    position: absolute; inset: 0; background: #e5e7eb; z-index: 30;
+    display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .phone-app-screen.active { transform: translateY(0); }
+  .phone-app-header { height: 80px; padding-top: 40px; background: #fff; display: flex; align-items: center; padding-left: 15px; border-bottom: 1px solid #d1d5db; }
+  .phone-back-btn { color: #007aff; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
-  /* --- SHOP --- */
+  /* MAP VIEW APP */
+  .map-view { flex-grow: 1; position: relative; overflow: hidden; background-color: #d1d5db; }
+  .map-bg {
+    position: absolute; inset: 0; background-color: #e5e5e5;
+    background-image: linear-gradient(45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%);
+    background-size: 60px 60px; opacity: 0.7;
+  }
+  .map-pin {
+    position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+    background: #ef4444; color: white; border-radius: 50%; width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer;
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.5); border: 2px solid white; animation: bouncePin 2s infinite; z-index: 10;
+  }
+  @keyframes bouncePin { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, -60%); } }
+  .pin-label { position: absolute; top: -30px; background: rgba(0,0,0,0.8); font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-weight: bold; }
+
+  /* SHOP VIEW APP (Nested in phone) */
+  #phone-app-shop { background: var(--bg-color); color: var(--text-color); }
   .shop-tabs { display: flex; gap: 6px; padding: 10px 12px 4px; flex-shrink: 0; overflow-x: auto; }
   .shop-tab { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(34,211,238,0.35); background: rgba(15,23,42,0.6); color: var(--accent-cyan); font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
   .shop-tab.active { background: var(--accent-orange); color: #1a1a1a; border-color: var(--accent-orange); }
-  .bike-list { padding: 8px 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .bike-list { padding: 8px 12px 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex-grow: 1; }
   .bike-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.35); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
   .bike-card-emoji { font-size: 30px; width: 40px; text-align: center; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
   .bike-card-emoji img { width: 100%; height: auto; display: block; }
@@ -94,6 +132,7 @@
   .bike-btn.buy:disabled { background: #4a5568; color: #8a97a8; }
   .bike-btn.select { background: var(--accent-cyan); color: #1a1a1a; }
   .bike-btn.selected { background: #2d3748; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+
 
   /* --- MISSIONS & CLAN --- */
   .missions-list { padding: 10px 12px 16px; display: flex; flex-direction: column; gap: 8px; }
@@ -118,7 +157,7 @@
   .nav-item.active .nav-text-label { color: var(--accent-orange); }
 
   /* --- КНОПКИ РЕЖИМОВ --- */
-  .start-stunt-wrap { padding: 4px 12px 18px; }
+  .start-stunt-wrap { padding: 4px 12px 18px; margin-top: auto; }
   .start-stunt-btn { width: 100%; padding: 14px 10px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; font-size: 15px; font-weight: bold; letter-spacing: 0.5px; cursor: pointer; box-shadow: 0 0 16px rgba(249,115,22,0.5); }
   .start-stunt-btn:active { transform: scale(0.98); }
   
@@ -128,25 +167,18 @@
   .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
-  /* --- ОБЩИЕ ОВЕРЛЕИ (ABSOLUTE) --- */
+  /* --- ОБЩИЕ ОВЕРЛЕИ --- */
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; }
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: var(--sky-color, #4ca1af); transition: background-color 2s ease; }
   
-  .stunt-city-bg { 
-    position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; 
-    background-image: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); 
-    background-size: 100% 100%, 120px 100%; background-position: bottom; z-index: 1; 
-    filter: brightness(var(--city-bright, 1)); transition: filter 2s ease;
-  }
+  .stunt-city-bg { position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; background-image: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); background-size: 100% 100%, 120px 100%; background-position: bottom; z-index: 1; filter: brightness(var(--city-bright, 1)); transition: filter 2s ease; }
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; transition: transform 0.05s linear; }
   .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
-  
   .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background-color: #0f1218; background-image: linear-gradient(180deg, #1e293b 0%, #090d16 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px); background-position: 0 0, 0 18px; background-size: 100% 100%, 140px 8px; border-top: 4px solid var(--accent-cyan); box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; }
-  
   .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; }
   .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; }
   .stunt-zone-icon { font-size: 34px; }
@@ -155,14 +187,12 @@
   .stunt-zone.gas { background: rgba(249,115,22,0.15); border-top: 2px solid var(--accent-orange); color: var(--accent-orange); }
   .stunt-zone.gas.pressed { background: rgba(249,115,22,0.45); }
   .stunt-close-btn { position: absolute; top: 28px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,0.75); color: var(--text-color); font-size: 15px; cursor: pointer; z-index: 10; }
-  
   .stunt-result { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); }
   .stunt-result.hidden { display: none; }
   .stunt-result-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.5); border-radius: 14px; padding: 22px 24px; text-align: center; width: 78%; max-width: 320px; box-shadow: var(--glow); }
   .stunt-result-title { font-size: 18px; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; }
   .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
   .stunt-result-stats b { color: var(--accent-cyan); }
-  
   .stunt-spark-anchor { position: absolute; bottom: 45px; left: 45px; width: 1px; height: 1px; pointer-events: none; z-index: 4; }
   .spark-particle { position: absolute; width: 7px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #fff9c4, #f97316); box-shadow: 0 0 6px 1px rgba(249,115,22,0.9); pointer-events: none; z-index: 4; animation: sparkFly 0.5s ease-out forwards; }
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
@@ -190,19 +220,12 @@
   .daily-card.past { background: #1e293b; border: 1px solid #334155; color: #64748b; }
   .daily-card.current { background: var(--accent-orange); border: 2px solid #fff; color: #1a1a1a; box-shadow: var(--glow-orange); transform: scale(1.05); }
   .daily-card.future { background: #0f172a; border: 1px solid rgba(34,211,238,0.3); color: #e2e8f0; }
-
-  /* Кнопка ежедневного бонуса в профиле */
-  .profile-daily-btn {
-    background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4);
-    border-radius: 8px; padding: 12px; margin-bottom: 15px; cursor: pointer;
-    display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s;
-  }
+  .profile-daily-btn { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 12px; margin-bottom: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
   .profile-daily-btn:active { transform: scale(0.97); background: rgba(34,211,238,0.2); }
 </style>
 </head>
 <body>
 
-<!-- КОНТЕНТ СТРОГО ВНУТРИ APP-CONTAINER -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
@@ -229,17 +252,55 @@
         <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
         <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
       </div>
-      <div class="section-title">Тюнинг</div>
-      <div class="tuning-list" id="tuning-list"></div>
+      <!-- ТЮНИНГ УДАЛЕН ПО ЗАПРОСУ -->
       <div class="start-stunt-wrap">
         <button id="main-start-btn" class="start-stunt-btn">🏁 СТАРТ</button>
       </div>
     </div>
 
-    <!-- МАГАЗИН -->
-    <div class="screen" id="screen-shop">
-      <div class="shop-tabs" id="shop-tabs"></div>
-      <div class="bike-list" id="bike-list"></div>
+    <!-- ТЕЛЕФОН (IPHONE 18 PRO) - ЗАМЕНИЛ МАГАЗИН -->
+    <div class="screen" id="screen-phone" style="background: rgba(0,0,0,0.5);">
+      <div class="iphone-frame">
+        <!-- Dynamic Island -->
+        <div class="dynamic-island">
+          <div class="island-sensor"></div>
+          <div class="island-cam"></div>
+        </div>
+        
+        <!-- Рабочий стол телефона -->
+        <div class="app-grid" id="phone-desktop">
+          <div class="app-icon" id="app-map-btn">
+            <div class="app-icon-inner" style="background: linear-gradient(135deg, #34d399, #059669);">📍</div>
+            <div class="app-label">Карта</div>
+          </div>
+        </div>
+
+        <!-- Приложение "Карта" (Оверлей внутри телефона) -->
+        <div class="phone-app-screen" id="phone-app-map">
+          <div class="phone-app-header">
+            <div class="phone-back-btn" id="map-back-btn">‹ Домой</div>
+          </div>
+          <div class="map-view">
+             <div class="map-bg"></div>
+             <!-- Пин магазина -->
+             <div class="map-pin" id="map-pin-shop">🏍️
+                <div class="pin-label">Мотосалон</div>
+             </div>
+          </div>
+        </div>
+
+        <!-- Магазин Мототехники (Оверлей внутри телефона) -->
+        <div class="phone-app-screen" id="phone-app-shop" style="background: var(--bg-color); color: var(--text-color);">
+          <div class="phone-app-header" style="background: var(--ui-bg); border-bottom: 1px solid var(--accent-cyan); justify-content: space-between; padding-right: 15px;">
+            <div class="phone-back-btn" id="shop-back-btn" style="color: var(--accent-cyan);">‹ Карта</div>
+            <div style="font-weight: bold; font-size: 14px;">Мотосалон</div>
+          </div>
+          <!-- Контент магазина -->
+          <div class="shop-tabs" id="shop-tabs"></div>
+          <div class="bike-list" id="bike-list"></div>
+        </div>
+
+      </div>
     </div>
 
     <!-- МИССИИ -->
@@ -260,7 +321,8 @@
   <!-- Нижняя панель -->
   <div class="nav-panel">
     <div class="nav-item active" data-screen="garage"><div class="nav-item-icon">🔧</div><div class="nav-text-label">Гараж</div></div>
-    <div class="nav-item" data-screen="shop"><div class="nav-item-icon">🛒</div><div class="nav-text-label">Магазин</div></div>
+    <!-- Иконка изменена на Телефон -->
+    <div class="nav-item" data-screen="phone"><div class="nav-item-icon">📱</div><div class="nav-text-label">Телефон</div></div>
     <div class="nav-item" data-screen="missions"><div class="nav-item-icon">🎯</div><div class="nav-text-label">Задания</div></div>
     <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
   </div>
@@ -350,7 +412,6 @@
         <div class="chase-line" style="top: 33%;"></div>
         <div class="chase-line" style="top: 66%;"></div>
         
-        <!-- МАШИНА ДПС (ГИФКА) -->
         <div class="chase-police" id="chase-police">
           <img src="pogonya1.gif" style="width: 170px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС">
         </div>
@@ -407,7 +468,6 @@
     </div>
   </div>
 
-  <!-- ЕЖЕДНЕВНЫЙ БОНУС -->
   <div id="daily-bonus-modal" class="custom-modal hidden">
     <div class="modal-card" style="max-width: 350px;">
       <button id="daily-close-btn" class="profile-modal-close">✕</button>
@@ -418,56 +478,88 @@
     </div>
   </div>
 
-</div> <!-- КОНЕЦ APP-CONTAINER -->
+</div>
 
 <script>
-// --- АУДИО СИСТЕМА (WEB AUDIO API) ---
+// --- АУДИО СИСТЕМА (СОВРЕМЕННЫЕ ЗВУКИ) ---
 let audioCtx = null;
 function playSound(type) {
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
     const now = audioCtx.currentTime;
 
     if (type === 'tap') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(300, now);
-      osc.frequency.exponentialRampToValueAtTime(100, now + 0.05);
-      gainNode.gain.setValueAtTime(0.05, now); // Тихий звук
-      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-      osc.start(now); osc.stop(now + 0.05);
-    } else if (type === 'click') {
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(400, now);
-      osc.frequency.exponentialRampToValueAtTime(50, now + 0.05);
-      gainNode.gain.setValueAtTime(0.05, now);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-      osc.start(now); osc.stop(now + 0.05);
-    } else if (type === 'buy' || type === 'reward') {
+      // Мягкий поп (как клавиатура смартфона)
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(800, now);
-      osc.frequency.setValueAtTime(1200, now + 0.1);
-      gainNode.gain.setValueAtTime(0.15, now);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-      osc.start(now); osc.stop(now + 0.3);
-    } else if (type === 'error') {
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(150, now);
-      gainNode.gain.setValueAtTime(0.1, now);
-      gainNode.gain.linearRampToValueAtTime(0, now + 0.2);
-      osc.start(now); osc.stop(now + 0.2);
-    } else if (type === 'levelUp') {
+      osc.frequency.exponentialRampToValueAtTime(100, now + 0.03);
+      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(now); osc.stop(now + 0.03);
+    } 
+    else if (type === 'click') {
+      // Аккуратный UI-клик
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1200, now);
+      osc.frequency.exponentialRampToValueAtTime(200, now + 0.04);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(now); osc.stop(now + 0.04);
+    } 
+    else if (type === 'buy' || type === 'reward') {
+      // Двойной звонкий сигнал (в стиле Apple Pay)
+      const osc1 = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(1046.50, now); // Нота C6
+      gain1.gain.setValueAtTime(0, now);
+      gain1.gain.linearRampToValueAtTime(0.15, now + 0.02);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      osc1.connect(gain1); gain1.connect(audioCtx.destination);
+      osc1.start(now); osc1.stop(now + 0.2);
+
+      const osc2 = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(1567.98, now + 0.1); // Нота G6
+      gain2.gain.setValueAtTime(0, now + 0.1);
+      gain2.gain.linearRampToValueAtTime(0.15, now + 0.12);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      osc2.connect(gain2); gain2.connect(audioCtx.destination);
+      osc2.start(now + 0.1); osc2.stop(now + 0.5);
+    } 
+    else if (type === 'error') {
+      // Глухой стук
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(400, now);
-      osc.frequency.setValueAtTime(600, now + 0.1);
-      osc.frequency.setValueAtTime(800, now + 0.2);
-      gainNode.gain.setValueAtTime(0.15, now);
-      gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
-      osc.start(now); osc.stop(now + 0.5);
+      osc.frequency.setValueAtTime(250, now);
+      osc.frequency.exponentialRampToValueAtTime(50, now + 0.15);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.linearRampToValueAtTime(0, now + 0.15);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(now); osc.stop(now + 0.15);
+    } 
+    else if (type === 'levelUp') {
+      // Яркий современный перелив
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, now); 
+      osc.frequency.linearRampToValueAtTime(880, now + 0.2); 
+      osc.frequency.linearRampToValueAtTime(1318.51, now + 0.4); 
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.15, now + 0.1);
+      gain.gain.linearRampToValueAtTime(0, now + 0.6);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(now); osc.stop(now + 0.6);
     }
   } catch(e) {}
 }
@@ -503,13 +595,8 @@ const LEVEL_REQUIREMENTS = {
 };
 
 const DAILY_REWARDS = [
-  { day: 1, coins: 1500, exp: 75 },
-  { day: 2, coins: 2500, exp: 150 },
-  { day: 3, coins: 3500, exp: 300 },
-  { day: 4, coins: 5000, exp: 500 },
-  { day: 5, coins: 7500, exp: 800 },
-  { day: 6, coins: 10000, exp: 1000 },
-  { day: 7, coins: 15000, exp: 1500 }
+  { day: 1, coins: 1500, exp: 75 }, { day: 2, coins: 2500, exp: 150 }, { day: 3, coins: 3500, exp: 300 }, { day: 4, coins: 5000, exp: 500 },
+  { day: 5, coins: 7500, exp: 800 }, { day: 6, coins: 10000, exp: 1000 }, { day: 7, coins: 15000, exp: 1500 }
 ];
 
 // --- 2. СИСТЕМА СОХРАНЕНИЙ ---
@@ -520,16 +607,11 @@ function loadState() {
   try {
     const raw = localStorage.getItem(SAVE_KEY); if (!raw) return def; const parsed = JSON.parse(raw);
     return { 
-      coins: typeof parsed.coins === 'number' ? parsed.coins : def.coins, 
-      totalTaps: typeof parsed.totalTaps === 'number' ? parsed.totalTaps : def.totalTaps, 
-      level: typeof parsed.level === 'number' ? parsed.level : def.level, 
-      exp: typeof parsed.exp === 'number' ? parsed.exp : def.exp, 
-      ownedBikeIds: Array.isArray(parsed.ownedBikeIds) ? parsed.ownedBikeIds : def.ownedBikeIds, 
-      activeBikeId: parsed.activeBikeId || def.activeBikeId, 
-      tuning: parsed.tuning || def.tuning, 
-      claimedMissions: parsed.claimedMissions || def.claimedMissions,
-      lastBonusDate: parsed.lastBonusDate || def.lastBonusDate,
-      loginStreak: typeof parsed.loginStreak === 'number' ? parsed.loginStreak : def.loginStreak
+      coins: typeof parsed.coins === 'number' ? parsed.coins : def.coins, totalTaps: typeof parsed.totalTaps === 'number' ? parsed.totalTaps : def.totalTaps, 
+      level: typeof parsed.level === 'number' ? parsed.level : def.level, exp: typeof parsed.exp === 'number' ? parsed.exp : def.exp, 
+      ownedBikeIds: Array.isArray(parsed.ownedBikeIds) ? parsed.ownedBikeIds : def.ownedBikeIds, activeBikeId: parsed.activeBikeId || def.activeBikeId, 
+      tuning: parsed.tuning || def.tuning, claimedMissions: parsed.claimedMissions || def.claimedMissions,
+      lastBonusDate: parsed.lastBonusDate || def.lastBonusDate, loginStreak: typeof parsed.loginStreak === 'number' ? parsed.loginStreak : def.loginStreak
     };
   } catch (e) { return def; }
 }
@@ -538,7 +620,6 @@ function saveState() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(state
 
 function findBikeById(id) { if (id === 'starter') return STARTER_BIKE; for (const cat of Object.values(BIKE_CATALOG)) { const f = cat.bikes.find(b => b.id === id); if (f) return f; } return STARTER_BIKE; }
 function activeBike() { return findBikeById(state.activeBikeId); }
-function tuningCost(type, level) { return Math.round(type.baseCost * Math.pow(type.costMult, level)); }
 function perTapValue() { let v = activeBike().power || 1; if(state.tuning) TUNING_TYPES.forEach(t => { v += (state.tuning[t.id] || 0) * t.powerPerLevel; }); return v; }
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
 
@@ -620,25 +701,49 @@ function renderGarage() {
   const bike = activeBike(); document.getElementById('active-bike-name').innerText = bike.name; document.getElementById('points-display').innerText = fmt(state.coins) + ' pts'; document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
   const iconEl = document.getElementById('bike-emoji');
   if (bike.imgSrc) { iconEl.classList.add('is-svg'); iconEl.innerHTML = bikeImageMarkup('scooter-icon-garage', bike.imgSrc); } else { iconEl.classList.remove('is-svg'); iconEl.innerText = bike.emoji || '🏍️'; }
-  const list = document.getElementById('tuning-list'); list.innerHTML = '';
-  TUNING_TYPES.forEach(t => {
-    const level = (state.tuning && state.tuning[t.id]) || 0, maxed = level >= t.maxLevel, cost = tuningCost(t, level), canAfford = state.coins >= cost;
-    const row = document.createElement('div'); row.className = 'tuning-row';
-    row.innerHTML = `<div class="tuning-icon">${t.icon}</div><div class="tuning-info"><div class="tuning-name">${t.name}</div><div class="tuning-level">Уровень ${level} / ${t.maxLevel}</div><div class="tuning-bar"><div class="tuning-bar-fill" style="width:${(level / t.maxLevel) * 100}%"></div></div></div><button class="upgrade-btn" ${maxed || !canAfford ? 'disabled' : ''} data-tune="${t.id}">${maxed ? 'Макс.' : '🪙 ' + fmt(cost)}</button>`;
-    list.appendChild(row);
-  });
-  list.querySelectorAll('button[data-tune]').forEach(btn => btn.addEventListener('click', () => {
-    const id = btn.getAttribute('data-tune'), type = TUNING_TYPES.find(t => t.id === id), level = (state.tuning && state.tuning[id]) || 0;
-    if (level >= type.maxLevel) return;
-    if (state.coins < tuningCost(type, level)) { playSound('error'); return; }
-    playSound('buy');
-    state.coins -= tuningCost(type, level); if(!state.tuning) state.tuning = {}; state.tuning[id] = level + 1; saveState(); renderTop(); renderGarage();
-  }));
 }
 
-// --- МАГАЗИН И МИССИИ ---
+// --- ЛОГИКА ТЕЛЕФОНА И МАГАЗИНА ---
 let activeShopTab = 'scooter';
-function renderShopTabs() { const tabsEl = document.getElementById('shop-tabs'); tabsEl.innerHTML = ''; Object.keys(BIKE_CATALOG).forEach(key => { const cat = BIKE_CATALOG[key]; const tab = document.createElement('div'); tab.className = 'shop-tab' + (key === activeShopTab ? ' active' : ''); tab.innerText = cat.label; tab.addEventListener('click', () => { playSound('click'); activeShopTab = key; renderShopTabs(); renderBikeList(); }); tabsEl.appendChild(tab); }); }
+const phoneAppMap = document.getElementById('phone-app-map');
+const phoneAppShop = document.getElementById('phone-app-shop');
+
+// Иконка карты
+document.getElementById('app-map-btn').addEventListener('click', () => {
+  playSound('click');
+  phoneAppMap.classList.add('active');
+});
+
+// Кнопка назад в карте
+document.getElementById('map-back-btn').addEventListener('click', () => {
+  playSound('click');
+  phoneAppMap.classList.remove('active');
+});
+
+// Пин магазина на карте
+document.getElementById('map-pin-shop').addEventListener('click', () => {
+  playSound('click');
+  renderShopTabs(); 
+  phoneAppShop.classList.add('active');
+});
+
+// Кнопка назад в магазине
+document.getElementById('shop-back-btn').addEventListener('click', () => {
+  playSound('click');
+  phoneAppShop.classList.remove('active');
+});
+
+function renderShopTabs() { 
+  const tabsEl = document.getElementById('shop-tabs'); tabsEl.innerHTML = ''; 
+  Object.keys(BIKE_CATALOG).forEach(key => { 
+    const cat = BIKE_CATALOG[key]; const tab = document.createElement('div'); tab.className = 'shop-tab' + (key === activeShopTab ? ' active' : ''); 
+    tab.innerText = cat.label; 
+    tab.addEventListener('click', () => { playSound('click'); activeShopTab = key; renderShopTabs(); renderBikeList(); }); 
+    tabsEl.appendChild(tab); 
+  }); 
+  renderBikeList();
+}
+
 function renderBikeList() {
   const listEl = document.getElementById('bike-list'); listEl.innerHTML = '';
   BIKE_CATALOG[activeShopTab].bikes.forEach(bike => {
@@ -657,10 +762,11 @@ function renderBikeList() {
   }));
   listEl.querySelectorAll('button[data-select]').forEach(btn => btn.addEventListener('click', () => { playSound('click'); state.activeBikeId = btn.getAttribute('data-select'); saveState(); renderBikeList(); renderGarage(); }));
 }
+
 function renderMissions() {
   const listEl = document.getElementById('missions-list'); listEl.innerHTML = '';
   MISSIONS.forEach(m => {
-    const progress = m.type === 'taps' ? state.totalTaps : (m.type === 'ownedBikes' ? state.ownedBikeIds.length : (state.tuning ? Math.max(0, ...Object.values(state.tuning)) : 0));
+    const progress = m.type === 'taps' ? state.totalTaps : (m.type === 'ownedBikes' ? state.ownedBikeIds.length : 0);
     const card = document.createElement('div'); card.className = 'mission-card';
     card.innerHTML = `<div class="mission-info"><div class="mission-name">${m.name}</div><div class="mission-progress">Прогресс: ${Math.min(progress, m.target)} / ${m.target}</div><div class="mission-reward">Награда: 🪙 ${fmt(m.reward)}</div></div>` + (!!state.claimedMissions[m.id] ? `<button class="claim-btn done" disabled>Получено</button>` : progress >= m.target ? `<button class="claim-btn" data-claim="${m.id}">Забрать</button>` : `<button class="claim-btn" disabled>${Math.min(progress, m.target)}/${m.target}</button>`);
     listEl.appendChild(card);
@@ -686,8 +792,9 @@ document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('cl
   playSound('click');
   const target = item.getAttribute('data-screen'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); item.classList.add('active');
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById('screen-' + target).classList.add('active');
-  if (target === 'garage') renderGarage(); if (target === 'shop') { renderShopTabs(); renderBikeList(); } if (target === 'missions') renderMissions();
+  if (target === 'garage') renderGarage(); if (target === 'missions') renderMissions();
 }));
+
 function initTelegramUser() {
   try { const tg = window.Telegram && window.Telegram.WebApp; if (!tg) return; tg.ready(); tg.expand(); const user = tg.initDataUnsafe && tg.initDataUnsafe.user; if (!user) return; document.getElementById('user-nickname').innerText = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' '); const avatarEl = document.getElementById('avatar-placeholder'); if (user.photo_url) avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`; else avatarEl.innerText = (user.first_name ? user.first_name[0] : (user.username ? user.username[0].toUpperCase() : 'R')); } catch (e) {}
 }
@@ -699,10 +806,9 @@ document.getElementById('mode-stunt-btn').addEventListener('click', () => { play
 document.getElementById('mode-race-btn').addEventListener('click', () => { playSound('click'); document.getElementById('mode-modal').classList.add('hidden'); openRace(); });
 document.getElementById('mode-chase-btn').addEventListener('click', () => { playSound('click'); document.getElementById('mode-modal').classList.add('hidden'); openChase(); });
 
-
 // --- СТАНТ И ГОНКА ---
 const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg'), stuntTimerEl = document.getElementById('stunt-timer'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntClockEl = document.getElementById('stunt-clock'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats'), stuntGasZone = document.getElementById('stunt-gas'), stuntBrakeZone = document.getElementById('stunt-brake'), stuntSceneEl = document.getElementById('stunt-scene'), sparkAnchorEl = document.getElementById('stunt-spark-anchor');
-const STUNT_MAX_ANGLE = 92, STUNT_MIN_ANGLE = -18, SPARK_ANGLE_THRESHOLD = 86, SPARK_INTERVAL_MS = 40;
+const STUNT_MAX_ANGLE = 92, STUNT_MIN_ANGLE = -18;
 let stunt = null, lastSparkTs = 0;
 
 function stuntCoinsForState(bestWheelieSec, maxAngle) { return Math.max(1, Math.floor(bestWheelieSec * 6 + maxAngle * 1.5)); }
