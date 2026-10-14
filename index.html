@@ -11,7 +11,6 @@
     --accent-orange: #f97316; --accent-cyan: #22d3ee;
     --ui-bg: rgba(13, 17, 23, 0.88); --card-bg: rgba(22, 30, 41, 0.92);
     --glow: 0 0 10px var(--accent-cyan); --glow-orange: 0 0 10px var(--accent-orange);
-    /* Оригинальные обои в стиле iPhone Pro Titanium */
     --phone-bg: url('https://images.unsplash.com/photo-1695042456488-6689d2d8ec1b?q=80&w=1000&auto=format&fit=crop');
   }
 
@@ -27,7 +26,7 @@
   html, body {
     margin: 0; padding: 0; width: 100%; height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-color); color: var(--text-color);
+    background-color: #000; color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
     transition: background-color 0.3s, color 0.3s;
   }
@@ -38,17 +37,20 @@
   }
 
   #app-container {
-    width: 100%; height: 100%; max-width: 480px; position: relative;
+    width: 100%; max-width: 480px; height: 100%;
+    margin: 0 auto;
+    position: relative;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
-    box-shadow: 0 0 50px rgba(0,0,0,0.9); overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,1); overflow: hidden;
   }
   body.light-theme #app-container { background-image: none; background-color: #f1f5f9; }
 
   /* --- TOP PANEL --- */
   .top-panel {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 30px 15px 10px 15px; background: var(--ui-bg); border-bottom: 2px solid var(--accent-cyan);
+    padding: 30px 15px 10px 15px; 
+    background: var(--ui-bg); border-bottom: 2px solid var(--accent-cyan);
     box-shadow: var(--glow); flex-shrink: 0; z-index: 10; transition: background 0.3s;
   }
   .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.1s; padding: 4px; border-radius: 8px; }
@@ -80,22 +82,14 @@
   .section-title { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-cyan); margin: 10px 14px 6px; }
 
   /* --- IPHONE 18 PRO --- */
-  .iphone-frame {
-    width: 90%; max-width: 360px; height: 90%; margin: auto;
-    background: var(--phone-bg) center/cover;
-    border-radius: 45px; border: 10px solid #1c1c1e;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 0 4px #000;
-    position: relative; overflow: hidden; display: flex; flex-direction: column;
-    transition: background 0.5s;
-  }
-  .iphone-status-bar { position: absolute; top: 12px; left: 0; right: 0; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600; font-size: 13px; z-index: 45; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+  .iphone-frame { width: 90%; max-width: 360px; height: 90%; margin: auto; background: var(--phone-bg) center/cover; border-radius: 45px; border: 10px solid #1c1c1e; box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 0 4px #000; position: relative; overflow: hidden; display: flex; flex-direction: column; transition: background 0.5s; }
+  .iphone-status-bar { position: absolute; top: 12px; left: 0; right: 0; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600; font-size: 13px; z-index: 45; text-shadow: 0 1px 3px rgba(0,0,0,0.8); pointer-events: none; }
   .iphone-time { font-size: 14px; letter-spacing: 0.5px; }
   .iphone-icons { display: flex; gap: 5px; font-size: 13px; }
   .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 130px; height: 5px; background: #fff; border-radius: 10px; z-index: 50; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.5); transition: background 0.3s; }
   .home-indicator:active { background: #9ca3af; transform: translateX(-50%) scale(0.95); }
   body.light-theme .phone-app-screen .home-indicator { background: #000; }
-
-  .dynamic-island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 110px; height: 30px; background: #000; border-radius: 15px; z-index: 40; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+  .dynamic-island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 110px; height: 30px; background: #000; border-radius: 15px; z-index: 40; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; box-shadow: 0 0 5px rgba(0,0,0,0.5); pointer-events: none;}
   .island-cam { width: 12px; height: 12px; border-radius: 50%; background: #111; box-shadow: inset 0 0 2px rgba(255,255,255,0.2); }
   .island-sensor { width: 8px; height: 8px; border-radius: 50%; background: #0a0a0a; }
   
@@ -105,7 +99,6 @@
   .app-icon-inner { width: 55px; height: 55px; border-radius: 14px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
   .app-label { font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); margin-top: 5px; font-weight: 500; text-align: center; line-height: 1.1; }
   
-  /* Нижний Dock */
   .iphone-dock { position: absolute; bottom: 25px; left: 15px; right: 15px; height: 75px; background: rgba(255,255,255,0.25); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 28px; display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 5; }
   .iphone-dock .app-label { display: none; }
   .iphone-dock .app-icon-inner { width: 50px; height: 50px; }
@@ -113,7 +106,7 @@
   /* ПРИЛОЖЕНИЯ IPHONE */
   .phone-app-screen { position: absolute; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 30; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); overflow: hidden; }
   .phone-app-screen.active { transform: translateY(0); }
-  .phone-app-header { height: 85px; padding-top: 45px; background: var(--ui-bg); display: flex; align-items: center; padding-left: 15px; border-bottom: 1px solid var(--accent-cyan); font-weight: bold; font-size: 18px; flex-shrink: 0; }
+  .phone-app-header { height: 85px; padding-top: 45px; background: var(--ui-bg); display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid var(--accent-cyan); font-weight: bold; font-size: 18px; flex-shrink: 0; }
   .phone-app-content { flex-grow: 1; padding: 20px; overflow-y: auto; }
 
   /* Настройки App */
@@ -128,7 +121,7 @@
   .wheel-circle { width: 250px; height: 250px; border-radius: 50%; background: conic-gradient(#f97316 0deg 90deg, #22d3ee 90deg 180deg, #10b981 180deg 270deg, #8b5cf6 270deg 360deg); border: 5px solid var(--ui-bg); box-shadow: var(--glow); position: relative; display: flex; align-items: center; justify-content: center; transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1); margin-bottom: 30px; overflow: hidden; }
   .wheel-pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #fff; z-index: 10; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
   .wheel-center { width: 50px; height: 50px; background: var(--card-bg); border-radius: 50%; z-index: 5; border: 3px solid #fff; }
-  .spin-btn { background: var(--accent-orange); color: #1a1a1a; border: none; padding: 15px 40px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: var(--glow-orange); transition: transform 0.1s; }
+  .spin-btn { background: var(--accent-orange); color: #1a1a1a; border: none; padding: 15px 40px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: var(--glow-orange); transition: transform 0.1s; z-index: 5; position: relative;}
   .spin-btn:active { transform: scale(0.95); }
   .spin-btn:disabled { background: #4a5568; box-shadow: none; color: #cbd5e1; cursor: default; }
 
@@ -138,11 +131,11 @@
   .map-pin { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.5); border: 2px solid white; animation: bouncePin 2s infinite; z-index: 10; }
   @keyframes bouncePin { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, -60%); } }
   .pin-label { position: absolute; top: -30px; background: rgba(0,0,0,0.8); font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-weight: bold; color: white;}
-
+  
   .shop-tabs { display: flex; gap: 6px; padding: 10px 12px 4px; flex-shrink: 0; overflow-x: auto; background: var(--bg-color); }
   .shop-tab { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(34,211,238,0.35); background: var(--card-bg); color: var(--accent-cyan); font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
   .shop-tab.active { background: var(--accent-orange); color: #1a1a1a; border-color: var(--accent-orange); }
-  .bike-list { padding: 8px 12px 25px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex-grow: 1; background: var(--bg-color); }
+  .bike-list { padding: 8px 12px 25px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex-grow: 1; background: var(--bg-color); padding-bottom: 40px; }
   .bike-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.35); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
   .bike-card-emoji { font-size: 30px; width: 40px; text-align: center; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
   .bike-card-emoji img { width: 100%; height: auto; display: block; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); }
@@ -197,14 +190,11 @@
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: var(--sky-color, #4ca1af); transition: background-color 2s ease; }
-  
   .stunt-city-bg { position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; background-image: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); background-size: 100% 100%, 120px 100%; background-position: bottom; z-index: 1; filter: brightness(var(--city-bright, 1)); transition: filter 2s ease; }
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; transition: transform 0.05s linear; }
   .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
-  
   .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background-color: #0f1218; background-image: linear-gradient(180deg, #1e293b 0%, #090d16 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px); background-position: 0 0, 0 18px; background-size: 100% 100%, 140px 8px; border-top: 4px solid var(--accent-cyan); box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; }
-  
   .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; }
   .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; color: white; }
   .stunt-zone-icon { font-size: 34px; }
@@ -214,19 +204,16 @@
   .stunt-zone.gas.pressed { background: rgba(249,115,22,0.45); }
   .stunt-close-btn { position: absolute; top: 28px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,0.75); color: white; font-size: 15px; cursor: pointer; z-index: 10; transition: transform 0.1s; }
   .stunt-close-btn:active { transform: scale(0.9); }
-  
   .stunt-result { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); }
   .stunt-result.hidden { display: none; }
   .stunt-result-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.5); border-radius: 14px; padding: 22px 24px; text-align: center; width: 78%; max-width: 320px; box-shadow: var(--glow); }
   .stunt-result-title { font-size: 18px; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; }
   .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
   .stunt-result-stats b { color: var(--accent-cyan); }
-  
-  .stunt-spark-anchor { position: absolute; bottom: 45px; left: 45px; width: 1px; height: 1px; pointer-events: none; z-index: 4; }
   .spark-particle { position: absolute; width: 7px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #fff9c4, #f97316); box-shadow: 0 0 6px 1px rgba(249,115,22,0.9); pointer-events: none; z-index: 4; animation: sparkFly 0.5s ease-out forwards; }
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
 
-  /* --- ПОГОНЯ --- */
+  /* --- РАННЕР (ПОГОНЯ И ДОСТАВКА) --- */
   .chase-road { position: absolute; left: 0; right: 0; bottom: 0; height: 60%; background-color: #1a1c23; border-top: 5px solid #475569; z-index: 2; overflow: hidden; }
   .chase-line { position: absolute; width: 100%; height: 4px; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0, rgba(255,255,255,0.7) 60px, transparent 60px, transparent 120px); }
   .chase-player { position: absolute; left: 120px; width: 120px; height: 90px; transition: top 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 4; display: flex; align-items: flex-end; }
@@ -303,7 +290,8 @@
           <div class="app-grid" id="phone-desktop">
             <div class="app-icon" id="app-map-btn"><div class="app-icon-inner" style="background: linear-gradient(135deg, #34d399, #059669);">📍</div><div class="app-label">Карта</div></div>
             <div class="app-icon" id="app-wheel-btn"><div class="app-icon-inner" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">🎡</div><div class="app-label">Колесо<br>удачи</div></div>
-            <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: linear-gradient(135deg, #f59e0b, #d97706);">📦</div><div class="app-label">Кейсы</div></div>
+            <!-- НОВОЕ ПРИЛОЖЕНИЕ: ДОСТАВКА -->
+            <div class="app-icon" id="app-delivery-btn"><div class="app-icon-inner" style="background: #facc15; color:#000; box-shadow: inset 0 0 0 2px #eab308;">🍔</div><div class="app-label">Доставка</div></div>
             <div class="app-icon" id="app-settings-btn"><div class="app-icon-inner" style="background: linear-gradient(135deg, #64748b, #334155);">⚙️</div><div class="app-label">Настройки</div></div>
           </div>
 
@@ -363,6 +351,29 @@
             </div>
             <div class="home-indicator"></div>
           </div>
+
+          <!-- НОВОЕ ПРИЛОЖЕНИЕ: ДОСТАВКА -->
+          <div class="phone-app-screen" id="phone-app-delivery">
+            <div class="phone-app-header" style="display: flex; gap: 10px; background:#facc15; color:#000; border-bottom:none;">
+              <div class="phone-back-btn" style="color:#000;">‹ Домой</div>
+              <div style="flex-grow:1; text-align:center;">Yandex.Moto</div>
+              <div style="width: 50px;"></div>
+            </div>
+            <div class="phone-app-content" style="background:#fff; color:#000; display:flex; flex-direction:column; align-items:center; padding-top:20px;">
+              <div style="font-size:60px; margin-bottom:10px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));">🍕</div>
+              <div style="font-size:20px; font-weight:bold; margin-bottom:5px;">Работа курьером</div>
+              <div style="font-size:15px; margin-bottom:25px; color:#4b5563;">Ваш рейтинг: <b id="delivery-rating-ui" style="color:#f59e0b; font-size:18px;">5.0</b> ⭐</div>
+              
+              <div style="background:#f3f4f6; padding:15px; border-radius:12px; width:100%; margin-bottom:20px; text-align:center; border: 1px solid #d1d5db;">
+                 <div style="font-size:14px; font-weight:bold; margin-bottom:5px; color:#111827;">Горячий заказ</div>
+                 <div style="font-size:12px; color:#4b5563; margin-bottom: 8px;">Доставьте пиццу за отведенное время! Уворачивайтесь от машин в потоке. Чем выше рейтинг, тем больше оплата.</div>
+                 <div style="font-size:13px; font-weight:bold; color:#059669;">Ожидаемая оплата: до 🪙 <span id="delivery-expected-pay">500</span></div>
+              </div>
+              <button id="start-delivery-btn" class="spin-btn" style="background:#facc15; color:#000; width:100%; box-shadow:0 5px 15px rgba(250,204,21,0.5);">ВЗЯТЬ ЗАКАЗ</button>
+            </div>
+            <div class="home-indicator" style="background:#000;"></div>
+          </div>
+
         </div>
       </div>
 
@@ -457,6 +468,7 @@
       <button id="race-close-btn" class="stunt-close-btn">✕</button>
     </div>
 
+    <!-- ПОГОНЯ -->
     <div id="chase-overlay" class="stunt-overlay hidden">
       <div class="stunt-hud" style="background: rgba(0,0,0,0.9);">
         <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
@@ -481,6 +493,33 @@
         </div>
       </div>
       <button id="chase-close-btn" class="stunt-close-btn">✕</button>
+    </div>
+
+    <!-- ДОСТАВКА (НОВАЯ ИГРА) -->
+    <div id="delivery-overlay" class="stunt-overlay hidden">
+      <div class="stunt-hud" style="background: rgba(250,204,21,0.9); color:#000;">
+        <div class="stunt-hud-item" style="color:#000; border-color:#000; font-size:14px;">⏱ <span id="deliv-time">60</span>с</div>
+        <div class="stunt-hud-item" style="color:#000; border-color:#000; min-width:40%;">📦 <span id="deliv-dist">0</span>/1000м</div>
+        <div class="stunt-hud-item" style="color:#000; border-color:#000;">⭐ <span id="deliv-rating-hud">5.0</span></div>
+      </div>
+      <div class="stunt-scene" id="deliv-scene" style="background-color: #1e293b; touch-action: none;">
+        <div class="stunt-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.7);"></div>
+        <div class="chase-road" id="deliv-road">
+          <div class="chase-line" style="top: 33%;"></div>
+          <div class="chase-line" style="top: 66%;"></div>
+          <div class="chase-player" id="deliv-player">🏍️</div>
+          <div id="deliv-obstacles-container"></div>
+        </div>
+        <div class="swipe-indicator"><div>СВАЙП ВВЕРХ / ВНИЗ</div><div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для маневрирования в потоке</div></div>
+      </div>
+      <div class="stunt-result hidden" id="deliv-result">
+        <div class="stunt-result-card" style="border-color: #facc15; box-shadow: 0 0 25px rgba(250,204,21,0.6);" id="deliv-result-card">
+          <div class="stunt-result-title" id="deliv-result-title" style="color: #f59e0b;">ЗАКАЗ ДОСТАВЛЕН!</div>
+          <div class="stunt-result-stats" id="deliv-result-stats"></div>
+          <button id="deliv-claim-btn" class="claim-btn" style="background: #facc15; color:#000; width: 100%;">Отлично</button>
+        </div>
+      </div>
+      <button id="deliv-close-btn" class="stunt-close-btn" style="background:#facc15; color:#000; border-color:#000;">✕</button>
     </div>
 
     <!-- МОДАЛЬНЫЕ ОКНА ИНТЕРФЕЙСА -->
@@ -574,7 +613,7 @@ try {
   const addEvt = (id, event, handler) => { const el = document.getElementById(id); if (el) el.addEventListener(event, handler); };
 
   const SAVE_KEY = 'motoTapalkaSave';
-  function defaultState() { return { coins: 500, totalTaps: 0, level: 1, exp: 0, ownedBikeIds: [], activeBikeId: 'starter', claimedMissions: {}, lastBonusDate: null, loginStreak: 0, vibration: true, theme: 'dark', lastWheelTime: 0, usedPromos: [] }; }
+  function defaultState() { return { coins: 500, totalTaps: 0, level: 1, exp: 0, ownedBikeIds: [], activeBikeId: 'starter', claimedMissions: {}, lastBonusDate: null, loginStreak: 0, vibration: true, theme: 'dark', lastWheelTime: 0, usedPromos: [], deliveryRating: 5.0, deliveriesDone: 0 }; }
   function loadState() {
     const def = defaultState();
     try {
@@ -585,7 +624,8 @@ try {
         ownedBikeIds: Array.isArray(parsed.ownedBikeIds) ? parsed.ownedBikeIds : def.ownedBikeIds, activeBikeId: parsed.activeBikeId || def.activeBikeId, 
         claimedMissions: parsed.claimedMissions || def.claimedMissions, lastBonusDate: parsed.lastBonusDate || def.lastBonusDate, 
         loginStreak: typeof parsed.loginStreak === 'number' ? parsed.loginStreak : def.loginStreak, vibration: parsed.vibration !== undefined ? parsed.vibration : def.vibration, 
-        theme: parsed.theme || def.theme, lastWheelTime: parsed.lastWheelTime || def.lastWheelTime, usedPromos: Array.isArray(parsed.usedPromos) ? parsed.usedPromos : def.usedPromos
+        theme: parsed.theme || def.theme, lastWheelTime: parsed.lastWheelTime || def.lastWheelTime, usedPromos: Array.isArray(parsed.usedPromos) ? parsed.usedPromos : def.usedPromos,
+        deliveryRating: typeof parsed.deliveryRating === 'number' ? parsed.deliveryRating : def.deliveryRating, deliveriesDone: typeof parsed.deliveriesDone === 'number' ? parsed.deliveriesDone : def.deliveriesDone
       };
     } catch (e) { return def; }
   }
@@ -622,15 +662,18 @@ try {
   }
 
   function bikeImageMarkup(cls, src) { return `<img src="${src}" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Мотоцикл">`; }
+  
+  // ДОБАВЛЕН РАЗДЕЛ ЭЛЕКТРОМОТОЦИКЛОВ
   const BIKE_CATALOG = {
     scooter: { label: 'Скутеры', emoji: '🛵', bikes: [ { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgSrc: 'дио1.png' }, { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png' } ]},
     pitbike: { label: 'Питбайки', emoji: '🏍️', bikes: [ { id: 'kayo-tt125', name: 'Kayo TT 125', price: 2000, power: 2, top: '80', imgSrc: 'kayott125.png' }, { id: 'apollo-rfz125', name: 'Apollo RFZ 125', price: 3500, power: 3, top: '85', imgSrc: 'apollorfz125.png' }, { id: 'bse-ph125', name: 'BSE PH 125', price: 5000, power: 4, top: '90', imgSrc: 'bseph125.png' }, { id: 'progasi-smart125', name: 'Progasi Smart 125', price: 6500, power: 5, top: '95', imgSrc: 'progasismart125.png' }, { id: 'sharmax-miami145', name: 'Sharmax Miami 145', price: 8000, power: 6, top: '105', imgSrc: 'sharmaxmiami145.png' }, { id: 'kayo-tt250', name: 'KAYO TT250', price: 12000, power: 8, top: '115' } ]},
+    electric: { label: 'Электро', emoji: '⚡', bikes: [ { id: 'surron-light', name: 'Surron Light Bee X', price: 18000, power: 10, top: '75' }, { id: 'surron-ultra', name: 'Surron Ultra Bee', price: 45000, power: 18, top: '90' } ]},
     enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [ { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145' } ]},
     motocross: { label: 'Кросс', emoji: '🏁', bikes: [ { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156' } ]}
   };
   const STARTER_BIKE = BIKE_CATALOG.scooter.bikes[0];
   const MISSIONS = [ { id: 'taps50', name: 'Сделать 50 тапов', reward: 300, type: 'taps', target: 50 } ];
-  const LEVEL_REQUIREMENTS = { 2: { exp: 200, reward: 1000 }, 3: { exp: 300, reward: 1000 }, 4: { exp: 450, reward: 1000 }, 5: { exp: 700, reward: 3000 }, 6: { exp: 1000, reward: 1500 }, 7: { exp: 1400, reward: 1500 }, 8: { exp: 1900, reward: 1500 }, 9: { exp: 2500, reward: 1500 }, 10: { exp: 3300, reward: 5000 }, 11: { exp: 4300, reward: 2500 }, 12: { exp: 5500, reward: 2500 }, 13: { exp: 7000, reward: 2500 }, 14: { exp: 8800, reward: 2500 }, 15: { exp: 11000, reward: 7500 } };
+  const LEVEL_REQUIREMENTS = { 2: { exp: 200, reward: 1000 }, 3: { exp: 300, reward: 1000 }, 4: { exp: 450, reward: 1000 }, 5: { exp: 700, reward: 3000 }, 6: { exp: 1000, reward: 1500 }, 7: { exp: 1400, reward: 1500 }, 8: { exp: 1900, reward: 1500 }, 9: { exp: 2500, reward: 1500 }, 10: { exp: 3300, reward: 5000 } };
   const DAILY_REWARDS = [ { day: 1, coins: 1500, exp: 75 }, { day: 2, coins: 2500, exp: 150 }, { day: 3, coins: 3500, exp: 300 }, { day: 4, coins: 5000, exp: 500 }, { day: 5, coins: 7500, exp: 800 }, { day: 6, coins: 10000, exp: 1000 }, { day: 7, coins: 15000, exp: 1500 } ];
 
   function findBikeById(id) { if (id === 'starter') return STARTER_BIKE; for (const cat of Object.values(BIKE_CATALOG)) { const f = cat.bikes.find(b => b.id === id); if (f) return f; } return STARTER_BIKE; }
@@ -705,39 +748,6 @@ try {
   });
   addEvt('profile-close-btn', 'click', () => { playSound('click'); profileModal.classList.add('hidden'); });
 
-  addEvt('profile-daily-btn', 'click', () => {
-    playSound('click'); profileModal.classList.add('hidden'); const now = new Date();
-    if (state.lastBonusDate !== now.toDateString()) {
-      const yesterday = new Date(); yesterday.setDate(now.getDate() - 1);
-      if (state.lastBonusDate === yesterday.toDateString()) { pendingStreak = (state.loginStreak || 0) + 1; if (pendingStreak > 7) pendingStreak = 1; } else { pendingStreak = 1; }
-      showDailyBonusModal(pendingStreak, true);
-    } else { showDailyBonusModal(state.loginStreak === 0 ? 1 : state.loginStreak, false); }
-  });
-
-  // Кнопка Друзья
-  addEvt('profile-friends-btn', 'click', () => { playSound('click'); profileModal.classList.add('hidden'); document.getElementById('friends-modal').classList.remove('hidden'); });
-  addEvt('friends-close-btn', 'click', () => { playSound('click'); document.getElementById('friends-modal').classList.add('hidden'); });
-  addEvt('friends-invite-btn', 'click', () => {
-    playSound('click');
-    const botLink = "https://t.me/MotoTapalkaBot?start=ref12345";
-    navigator.clipboard.writeText(botLink).then(() => { const btn = document.getElementById('friends-invite-btn'); btn.innerText = "✅ Ссылка скопирована!"; setTimeout(() => btn.innerText = "🔗 Скопировать ссылку", 2000); });
-  });
-
-  // Кнопка Промокод
-  addEvt('profile-promo-btn', 'click', () => { playSound('click'); profileModal.classList.add('hidden'); document.getElementById('promo-modal').classList.remove('hidden'); });
-  addEvt('promo-close-btn', 'click', () => { playSound('click'); document.getElementById('promo-modal').classList.add('hidden'); });
-  addEvt('promo-apply-btn', 'click', () => {
-    const code = document.getElementById('promo-input').value.toUpperCase().trim();
-    if (code === 'MOTO2026') {
-      if (state.usedPromos.includes(code)) { playSound('error'); alert("Промокод уже использован!"); return; }
-      playSound('reward'); state.coins += 25000; state.usedPromos.push(code); saveState(); renderTop();
-      alert("Успешно! Вы получили 25 000 монет."); document.getElementById('promo-modal').classList.add('hidden');
-    } else { playSound('error'); alert("Неверный или устаревший промокод."); }
-  });
-
-  // Колесо удачи
-  addEvt('profile-wheel-btn', 'click', () => { playSound('click'); profileModal.classList.add('hidden'); document.querySelector('.nav-item[data-screen="phone"]').click(); document.getElementById('app-wheel-btn').click(); });
-
   function renderGarage() {
     const bike = activeBike(); 
     const an = document.getElementById('active-bike-name'); if(an) an.innerText = bike.name; 
@@ -749,7 +759,7 @@ try {
     }
   }
 
-  // --- ЛОГИКА ТЕЛЕФОНА И ПРИЛОЖЕНИЙ ---
+  // --- ТЕЛЕФОН И ПРИЛОЖЕНИЯ ---
   document.querySelectorAll('.phone-back-btn').forEach(btn => { btn.addEventListener('click', () => { playSound('click'); document.querySelectorAll('.phone-app-screen').forEach(app => app.classList.remove('active')); }); });
   document.querySelectorAll('.home-indicator').forEach(ind => { ind.addEventListener('click', () => { playSound('click'); document.querySelectorAll('.phone-app-screen').forEach(app => app.classList.remove('active')); }); });
   
@@ -764,38 +774,14 @@ try {
   addEvt('app-map-btn', 'click', () => { playSound('click'); document.getElementById('phone-app-map').classList.add('active'); });
   addEvt('map-pin-shop', 'click', () => { playSound('click'); renderShopTabs(); document.getElementById('phone-app-shop').classList.add('active'); });
 
-  addEvt('app-wheel-btn', 'click', () => { playSound('click'); updateWheelTimer(); document.getElementById('phone-app-wheel').classList.add('active'); });
-  let wheelTimerInterval;
-  function updateWheelTimer() {
-    const btn = document.getElementById('wheel-spin-btn'); const txt = document.getElementById('wheel-timer'); 
-    if(!btn || !txt) return;
-    clearInterval(wheelTimerInterval);
-    const checkTime = () => {
-      const now = Date.now(); const diff = (state.lastWheelTime + (4 * 60 * 60 * 1000)) - now;
-      if (diff <= 0) { btn.disabled = false; btn.innerText = "КРУТИТЬ"; txt.innerText = "Готово к прокрутке!"; clearInterval(wheelTimerInterval); } 
-      else { btn.disabled = true; btn.innerText = "ОЖИДАНИЕ"; let h = Math.floor(diff / (1000 * 60 * 60)); let m = Math.floor((diff / (1000 * 60)) % 60); let s = Math.floor((diff / 1000) % 60); txt.innerText = `Следующая прокрутка через: ${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
-    };
-    checkTime(); wheelTimerInterval = setInterval(checkTime, 1000);
-  }
-
-  addEvt('wheel-spin-btn', 'click', () => {
-    const circle = document.getElementById('wheel-circle'); const btn = document.getElementById('wheel-spin-btn');
-    if (!circle || !btn || btn.disabled) return; 
-    playSound('click'); btn.disabled = true;
-    let currentRotation = parseInt(circle.dataset.rot || '0'); let extraSpins = 360 * 5; let randomAngle = Math.floor(Math.random() * 360); let finalRotation = currentRotation + extraSpins + randomAngle;
-    circle.style.transform = `rotate(${finalRotation}deg)`; circle.dataset.rot = finalRotation;
-    setTimeout(() => {
-      playSound('reward');
-      let prizes = [ {t: 'coins', v: 1000, n: '1000 Монет'}, {t: 'coins', v: 5000, n: '5000 Монет'}, {t: 'exp', v: 50, n: '50 Опыта'}, {t: 'exp', v: 200, n: '200 Опыта'} ];
-      let prize = prizes[Math.floor(Math.random() * prizes.length)];
-      if(prize.t === 'coins') state.coins += prize.v; else addExp(prize.v);
-      state.lastWheelTime = Date.now(); saveState(); renderTop(); alert(`🎉 Вы выиграли: ${prize.n}!`); updateWheelTimer();
-    }, 4000);
+  // Доставка (Новое приложение)
+  addEvt('app-delivery-btn', 'click', () => { 
+    playSound('click'); 
+    document.getElementById('delivery-rating-ui').innerText = state.deliveryRating.toFixed(1);
+    let pay = Math.floor(500 * (state.deliveryRating / 5));
+    document.getElementById('delivery-expected-pay').innerText = fmt(pay);
+    document.getElementById('phone-app-delivery').classList.add('active'); 
   });
-
-  document.querySelectorAll('.dev-btn').forEach(btn => { btn.addEventListener('click', () => { playSound('click'); document.getElementById('dev-modal').classList.remove('hidden'); }); });
-  addEvt('dev-close-btn', 'click', () => { playSound('click'); document.getElementById('dev-modal').classList.add('hidden'); });
-  addEvt('dev-ok-btn', 'click', () => { playSound('click'); document.getElementById('dev-modal').classList.add('hidden'); });
 
   let activeShopTab = 'scooter';
   function renderShopTabs() { 
@@ -839,7 +825,6 @@ try {
     }));
   }
 
-  // --- ОБРАБОТКА ТАПОВ И НАВИГАЦИЯ ---
   const tapZone = document.getElementById('tap-zone');
   if(tapZone) {
       tapZone.addEventListener('click', (e) => {
@@ -858,12 +843,6 @@ try {
     if (target === 'garage') renderGarage(); if (target === 'missions') renderMissions();
   }));
 
-  function initTelegramUser() {
-    try { const tg = window.Telegram && window.Telegram.WebApp; if (!tg) return; tg.ready(); tg.expand(); const user = tg.initDataUnsafe && tg.initDataUnsafe.user; if (!user) return; document.getElementById('user-nickname').innerText = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' '); const avatarEl = document.getElementById('avatar-placeholder'); if (user.photo_url) avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`; else avatarEl.innerText = (user.first_name ? user.first_name[0] : (user.username ? user.username[0].toUpperCase() : 'R')); } catch (e) {}
-  }
-
-  setInterval(() => { const d = new Date(); const timeEl = document.getElementById('iphone-time'); if (timeEl) timeEl.innerText = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0'); }, 1000);
-
   // --- ЛОГИКА МЕНЮ ВЫБОРА РЕЖИМА ---
   addEvt('main-start-btn', 'click', () => { playSound('click'); document.getElementById('mode-modal').classList.remove('hidden'); });
   addEvt('mode-close-btn', 'click', () => { playSound('click'); document.getElementById('mode-modal').classList.add('hidden'); });
@@ -871,136 +850,9 @@ try {
   addEvt('mode-race-btn', 'click', () => { playSound('click'); document.getElementById('mode-modal').classList.add('hidden'); openRace(); });
   addEvt('mode-chase-btn', 'click', () => { playSound('click'); document.getElementById('mode-modal').classList.add('hidden'); openChase(); });
 
-  // --- СТАНТ И ГОНКА ---
-  const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg'), stuntTimerEl = document.getElementById('stunt-timer'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntClockEl = document.getElementById('stunt-clock'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
-  const STUNT_MAX_ANGLE = 92, STUNT_MIN_ANGLE = -18;
-  let stunt = null, lastSparkTs = 0;
-
-  function stuntCoinsForState(bestWheelieSec, maxAngle) { return Math.max(1, Math.floor(bestWheelieSec * 6 + maxAngle * 1.5)); }
-
-  function spawnSparkBurst(count) {
-    const sparkAnchorEl = document.getElementById('stunt-spark-anchor'); const stuntSceneEl = document.getElementById('stunt-scene');
-    if(!sparkAnchorEl || !stuntSceneEl) return;
-    const anchorRect = sparkAnchorEl.getBoundingClientRect(), sceneRect = stuntSceneEl.getBoundingClientRect();
-    const baseX = anchorRect.left - sceneRect.left, baseY = anchorRect.top - sceneRect.top;
-    for (let i = 0; i < count; i++) {
-      const el = document.createElement('div'); el.className = 'spark-particle';
-      const rad = (-110 + (Math.random() * 90 - 45)) * Math.PI / 180, dist = 18 + Math.random() * 30;
-      el.style.left = baseX + 'px'; el.style.top = baseY + 'px';
-      el.style.setProperty('--sx', (Math.cos(rad) * dist).toFixed(1) + 'px'); el.style.setProperty('--sy', (Math.sin(rad) * dist).toFixed(1) + 'px'); el.style.setProperty('--sa', (Math.random() * 360).toFixed(0) + 'deg');
-      stuntSceneEl.appendChild(el); setTimeout(() => el.remove(), 500);
-    }
-  }
-
-  function openStunt() {
-    stunt = { angle: 0, speed: 15, roadOffset: 0, cityOffset: 0, currentWheelie: 0, bestWheelie: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null, gameTimeMinutes: 8 * 60, currentSkyClass: '' };
-    lastSparkTs = 0; const stuntSceneEl = document.getElementById('stunt-scene'); if(stuntSceneEl) stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
-    stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
-    const bike = activeBike();
-    if (bike.imgSrc) { stuntBikeEl.classList.add('is-svg'); stuntBikeEl.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); } else { stuntBikeEl.classList.remove('is-svg'); stuntBikeEl.innerText = bike.emoji || '🏍️'; }
-    stuntBikeEl.style.transform = 'rotate(0deg)'; stuntTimerEl.innerText = '0.0'; stuntAngleEl.innerText = '0'; stuntSpeedEl.innerText = '15'; stuntCoinsEl.innerText = '0';
-    stunt.rafId = requestAnimationFrame(stuntTick);
-  }
-
-  function closeStunt() { if (stunt && stunt.rafId) cancelAnimationFrame(stunt.rafId); stunt = null; stuntOverlay.classList.add('hidden'); }
-
-  function stuntTick(ts) {
-    if (!stunt || stunt.crashed) return;
-    if (stunt.lastTs === null) stunt.lastTs = ts;
-    const dt = Math.min((ts - stunt.lastTs) / 1000, 0.05); stunt.lastTs = ts;
-
-    if (stunt.gas) { stunt.angle += 55 * dt; stunt.speed = Math.min(stunt.speed + 35 * dt, 100); } else { stunt.speed = Math.max(stunt.speed - 12 * dt, 15); }
-    if (stunt.brake) { stunt.angle -= 85 * dt; stunt.speed = Math.max(stunt.speed - 70 * dt, 15); }
-    if (!stunt.gas && !stunt.brake) { stunt.angle += (stunt.angle > 0 ? -1 : 1) * 8 * dt; }
-
-    if (stunt.angle > 5) { stunt.currentWheelie += dt; stunt.bestWheelie = Math.max(stunt.bestWheelie, stunt.currentWheelie); } else { stunt.currentWheelie = 0; }
-    stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
-    stunt.roadOffset -= stunt.speed * dt * 4; stunt.cityOffset -= stunt.speed * dt * 0.8;
-
-    stuntBikeEl.style.transform = `rotate(${-stunt.angle}deg)`;
-    stuntRoadEl.style.backgroundPosition = `0 0, ${stunt.roadOffset}px 18px`; stuntCityBg.style.backgroundPosition = `${stunt.cityOffset}px bottom`;
-    
-    stuntTimerEl.innerText = stunt.currentWheelie.toFixed(1); stuntAngleEl.innerText = Math.round(Math.max(0, stunt.angle));
-    stuntSpeedEl.innerText = Math.round(stunt.speed); stuntCoinsEl.innerText = fmt(stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle));
-
-    if (stunt.angle >= 86 && ts - lastSparkTs > 40) { spawnSparkBurst(3 + Math.floor(Math.random() * 3)); lastSparkTs = ts; }
-
-    stunt.gameTimeMinutes += dt * 10;
-    let hours = Math.floor((stunt.gameTimeMinutes % 1440) / 60), mins = Math.floor((stunt.gameTimeMinutes % 1440) % 60);
-    stuntClockEl.innerText = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-    let newSky, newBright;
-    if (hours >= 22 || hours < 6) { newSky = '#050b14'; newBright = 0.3; } else if (hours >= 6 && hours < 10) { newSky = '#ff7e5f'; newBright = 0.7; } else if (hours >= 10 && hours < 18) { newSky = '#4ca1af'; newBright = 1.0; } else { newSky = '#ffb347'; newBright = 0.6; }
-    if (stunt.currentSkyClass !== newSky) { document.getElementById('stunt-scene').style.setProperty('--sky-color', newSky); stuntCityBg.style.setProperty('--city-bright', newBright); stunt.currentSkyClass = newSky; }
-
-    if (stunt.angle >= 92 || stunt.angle <= -18) {
-      playSound('error');
-      stunt.crashed = true; if (stunt.angle >= 92) spawnSparkBurst(20);
-      const reward = stuntCoinsForState(stunt.bestWheelie, stunt.maxAngle);
-      stuntResultStatsEl.innerHTML = `Рекорд: <b>${stunt.bestWheelie.toFixed(1)}с</b><br>Угол: <b>${Math.round(stunt.maxAngle)}°</b><br>Награда: <b>🪙 ${fmt(reward)}</b>`;
-      stuntResultEl.dataset.reward = reward; stuntResultEl.classList.remove('hidden'); return;
-    }
-    stunt.rafId = requestAnimationFrame(stuntTick);
-  }
-  addEvt('stunt-close-btn', 'click', () => { playSound('click'); closeStunt(); });
-  addEvt('stunt-claim-btn', 'click', () => { playSound('reward'); state.coins += parseInt(stuntResultEl.dataset.reward || '0', 10); addExp(Math.floor(stunt.bestWheelie * 5)); saveState(); renderTop(); renderGarage(); closeStunt(); });
-
-  /* ГОНКА 1X1 */
-  const raceOverlay = document.getElementById('race-overlay'), raceSpeedEl = document.getElementById('race-speed'), raceDistPlayerEl = document.getElementById('race-dist-player'), raceDistBotEl = document.getElementById('race-dist-bot'), raceBotWrap = document.getElementById('race-bot-wrap'), raceRoad = document.getElementById('race-road'), racePlayerBike = document.getElementById('race-bike-player'), raceResultEl = document.getElementById('race-result'), raceResultTitle = document.getElementById('race-result-title'), raceResultStats = document.getElementById('race-result-stats');
-  let race = null;
-
-  function openRace() {
-    const bike = activeBike(); let baseSpeed = parseInt(bike.top); let playerMaxSpeed = baseSpeed;
-    race = { playerDist: 0, botDist: 0, playerSpeed: 0, botSpeed: 0, playerMax: playerMaxSpeed, botMax: playerMaxSpeed * (0.9 + Math.random() * 0.2), gas: false, brake: false, finished: false, lastTs: null, rafId: null, roadOffset: 0 };
-    raceResultEl.classList.add('hidden'); raceOverlay.classList.remove('hidden');
-    if (bike.imgSrc) { racePlayerBike.classList.add('is-svg'); racePlayerBike.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); } else { racePlayerBike.classList.remove('is-svg'); racePlayerBike.innerText = bike.emoji || '🏍️'; }
-    raceSpeedEl.innerText = '0'; raceDistPlayerEl.innerText = '0'; raceDistBotEl.innerText = '0'; raceBotWrap.style.transform = `translateX(0px) scale(0.85)`;
-    race.rafId = requestAnimationFrame(raceTick);
-  }
-  function closeRace() { if (race && race.rafId) cancelAnimationFrame(race.rafId); race = null; raceOverlay.classList.add('hidden'); }
-
-  function raceTick(ts) {
-    if (!race || race.finished) return;
-    if (!race.lastTs) race.lastTs = ts;
-    const dt = Math.min((ts - race.lastTs) / 1000, 0.05); race.lastTs = ts;
-
-    if (race.gas) { race.playerSpeed = Math.min(race.playerSpeed + 40 * dt, race.playerMax); } else { race.playerSpeed = Math.max(race.playerSpeed - 15 * dt, 0); }
-    if (race.brake) { race.playerSpeed = Math.max(race.playerSpeed - 80 * dt, 0); }
-    let botAcc = 35; if (race.botDist < race.playerDist - 30) botAcc = 50; 
-    race.botSpeed = Math.min(race.botSpeed + botAcc * dt, race.botMax);
-
-    race.playerDist += (race.playerSpeed / 3.6) * dt * 3; race.botDist += (race.botSpeed / 3.6) * dt * 3;
-    race.roadOffset -= race.playerSpeed * dt * 4; raceRoad.style.backgroundPosition = `0 0, ${race.roadOffset}px 18px`;
-
-    let botOffsetPx = (race.botDist - race.playerDist) * 4;
-    raceBotWrap.style.transform = `translateX(${botOffsetPx}px) scale(0.85)`;
-
-    raceSpeedEl.innerText = Math.round(race.playerSpeed); raceDistPlayerEl.innerText = Math.floor(race.playerDist); raceDistBotEl.innerText = Math.floor(race.botDist);
-
-    if (race.playerDist >= 500 || race.botDist >= 500) {
-      race.finished = true; let playerWon = race.playerDist >= 500; let reward = playerWon ? 3000 : 500;
-      playSound(playerWon ? 'reward' : 'error');
-      raceResultTitle.innerText = playerWon ? "🏆 Победа!" : "💥 Поражение!";
-      raceResultStats.innerHTML = playerWon ? `Вы первыми пересекли финиш!<br>Награда: <b>🪙 ${fmt(reward)}</b>` : `Бот оказался быстрее.<br>Утешительный приз: <b>🪙 ${fmt(reward)}</b>`;
-      raceResultEl.dataset.reward = reward; raceResultEl.classList.remove('hidden'); return;
-    }
-    race.rafId = requestAnimationFrame(raceTick);
-  }
-  addEvt('race-close-btn', 'click', () => { playSound('click'); closeRace(); });
-  addEvt('race-claim-btn', 'click', () => { playSound('click'); state.coins += parseInt(raceResultEl.dataset.reward || '0', 10); addExp(20); saveState(); renderTop(); renderGarage(); closeRace(); });
-
-  function bindHold(elId, onPress, onRelease) {
-    const el = document.getElementById(elId); if(!el) return;
-    const press = (e) => { e.preventDefault(); onPress(); }, release = (e) => { e.preventDefault(); onRelease(); };
-    el.addEventListener('pointerdown', press); el.addEventListener('pointerup', release); el.addEventListener('pointerleave', release); el.addEventListener('pointercancel', release);
-  }
-  bindHold('stunt-gas', () => { if (stunt && !stunt.crashed) { stunt.gas = true; document.getElementById('stunt-gas').classList.add('pressed'); } }, () => { if (stunt) stunt.gas = false; document.getElementById('stunt-gas').classList.remove('pressed'); });
-  bindHold('stunt-brake', () => { if (stunt && !stunt.crashed) { stunt.brake = true; document.getElementById('stunt-brake').classList.add('pressed'); } }, () => { if (stunt) stunt.brake = false; document.getElementById('stunt-brake').classList.remove('pressed'); });
-  bindHold('race-gas', () => { if (race && !race.finished) { race.gas = true; document.getElementById('race-gas').classList.add('pressed'); } }, () => { if (race) race.gas = false; document.getElementById('race-gas').classList.remove('pressed'); });
-  bindHold('race-brake', () => { if (race && !race.finished) { race.brake = true; document.getElementById('race-brake').classList.add('pressed'); } }, () => { if (race) race.brake = false; document.getElementById('race-brake').classList.remove('pressed'); });
-
   // --- 11. ПОГОНЯ (ДПС) ---
   const chaseOverlay = document.getElementById('chase-overlay'), chaseScene = document.getElementById('chase-scene'), chasePlayer = document.getElementById('chase-player'), chasePolice = document.getElementById('chase-police'), chaseObstaclesContainer = document.getElementById('chase-obstacles-container'), chaseScoreEl = document.getElementById('chase-score'), chaseWantedEl = document.getElementById('chase-wanted-stars'), chaseResultEl = document.getElementById('chase-result'), chaseResultStats = document.getElementById('chase-result-stats');
-  let chase = null; const CHASE_LANE_Y = ['5%', '38%', '70%']; const OBSTACLE_TYPES = ['🚧', '🦺', '🕳️'];
+  let chase = null; const CHASE_LANE_Y = ['5%', '38%', '70%']; const CHASE_OBSTACLES = ['🚧', '🦺', '🕳️'];
 
   function updateWantedStars() { let stars = ''; for(let i=0; i<5; i++) stars += (i < chase.wantedLevel) ? '⭐ ' : '🌑 '; chaseWantedEl.innerText = stars; }
 
@@ -1015,10 +867,10 @@ try {
 
   function closeChase() { if (chase && chase.rafId) cancelAnimationFrame(chase.rafId); chase = null; chaseOverlay.classList.add('hidden'); }
 
-  function spawnObstacle() {
+  function spawnChaseObstacle() {
     let lanes = [0, 1, 2].sort(() => 0.5 - Math.random()).slice(0, Math.random() > 0.6 ? 2 : 1);
     lanes.forEach(l => {
-      let el = document.createElement('div'); el.className = 'chase-obstacle'; el.innerText = OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)];
+      let el = document.createElement('div'); el.className = 'chase-obstacle'; el.innerText = CHASE_OBSTACLES[Math.floor(Math.random() * CHASE_OBSTACLES.length)];
       el.style.top = CHASE_LANE_Y[l]; let obsX = window.innerWidth; el.style.left = obsX + 'px';
       chaseObstaclesContainer.appendChild(el); chase.obstacles.push({ el: el, lane: l, x: obsX, width: 50 });
     });
@@ -1036,15 +888,14 @@ try {
       let policeLeft = -20 + (chase.wantedLevel * 15); chasePolice.style.left = policeLeft + 'px';
     }
 
-    chase.spawnTimer -= dt; if (chase.spawnTimer <= 0) { spawnObstacle(); chase.spawnTimer = 1.5 - (chase.wantedLevel * 0.15); }
+    chase.spawnTimer -= dt; if (chase.spawnTimer <= 0) { spawnChaseObstacle(); chase.spawnTimer = 1.5 - (chase.wantedLevel * 0.15); }
     if (Math.random() > 0.95) { chasePolice.style.top = CHASE_LANE_Y[chase.lane]; }
 
     let playerX = 120; let playerW = 80;  
     for (let i = chase.obstacles.length - 1; i >= 0; i--) {
       let obs = chase.obstacles[i]; obs.x -= chase.speed * dt; obs.el.style.left = obs.x + 'px';
       if (obs.lane === chase.lane && obs.x < playerX + playerW - 20 && obs.x + obs.width > playerX + 20) {
-        playSound('error');
-        chase.finished = true; chasePolice.style.left = '90px'; chasePolice.style.top = CHASE_LANE_Y[chase.lane];
+        playSound('error'); chase.finished = true; chasePolice.style.left = '90px'; chasePolice.style.top = CHASE_LANE_Y[chase.lane];
         let reward = Math.floor(chase.score / 2);
         chaseResultStats.innerHTML = `Вы продержались: <b>${chase.elapsed.toFixed(1)}с</b><br>Розыск: <b>${chase.wantedLevel} ⭐</b><br>Награда: <b>🪙 ${fmt(reward)}</b>`;
         chaseResultEl.dataset.reward = reward; chaseResultEl.classList.remove('hidden'); return;
@@ -1062,23 +913,128 @@ try {
     chaseScene.addEventListener('touchstart', e => { swipeStartY = e.touches[0].clientY; }, {passive: false});
     chaseScene.addEventListener('touchmove', e => { e.preventDefault(); }, {passive: false});
     chaseScene.addEventListener('touchend', e => {
-      if(!chase || chase.finished) return; let dy = e.changedTouches[0].clientY - swipeStartY;
-      if (dy < -30 && chase.lane > 0) { playSound('tap'); chase.lane--; chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; } else if (dy > 30 && chase.lane < 2) { playSound('tap'); chase.lane++; chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; }
+      if(chase && !chase.finished) {
+        let dy = e.changedTouches[0].clientY - swipeStartY;
+        if (dy < -30 && chase.lane > 0) { playSound('tap'); chase.lane--; chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; } else if (dy > 30 && chase.lane < 2) { playSound('tap'); chase.lane++; chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; }
+      }
+      if(deliv && !deliv.finished) {
+        let dy = e.changedTouches[0].clientY - swipeStartY;
+        if (dy < -30 && deliv.lane > 0) { playSound('tap'); deliv.lane--; delivPlayer.style.top = CHASE_LANE_Y[deliv.lane]; } else if (dy > 30 && deliv.lane < 2) { playSound('tap'); deliv.lane++; delivPlayer.style.top = CHASE_LANE_Y[deliv.lane]; }
+      }
     });
     chaseScene.addEventListener('mousedown', e => { swipeStartY = e.clientY; });
     chaseScene.addEventListener('mouseup', e => {
-      if(!chase || chase.finished) return; let dy = e.clientY - swipeStartY;
-      if (dy < -30 && chase.lane > 0) { playSound('tap'); chase.lane--; chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; } else if (dy > 30 && chase.lane < 2) { playSound('tap'); chase.lane++; chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; }
+      if(chase && !chase.finished) {
+        let dy = e.clientY - swipeStartY;
+        if (dy < -30 && chase.lane > 0) { playSound('tap'); chase.lane--; chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; } else if (dy > 30 && chase.lane < 2) { playSound('tap'); chase.lane++; chasePlayer.style.top = CHASE_LANE_Y[chase.lane]; }
+      }
+    });
+  }
+
+  // --- НОВАЯ МИНИ-ИГРА: ДОСТАВКА (КУРЬЕР) ---
+  const delivOverlay = document.getElementById('delivery-overlay'), delivScene = document.getElementById('deliv-scene'), delivPlayer = document.getElementById('deliv-player'), delivObstaclesContainer = document.getElementById('deliv-obstacles-container'), delivTimeEl = document.getElementById('deliv-time'), delivDistEl = document.getElementById('deliv-dist'), delivRatingHud = document.getElementById('deliv-rating-hud'), delivResultEl = document.getElementById('deliv-result'), delivResultStats = document.getElementById('deliv-result-stats');
+  let deliv = null; const DELIV_OBSTACLES = ['🚗', '🚕', '🚙', '🚧', '🕳️'];
+
+  function openDelivery() {
+    const bike = activeBike();
+    let speedBonus = parseInt(bike.top) * 3; // Скорость зависит от максималки байка
+    deliv = { lane: 1, speed: 250 + speedBonus, dist: 0, targetDist: 1000 + Math.floor(Math.random()*500), time: 60, obstacles: [], spawnTimer: 0, finished: false, lastTs: null, rafId: null };
+    delivObstaclesContainer.innerHTML = ''; delivResultEl.classList.add('hidden'); delivOverlay.classList.remove('hidden');
+    
+    // Отрисовка байка с пиццей
+    let pizzaBadge = '<span style="position:absolute; top:-15px; right:-15px; font-size:26px; filter: drop-shadow(0 2px 2px #000); z-index:10;">🍕</span>';
+    if (bike.imgSrc) { delivPlayer.innerHTML = bikeImageMarkup('scooter-icon-chase', bike.imgSrc) + pizzaBadge; delivPlayer.querySelector('img').style.width = '100px'; } 
+    else { delivPlayer.innerHTML = (bike.emoji || '🏍️') + pizzaBadge; delivPlayer.style.fontSize = '80px'; }
+    
+    delivPlayer.style.top = CHASE_LANE_Y[deliv.lane]; delivRatingHud.innerText = state.deliveryRating.toFixed(1);
+    deliv.rafId = requestAnimationFrame(delivTick);
+  }
+
+  function closeDelivery() { if (deliv && deliv.rafId) cancelAnimationFrame(deliv.rafId); deliv = null; delivOverlay.classList.add('hidden'); }
+
+  function spawnDelivObstacle() {
+    let lanes = [0, 1, 2].sort(() => 0.5 - Math.random()).slice(0, Math.random() > 0.4 ? 2 : 1);
+    lanes.forEach(l => {
+      let el = document.createElement('div'); el.className = 'chase-obstacle'; el.innerText = DELIV_OBSTACLES[Math.floor(Math.random() * DELIV_OBSTACLES.length)];
+      el.style.top = CHASE_LANE_Y[l]; let obsX = window.innerWidth; el.style.left = obsX + 'px';
+      delivObstaclesContainer.appendChild(el); deliv.obstacles.push({ el: el, lane: l, x: obsX, width: 60 });
+    });
+  }
+
+  function delivTick(ts) {
+    if (!deliv || deliv.finished) return;
+    if (!deliv.lastTs) deliv.lastTs = ts;
+    const dt = Math.min((ts - deliv.lastTs) / 1000, 0.05); deliv.lastTs = ts;
+
+    deliv.time -= dt; deliv.dist += (deliv.speed / 3.6) * dt * 2;
+    delivTimeEl.innerText = Math.max(0, deliv.time).toFixed(1);
+    delivDistEl.innerText = Math.floor(Math.min(deliv.dist, deliv.targetDist)) + '/' + deliv.targetDist + 'м';
+
+    deliv.spawnTimer -= dt; if (deliv.spawnTimer <= 0) { spawnDelivObstacle(); deliv.spawnTimer = 1.0 + Math.random(); }
+
+    // Проверка победы (довезли)
+    if (deliv.dist >= deliv.targetDist) {
+      deliv.finished = true; playSound('reward');
+      let ratingGain = 0.05; state.deliveryRating = Math.min(5.0, state.deliveryRating + ratingGain);
+      let pay = Math.floor(500 * (state.deliveryRating / 5));
+      let tips = deliv.time > 15 ? 300 : 0; // Чаевые за скорость
+      let totalReward = pay + tips;
+      document.getElementById('deliv-result-title').innerText = "ЗАКАЗ ДОСТАВЛЕН!";
+      document.getElementById('deliv-result-title').style.color = "#10b981";
+      document.getElementById('deliv-result-card').style.borderColor = "#10b981";
+      delivResultStats.innerHTML = `Время в запасе: <b>${deliv.time.toFixed(1)}с</b><br>Оплата: <b>🪙 ${fmt(pay)}</b><br>Чаевые: <b>🪙 ${tips}</b><br>Рейтинг: <b style="color:#10b981;">+${ratingGain}</b>`;
+      delivResultEl.dataset.reward = totalReward; delivResultEl.classList.remove('hidden'); return;
+    }
+
+    // Проверка поражения (время или авария)
+    if (deliv.time <= 0) { endDelivFail("ВРЕМЯ ВЫШЛО!"); return; }
+
+    let playerX = 120; let playerW = 80;  
+    for (let i = deliv.obstacles.length - 1; i >= 0; i--) {
+      let obs = deliv.obstacles[i]; obs.x -= deliv.speed * dt; obs.el.style.left = obs.x + 'px';
+      if (obs.lane === deliv.lane && obs.x < playerX + playerW - 20 && obs.x + obs.width > playerX + 20) { endDelivFail("АВАРИЯ! ПИЦЦА УНИЧТОЖЕНА"); return; }
+      if (obs.x < -60) { obs.el.remove(); deliv.obstacles.splice(i, 1); }
+    }
+    deliv.rafId = requestAnimationFrame(delivTick);
+  }
+
+  function endDelivFail(reason) {
+    playSound('error'); deliv.finished = true;
+    let ratingDrop = 0.1; state.deliveryRating = Math.max(1.0, state.deliveryRating - ratingDrop);
+    document.getElementById('deliv-result-title').innerText = reason;
+    document.getElementById('deliv-result-title').style.color = "#ef4444";
+    document.getElementById('deliv-result-card').style.borderColor = "#ef4444";
+    delivResultStats.innerHTML = `Заказ не доставлен.<br>Штраф рейтинга: <b style="color:#ef4444;">-${ratingDrop}</b>`;
+    delivResultEl.dataset.reward = 0; delivResultEl.classList.remove('hidden');
+  }
+
+  addEvt('start-delivery-btn', 'click', () => { playSound('click'); document.getElementById('phone-app-delivery').classList.remove('active'); openDelivery(); });
+  addEvt('deliv-close-btn', 'click', () => { playSound('click'); closeDelivery(); });
+  addEvt('deliv-claim-btn', 'click', () => { playSound('click'); state.coins += parseInt(delivResultEl.dataset.reward || '0', 10); addExp(15); saveState(); renderTop(); renderGarage(); closeDelivery(); });
+
+  if(delivScene) {
+    delivScene.addEventListener('touchstart', e => { swipeStartY = e.touches[0].clientY; }, {passive: false});
+    delivScene.addEventListener('touchmove', e => { e.preventDefault(); }, {passive: false});
+    delivScene.addEventListener('touchend', e => {
+      if(deliv && !deliv.finished) {
+        let dy = e.changedTouches[0].clientY - swipeStartY;
+        if (dy < -30 && deliv.lane > 0) { playSound('tap'); deliv.lane--; delivPlayer.style.top = CHASE_LANE_Y[deliv.lane]; } else if (dy > 30 && deliv.lane < 2) { playSound('tap'); deliv.lane++; delivPlayer.style.top = CHASE_LANE_Y[deliv.lane]; }
+      }
+    });
+    delivScene.addEventListener('mousedown', e => { swipeStartY = e.clientY; });
+    delivScene.addEventListener('mouseup', e => {
+      if(deliv && !deliv.finished) {
+        let dy = e.clientY - swipeStartY;
+        if (dy < -30 && deliv.lane > 0) { playSound('tap'); deliv.lane--; delivPlayer.style.top = CHASE_LANE_Y[deliv.lane]; } else if (dy > 30 && deliv.lane < 2) { playSound('tap'); deliv.lane++; delivPlayer.style.top = CHASE_LANE_Y[deliv.lane]; }
+      }
     });
   }
 
   // --- ЗАПУСК ДВИЖКА ---
-  initTelegramUser(); 
-  renderTop(); 
-  renderGarage(); 
-  renderShopTabs(); 
-  renderMissions(); 
-  checkDailyBonus();
+  function initTelegramUser() {
+    try { const tg = window.Telegram && window.Telegram.WebApp; if (!tg) return; tg.ready(); tg.expand(); const user = tg.initDataUnsafe && tg.initDataUnsafe.user; if (!user) return; document.getElementById('user-nickname').innerText = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' '); const avatarEl = document.getElementById('avatar-placeholder'); if (user.photo_url) avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`; else avatarEl.innerText = (user.first_name ? user.first_name[0] : (user.username ? user.username[0].toUpperCase() : 'R')); } catch (e) {}
+  }
+  initTelegramUser(); renderTop(); renderGarage(); renderShopTabs(); renderMissions(); checkDailyBonus();
 
 } catch (err) {
   // ПРИ ЛЮБОЙ ОШИБКЕ СБРАСЫВАЕМ КЭШ, ЧТОБЫ ВОССТАНОВИТЬ ИГРУ
