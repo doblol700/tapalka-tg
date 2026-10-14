@@ -24,9 +24,8 @@
 
   * { box-sizing: border-box; }
 
-  /* --- ЖЕЛЕЗОБЕТОННОЕ ЦЕНТРИРОВАНИЕ ДЛЯ TELEGRAM DESKTOP --- */
+  /* --- БАЗА СТРАНИЦЫ --- */
   html, body {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     margin: 0; padding: 0; width: 100%; height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
@@ -34,10 +33,15 @@
     transition: background-color 0.3s, color 0.3s;
   }
 
+  /* --- ИДЕАЛЬНОЕ ЦЕНТРИРОВАНИЕ (ВРАППЕР ДЛЯ ПК) --- */
+  #desktop-wrapper {
+    width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+  }
+
+  /* --- КОНТЕЙНЕР ИГРЫ --- */
   #app-container {
-    width: 100%; height: 100%; max-width: 480px; 
-    margin: 0 auto; /* Строго по центру */
-    position: relative;
+    width: 100%; height: 100%; max-width: 480px; position: relative;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
     box-shadow: 0 0 40px rgba(0,0,0,1); overflow: hidden;
@@ -93,7 +97,7 @@
   .iphone-time { font-size: 14px; letter-spacing: 0.5px; }
   .iphone-icons { display: flex; gap: 5px; font-size: 13px; }
 
-  /* Home Indicator (ПОЛОСКА) */
+  /* Home Indicator */
   .home-indicator {
     position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
     width: 130px; height: 5px; background: #fff; border-radius: 10px; z-index: 50;
@@ -118,11 +122,7 @@
   .iphone-dock .app-icon-inner { width: 50px; height: 50px; }
 
   /* PHONE APPS OVERLAYS */
-  .phone-app-screen {
-    position: absolute; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 30;
-    display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-    overflow: hidden;
-  }
+  .phone-app-screen { position: absolute; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 30; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); overflow: hidden; }
   .phone-app-screen.active { transform: translateY(0); }
   .phone-app-header { height: 85px; padding-top: 45px; background: var(--ui-bg); display: flex; align-items: center; padding-left: 15px; border-bottom: 1px solid var(--accent-cyan); font-weight: bold; font-size: 18px; flex-shrink: 0; }
   .phone-app-content { flex-grow: 1; padding: 20px; overflow-y: auto; }
@@ -143,14 +143,13 @@
   .spin-btn:active { transform: scale(0.95); }
   .spin-btn:disabled { background: #4a5568; box-shadow: none; color: #cbd5e1; cursor: default; }
 
-  /* MAP VIEW APP */
+  /* Карта и Салон */
   .map-view { flex-grow: 1; position: relative; overflow: hidden; background-color: #d1d5db; }
   .map-bg { position: absolute; inset: 0; background-color: #e5e5e5; background-image: linear-gradient(45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%); background-size: 60px 60px; opacity: 0.7; }
   .map-pin { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.5); border: 2px solid white; animation: bouncePin 2s infinite; z-index: 10; }
   @keyframes bouncePin { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, -60%); } }
   .pin-label { position: absolute; top: -30px; background: rgba(0,0,0,0.8); font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-weight: bold; color: white;}
 
-  /* SHOP VIEW APP */
   .shop-tabs { display: flex; gap: 6px; padding: 10px 12px 4px; flex-shrink: 0; overflow-x: auto; background: var(--bg-color); }
   .shop-tab { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(34,211,238,0.35); background: var(--card-bg); color: var(--accent-cyan); font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
   .shop-tab.active { background: var(--accent-orange); color: #1a1a1a; border-color: var(--accent-orange); }
@@ -196,6 +195,7 @@
   .start-stunt-wrap { padding: 4px 12px 18px; margin-top: auto; }
   .start-stunt-btn { width: 100%; padding: 14px 10px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; font-size: 15px; font-weight: bold; letter-spacing: 0.5px; cursor: pointer; box-shadow: 0 0 16px rgba(249,115,22,0.5); transition: transform 0.1s; }
   .start-stunt-btn:active { transform: scale(0.97); }
+  
   .mode-btn { width: 100%; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; margin-bottom: 10px; transition: transform 0.1s; }
   .mode-btn:active { transform: scale(0.97); }
   .mode-stunt { background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; }
@@ -208,11 +208,14 @@
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: var(--sky-color, #4ca1af); transition: background-color 2s ease; }
+  
   .stunt-city-bg { position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; background-image: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); background-size: 100% 100%, 120px 100%; background-position: bottom; z-index: 1; filter: brightness(var(--city-bright, 1)); transition: filter 2s ease; }
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; transition: transform 0.05s linear; }
   .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
+  
   .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background-color: #0f1218; background-image: linear-gradient(180deg, #1e293b 0%, #090d16 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px); background-position: 0 0, 0 18px; background-size: 100% 100%, 140px 8px; border-top: 4px solid var(--accent-cyan); box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; }
+  
   .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; }
   .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; color: white; }
   .stunt-zone-icon { font-size: 34px; }
@@ -222,12 +225,15 @@
   .stunt-zone.gas.pressed { background: rgba(249,115,22,0.45); }
   .stunt-close-btn { position: absolute; top: 28px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.5); background: rgba(15,23,42,0.75); color: white; font-size: 15px; cursor: pointer; z-index: 10; transition: transform 0.1s; }
   .stunt-close-btn:active { transform: scale(0.9); }
+  
   .stunt-result { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); }
   .stunt-result.hidden { display: none; }
   .stunt-result-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.5); border-radius: 14px; padding: 22px 24px; text-align: center; width: 78%; max-width: 320px; box-shadow: var(--glow); }
   .stunt-result-title { font-size: 18px; font-weight: bold; color: var(--accent-orange); margin-bottom: 10px; }
   .stunt-result-stats { font-size: 14px; line-height: 1.8; color: var(--text-color); margin-bottom: 16px; }
   .stunt-result-stats b { color: var(--accent-cyan); }
+  
+  .stunt-spark-anchor { position: absolute; bottom: 45px; left: 45px; width: 1px; height: 1px; pointer-events: none; z-index: 4; }
   .spark-particle { position: absolute; width: 7px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #fff9c4, #f97316); box-shadow: 0 0 6px 1px rgba(249,115,22,0.9); pointer-events: none; z-index: 4; animation: sparkFly 0.5s ease-out forwards; }
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
 
@@ -264,321 +270,324 @@
 </head>
 <body>
 
-<div id="app-container">
+<!-- ВРАППЕР ДЛЯ ЦЕНТРИРОВАНИЯ НА ПК -->
+<div id="desktop-wrapper">
 
-  <!-- Верхняя панель -->
-  <div class="top-panel">
-    <div class="user-info" id="user-profile-btn">
-      <div class="avatar-placeholder" id="avatar-placeholder">VIP</div>
-      <div class="stats-text">
-        <strong id="user-nickname">RIDERNICK</strong><br>
-        <span id="user-level-label">Lv 1</span>
-        <div class="level-bar"><div class="level-progress" id="level-progress-bar"></div></div>
-      </div>
-    </div>
-    <div class="currency-panel">
-      <div class="currency-item" id="coins-display">🪙 0</div>
-    </div>
-  </div>
-
-  <div class="screens">
-    <!-- ГАРАЖ -->
-    <div class="screen active" id="screen-garage">
-      <div id="tap-zone" class="tap-zone">
-        <div class="active-bike-name" id="active-bike-name">Honda Dio 27</div>
-        <div id="points-display">0 pts</div>
-        <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
-        <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
-      </div>
-      <div class="start-stunt-wrap">
-        <button id="main-start-btn" class="start-stunt-btn">🏁 СТАРТ</button>
-      </div>
-    </div>
-
-    <!-- ТЕЛЕФОН (IPHONE 18 PRO) -->
-    <div class="screen" id="screen-phone" style="background: rgba(0,0,0,0.5);">
-      <div class="iphone-frame">
-        <div class="iphone-status-bar">
-          <span class="iphone-time" id="iphone-time">09:41</span>
-          <span class="iphone-icons">📶 🛜 🔋</span>
+  <div id="app-container">
+    <!-- Верхняя панель -->
+    <div class="top-panel">
+      <div class="user-info" id="user-profile-btn">
+        <div class="avatar-placeholder" id="avatar-placeholder">VIP</div>
+        <div class="stats-text">
+          <strong id="user-nickname">RIDERNICK</strong><br>
+          <span id="user-level-label">Lv 1</span>
+          <div class="level-bar"><div class="level-progress" id="level-progress-bar"></div></div>
         </div>
-        <div class="dynamic-island"><div class="island-sensor"></div><div class="island-cam"></div></div>
+      </div>
+      <div class="currency-panel">
+        <div class="currency-item" id="coins-display">🪙 0</div>
+      </div>
+    </div>
+
+    <div class="screens">
+      <!-- ГАРАЖ -->
+      <div class="screen active" id="screen-garage">
+        <div id="tap-zone" class="tap-zone">
+          <div class="active-bike-name" id="active-bike-name">Honda Dio 27</div>
+          <div id="points-display">0 pts</div>
+          <div class="per-tap-display" id="per-tap-display">+1 за тап</div>
+          <div class="bike-emoji-btn" id="bike-emoji">🏍️</div>
+        </div>
+        <div class="start-stunt-wrap">
+          <button id="main-start-btn" class="start-stunt-btn">🏁 СТАРТ</button>
+        </div>
+      </div>
+
+      <!-- ТЕЛЕФОН (IPHONE 18 PRO) -->
+      <div class="screen" id="screen-phone" style="background: rgba(0,0,0,0.5);">
+        <div class="iphone-frame">
+          <div class="iphone-status-bar">
+            <span class="iphone-time" id="iphone-time">09:41</span>
+            <span class="iphone-icons">📶 🛜 🔋</span>
+          </div>
+          <div class="dynamic-island"><div class="island-sensor"></div><div class="island-cam"></div></div>
+          
+          <!-- Рабочий стол -->
+          <div class="app-grid" id="phone-desktop">
+            <div class="app-icon" id="app-map-btn">
+              <div class="app-icon-inner" style="background: linear-gradient(135deg, #34d399, #059669);">📍</div>
+              <div class="app-label">Карта</div>
+            </div>
+            <div class="app-icon" id="app-wheel-btn">
+              <div class="app-icon-inner" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">🎡</div>
+              <div class="app-label">Удача</div>
+            </div>
+            <div class="app-icon dev-btn">
+              <div class="app-icon-inner" style="background: linear-gradient(135deg, #f59e0b, #d97706);">📦</div>
+              <div class="app-label">Кейсы</div>
+            </div>
+            <div class="app-icon" id="app-settings-btn">
+              <div class="app-icon-inner" style="background: linear-gradient(135deg, #64748b, #334155);">⚙️</div>
+              <div class="app-label">Настройки</div>
+            </div>
+          </div>
+
+          <!-- Нижний DOCK -->
+          <div class="iphone-dock">
+            <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: #22c55e;">📞</div></div>
+            <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: #3b82f6;">🌐</div></div>
+            <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: #e2e8f0; color: #1e293b;">📷</div></div>
+          </div>
+
+          <!-- Приложения телефона -->
+          <div class="phone-app-screen" id="phone-app-map">
+            <div class="phone-app-header">Карта Города</div>
+            <div class="map-view">
+               <div class="map-bg"></div>
+               <div class="map-pin" id="map-pin-shop">🏍️<div class="pin-label">Мотосалон</div></div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+
+          <div class="phone-app-screen" id="phone-app-shop" style="z-index: 35;">
+            <div class="phone-app-header" style="justify-content: space-between; padding-right: 15px;">
+              <div class="phone-back-btn" id="shop-back-btn" style="color: var(--accent-cyan);">‹ Карта</div>
+              <div>Мотосалон</div>
+            </div>
+            <div class="shop-tabs" id="shop-tabs"></div>
+            <div class="bike-list" id="bike-list"></div>
+            <div class="home-indicator"></div>
+          </div>
+
+          <div class="phone-app-screen" id="phone-app-settings">
+            <div class="phone-app-header">Настройки</div>
+            <div class="phone-app-content">
+              <div class="setting-row">Вибрация <div class="toggle-switch on" id="toggle-vibro"><div class="toggle-circle"></div></div></div>
+              <div class="setting-row">Светлая тема <div class="toggle-switch" id="toggle-theme"><div class="toggle-circle"></div></div></div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+
+          <div class="phone-app-screen" id="phone-app-wheel">
+            <div class="phone-app-header">Колесо Удачи</div>
+            <div class="phone-app-content wheel-container">
+              <div class="wheel-pointer"></div>
+              <div class="wheel-circle" id="wheel-circle"><div class="wheel-center"></div></div>
+              <div style="font-size: 14px; margin-bottom: 15px; font-weight: bold;" id="wheel-timer">Готово к прокрутке!</div>
+              <button class="spin-btn" id="wheel-spin-btn">КРУТИТЬ</button>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- МИССИИ -->
+      <div class="screen" id="screen-missions">
+        <div class="section-title">Задания</div>
+        <div class="missions-list" id="missions-list"></div>
+      </div>
+
+      <!-- КЛАН -->
+      <div class="screen" id="screen-clan">
+        <div class="clan-placeholder">
+          <div class="icon">👥</div>
+          <div class="title">Кланы в разработке</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Нижняя панель -->
+    <div class="nav-panel">
+      <div class="nav-item active" data-screen="garage"><div class="nav-item-icon">🔧</div><div class="nav-text-label">Гараж</div></div>
+      <div class="nav-item" data-screen="phone"><div class="nav-item-icon">📱</div><div class="nav-text-label">Телефон</div></div>
+      <div class="nav-item" data-screen="missions"><div class="nav-item-icon">🎯</div><div class="nav-text-label">Задания</div></div>
+      <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
+    </div>
+
+    <!-- ОВЕРЛЕИ РЕЖИМОВ ИГРЫ -->
+    <div id="mode-modal" class="custom-modal hidden">
+      <div class="modal-card">
+        <button id="mode-close-btn" class="profile-modal-close">✕</button>
+        <div class="modal-title" style="margin-bottom: 20px;">Выберите режим</div>
+        <div>
+          <button id="mode-stunt-btn" class="mode-btn mode-stunt">🏍️ Стант-заезд</button>
+          <button id="mode-race-btn" class="mode-btn mode-race">🏎️ Гонка 1x1 (Бот)</button>
+          <button id="mode-chase-btn" class="mode-btn mode-chase">🚓 Погоня (ДПС)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="stunt-overlay" class="stunt-overlay hidden">
+      <div class="stunt-hud">
+        <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
+        <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
+        <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
+        <div class="stunt-hud-item">🪙 <span id="stunt-coins-preview">0</span></div>
+        <div class="stunt-hud-item" style="min-width: 30%;">🕒 <span id="stunt-clock">08:00</span></div>
+      </div>
+      <div class="stunt-scene" id="stunt-scene">
+        <div class="stunt-city-bg" id="stunt-city-bg"></div>
+        <div class="stunt-bike-wrap"><div class="stunt-bike" id="stunt-bike">🏍️</div><div class="stunt-spark-anchor" id="stunt-spark-anchor"></div></div>
+        <div class="stunt-road" id="stunt-road"></div>
+      </div>
+      <div class="stunt-controls">
+        <div class="stunt-zone brake" id="stunt-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
+        <div class="stunt-zone gas" id="stunt-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
+      </div>
+      <div class="stunt-result hidden" id="stunt-result">
+        <div class="stunt-result-card">
+          <div class="stunt-result-title" id="stunt-result-title">Заезд окончен!</div>
+          <div class="stunt-result-stats" id="stunt-result-stats"></div>
+          <button id="stunt-claim-btn" class="claim-btn">Забрать награду</button>
+        </div>
+      </div>
+      <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
+    </div>
+
+    <div id="race-overlay" class="stunt-overlay hidden">
+      <div class="stunt-hud">
+        <div class="stunt-hud-item" style="min-width: 100%; text-align: left; padding-left: 10px;">🏎️ <span id="race-speed">0</span> км/ч</div>
+        <div class="stunt-hud-item" style="color: var(--accent-cyan);">🏁 Вы: <span id="race-dist-player">0</span>/500м</div>
+        <div class="stunt-hud-item" style="color: #fca5a5;">🤖 Бот: <span id="race-dist-bot">0</span>/500м</div>
+      </div>
+      <div class="stunt-scene" id="race-scene">
+        <div class="stunt-city-bg" id="race-city-bg"></div>
+        <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 42%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
+          <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));" id="race-bike-bot">🏍️</div>
+        </div>
+        <div class="stunt-bike-wrap" id="race-player-wrap" style="left: 20%; z-index: 3;"><div class="stunt-bike" id="race-bike-player">🏍️</div></div>
+        <div class="stunt-road" id="race-road"></div>
+      </div>
+      <div class="stunt-controls">
+        <div class="stunt-zone brake" id="race-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
+        <div class="stunt-zone gas" id="race-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
+      </div>
+      <div class="stunt-result hidden" id="race-result">
+        <div class="stunt-result-card">
+          <div class="stunt-result-title" id="race-result-title">Гонка окончена!</div>
+          <div class="stunt-result-stats" id="race-result-stats"></div>
+          <button id="race-claim-btn" class="claim-btn">Закрыть</button>
+        </div>
+      </div>
+      <button id="race-close-btn" class="stunt-close-btn">✕</button>
+    </div>
+
+    <div id="chase-overlay" class="stunt-overlay hidden">
+      <div class="stunt-hud" style="background: rgba(0,0,0,0.9);">
+        <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
+        <div class="stunt-hud-item" style="color: var(--accent-cyan); min-width: 40%;">Счет: <span id="chase-score">0</span></div>
+      </div>
+      <div class="stunt-scene" id="chase-scene" style="background-color: #0f172a; touch-action: none;">
+        <div class="stunt-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.4);"></div>
+        <div class="chase-road" id="chase-road">
+          <div class="chase-line" style="top: 33%;"></div>
+          <div class="chase-line" style="top: 66%;"></div>
+          <div class="chase-police" id="chase-police"><img src="pogonya1.gif" style="width: 170px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС"></div>
+          <div class="chase-player" id="chase-player">🏍️</div>
+          <div id="chase-obstacles-container"></div>
+        </div>
+        <div class="swipe-indicator"><div>СВАЙП ВВЕРХ / ВНИЗ</div><div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div></div>
+      </div>
+      <div class="stunt-result hidden" id="chase-result">
+        <div class="stunt-result-card" style="border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.6);">
+          <div class="stunt-result-title" style="color: #ef4444;">🚨 ПОЙМАЛИ!</div>
+          <div class="stunt-result-stats" id="chase-result-stats"></div>
+          <button id="chase-claim-btn" class="claim-btn" style="background: #ef4444; width: 100%;">Понятно</button>
+        </div>
+      </div>
+      <button id="chase-close-btn" class="stunt-close-btn">✕</button>
+    </div>
+
+    <!-- МОДАЛЬНЫЕ ОКНА ИНТЕРФЕЙСА -->
+    <div id="level-up-modal" class="custom-modal hidden">
+      <div class="modal-card">
+        <div class="modal-title">🎉 Поздравляем!</div>
+        <div class="modal-desc" id="level-up-desc">Вы достигли уровня!</div>
+        <button id="level-up-ok-btn" class="claim-btn" style="width: 100%;">Отлично!</button>
+      </div>
+    </div>
+
+    <div id="dev-modal" class="custom-modal hidden">
+      <div class="modal-card" style="border-color: #f59e0b; box-shadow: 0 0 25px rgba(245,158,11,0.6);">
+        <button id="dev-close-btn" class="profile-modal-close">✕</button>
+        <div class="modal-title" style="color: #f59e0b;">В разработке 🛠️</div>
+        <div class="modal-desc">Это приложение появится в будущих обновлениях!</div>
+        <button id="dev-ok-btn" class="claim-btn" style="width: 100%; background: #f59e0b; color: #1a1a1a;">Жду!</button>
+      </div>
+    </div>
+
+    <div id="profile-modal" class="custom-modal hidden">
+      <div class="modal-card" style="border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(34,211,238,0.4); padding: 15px;">
+        <button id="profile-close-btn" class="profile-modal-close">✕</button>
+        <div class="avatar-placeholder" id="profile-avatar-large" style="width: 60px; height: 60px; margin: 0 auto 10px; font-size: 20px; border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(34,211,238,0.5);">VIP</div>
+        <div class="modal-title" id="profile-nickname-large" style="font-size: 16px; margin-bottom: 2px;">RIDERNICK</div>
+        <div style="font-size: 14px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 20px;">Уровень <span id="profile-level-large">1</span></div>
         
-        <!-- Рабочий стол -->
-        <div class="app-grid" id="phone-desktop">
-          <div class="app-icon" id="app-map-btn">
-            <div class="app-icon-inner" style="background: linear-gradient(135deg, #34d399, #059669);">📍</div>
-            <div class="app-label">Карта</div>
+        <div style="text-align: left; font-size: 11px; margin-bottom: 4px; display: flex; justify-content: space-between; color: var(--text-dim);">
+          <span>Опыт (EXP)</span>
+          <span id="profile-exp-text" style="font-weight: bold;">0 / 200</span>
+        </div>
+        <div class="level-bar" style="width: 100%; height: 10px; border-radius: 5px; margin-bottom: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(34,211,238,0.3);"><div class="level-progress" id="profile-progress-bar-large" style="border-radius: 5px; background-color: var(--accent-cyan);"></div></div>
+        
+        <div style="max-height: 250px; overflow-y: auto;">
+          <div id="profile-daily-btn" class="profile-action-btn">
+            <span style="font-size: 14px; font-weight: bold; color: var(--accent-cyan);">🎁 Ежедневные бонусы</span><span style="font-size: 12px; color: var(--text-dim);">Посмотреть ➔</span>
           </div>
-          <div class="app-icon" id="app-wheel-btn">
-            <div class="app-icon-inner" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">🎡</div>
-            <div class="app-label">Удача</div>
+          <div id="profile-wheel-btn" class="profile-action-btn">
+            <span style="font-size: 14px; font-weight: bold; color: #f43f5e;">🎡 Колесо Удачи</span><span style="font-size: 12px; color: var(--text-dim);">Крутить ➔</span>
           </div>
-          <div class="app-icon dev-btn">
-            <div class="app-icon-inner" style="background: linear-gradient(135deg, #f59e0b, #d97706);">📦</div>
-            <div class="app-label">Кейсы</div>
+          <div id="profile-friends-btn" class="profile-action-btn">
+            <span style="font-size: 14px; font-weight: bold; color: #a855f7;">👥 Мои Друзья</span><span style="font-size: 12px; color: var(--text-dim);">Пригласить ➔</span>
           </div>
-          <div class="app-icon" id="app-settings-btn">
-            <div class="app-icon-inner" style="background: linear-gradient(135deg, #64748b, #334155);">⚙️</div>
-            <div class="app-label">Настройки</div>
+          <div id="profile-promo-btn" class="profile-action-btn">
+            <span style="font-size: 14px; font-weight: bold; color: #10b981;">🎟️ Промокод</span><span style="font-size: 12px; color: var(--text-dim);">Ввести ➔</span>
           </div>
         </div>
-
-        <!-- Нижний DOCK -->
-        <div class="iphone-dock">
-          <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: #22c55e;">📞</div></div>
-          <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: #3b82f6;">🌐</div></div>
-          <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: #e2e8f0; color: #1e293b;">📷</div></div>
-        </div>
-
-        <!-- Приложения телефона -->
-        <div class="phone-app-screen" id="phone-app-map">
-          <div class="phone-app-header">Карта Города</div>
-          <div class="map-view">
-             <div class="map-bg"></div>
-             <div class="map-pin" id="map-pin-shop">🏍️<div class="pin-label">Мотосалон</div></div>
-          </div>
-          <div class="home-indicator"></div>
-        </div>
-
-        <div class="phone-app-screen" id="phone-app-shop" style="z-index: 35;">
-          <div class="phone-app-header" style="justify-content: space-between; padding-right: 15px;">
-            <div class="phone-back-btn" id="shop-back-btn" style="color: var(--accent-cyan);">‹ Карта</div>
-            <div>Мотосалон</div>
-          </div>
-          <div class="shop-tabs" id="shop-tabs"></div>
-          <div class="bike-list" id="bike-list"></div>
-          <div class="home-indicator"></div>
-        </div>
-
-        <div class="phone-app-screen" id="phone-app-settings">
-          <div class="phone-app-header">Настройки</div>
-          <div class="phone-app-content">
-            <div class="setting-row">Вибрация <div class="toggle-switch on" id="toggle-vibro"><div class="toggle-circle"></div></div></div>
-            <div class="setting-row">Светлая тема <div class="toggle-switch" id="toggle-theme"><div class="toggle-circle"></div></div></div>
-          </div>
-          <div class="home-indicator"></div>
-        </div>
-
-        <div class="phone-app-screen" id="phone-app-wheel">
-          <div class="phone-app-header">Колесо Удачи</div>
-          <div class="phone-app-content wheel-container">
-            <div class="wheel-pointer"></div>
-            <div class="wheel-circle" id="wheel-circle"><div class="wheel-center"></div></div>
-            <div style="font-size: 14px; margin-bottom: 15px; font-weight: bold;" id="wheel-timer">Готово к прокрутке!</div>
-            <button class="spin-btn" id="wheel-spin-btn">КРУТИТЬ</button>
-          </div>
-          <div class="home-indicator"></div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- МИССИИ -->
-    <div class="screen" id="screen-missions">
-      <div class="section-title">Задания</div>
-      <div class="missions-list" id="missions-list"></div>
-    </div>
-
-    <!-- КЛАН -->
-    <div class="screen" id="screen-clan">
-      <div class="clan-placeholder">
-        <div class="icon">👥</div>
-        <div class="title">Кланы в разработке</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Нижняя панель -->
-  <div class="nav-panel">
-    <div class="nav-item active" data-screen="garage"><div class="nav-item-icon">🔧</div><div class="nav-text-label">Гараж</div></div>
-    <div class="nav-item" data-screen="phone"><div class="nav-item-icon">📱</div><div class="nav-text-label">Телефон</div></div>
-    <div class="nav-item" data-screen="missions"><div class="nav-item-icon">🎯</div><div class="nav-text-label">Задания</div></div>
-    <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
-  </div>
-
-  <!-- ОВЕРЛЕИ РЕЖИМОВ ИГРЫ -->
-  <div id="mode-modal" class="custom-modal hidden">
-    <div class="modal-card">
-      <button id="mode-close-btn" class="profile-modal-close">✕</button>
-      <div class="modal-title" style="margin-bottom: 20px;">Выберите режим</div>
-      <div>
-        <button id="mode-stunt-btn" class="mode-btn mode-stunt">🏍️ Стант-заезд</button>
-        <button id="mode-race-btn" class="mode-btn mode-race">🏎️ Гонка 1x1 (Бот)</button>
-        <button id="mode-chase-btn" class="mode-btn mode-chase">🚓 Погоня (ДПС)</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="stunt-overlay" class="stunt-overlay hidden">
-    <div class="stunt-hud">
-      <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
-      <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
-      <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
-      <div class="stunt-hud-item">🪙 <span id="stunt-coins-preview">0</span></div>
-      <div class="stunt-hud-item" style="min-width: 30%;">🕒 <span id="stunt-clock">08:00</span></div>
-    </div>
-    <div class="stunt-scene" id="stunt-scene">
-      <div class="stunt-city-bg" id="stunt-city-bg"></div>
-      <div class="stunt-bike-wrap"><div class="stunt-bike" id="stunt-bike">🏍️</div><div class="stunt-spark-anchor" id="stunt-spark-anchor"></div></div>
-      <div class="stunt-road" id="stunt-road"></div>
-    </div>
-    <div class="stunt-controls">
-      <div class="stunt-zone brake" id="stunt-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
-      <div class="stunt-zone gas" id="stunt-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
-    </div>
-    <div class="stunt-result hidden" id="stunt-result">
-      <div class="stunt-result-card">
-        <div class="stunt-result-title" id="stunt-result-title">Заезд окончен!</div>
-        <div class="stunt-result-stats" id="stunt-result-stats"></div>
-        <button id="stunt-claim-btn" class="claim-btn">Забрать награду</button>
-      </div>
-    </div>
-    <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
-  </div>
-
-  <div id="race-overlay" class="stunt-overlay hidden">
-    <div class="stunt-hud">
-      <div class="stunt-hud-item" style="min-width: 100%; text-align: left; padding-left: 10px;">🏎️ <span id="race-speed">0</span> км/ч</div>
-      <div class="stunt-hud-item" style="color: var(--accent-cyan);">🏁 Вы: <span id="race-dist-player">0</span>/500м</div>
-      <div class="stunt-hud-item" style="color: #fca5a5;">🤖 Бот: <span id="race-dist-bot">0</span>/500м</div>
-    </div>
-    <div class="stunt-scene" id="race-scene">
-      <div class="stunt-city-bg" id="race-city-bg"></div>
-      <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 42%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
-        <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));" id="race-bike-bot">🏍️</div>
-      </div>
-      <div class="stunt-bike-wrap" id="race-player-wrap" style="left: 20%; z-index: 3;"><div class="stunt-bike" id="race-bike-player">🏍️</div></div>
-      <div class="stunt-road" id="race-road"></div>
-    </div>
-    <div class="stunt-controls">
-      <div class="stunt-zone brake" id="race-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
-      <div class="stunt-zone gas" id="race-gas"><div class="stunt-zone-icon">⚡</div><div class="stunt-zone-label">ГАЗ</div></div>
-    </div>
-    <div class="stunt-result hidden" id="race-result">
-      <div class="stunt-result-card">
-        <div class="stunt-result-title" id="race-result-title">Гонка окончена!</div>
-        <div class="stunt-result-stats" id="race-result-stats"></div>
-        <button id="race-claim-btn" class="claim-btn">Закрыть</button>
-      </div>
-    </div>
-    <button id="race-close-btn" class="stunt-close-btn">✕</button>
-  </div>
-
-  <div id="chase-overlay" class="stunt-overlay hidden">
-    <div class="stunt-hud" style="background: rgba(0,0,0,0.9);">
-      <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
-      <div class="stunt-hud-item" style="color: var(--accent-cyan); min-width: 40%;">Счет: <span id="chase-score">0</span></div>
-    </div>
-    <div class="stunt-scene" id="chase-scene" style="background-color: #0f172a; touch-action: none;">
-      <div class="stunt-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.4);"></div>
-      <div class="chase-road" id="chase-road">
-        <div class="chase-line" style="top: 33%;"></div>
-        <div class="chase-line" style="top: 66%;"></div>
-        <div class="chase-police" id="chase-police"><img src="pogonya1.gif" style="width: 170px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС"></div>
-        <div class="chase-player" id="chase-player">🏍️</div>
-        <div id="chase-obstacles-container"></div>
-      </div>
-      <div class="swipe-indicator"><div>СВАЙП ВВЕРХ / ВНИЗ</div><div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div></div>
-    </div>
-    <div class="stunt-result hidden" id="chase-result">
-      <div class="stunt-result-card" style="border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.6);">
-        <div class="stunt-result-title" style="color: #ef4444;">🚨 ПОЙМАЛИ!</div>
-        <div class="stunt-result-stats" id="chase-result-stats"></div>
-        <button id="chase-claim-btn" class="claim-btn" style="background: #ef4444; width: 100%;">Понятно</button>
-      </div>
-    </div>
-    <button id="chase-close-btn" class="stunt-close-btn">✕</button>
-  </div>
-
-  <!-- МОДАЛЬНЫЕ ОКНА ИНТЕРФЕЙСА -->
-  <div id="level-up-modal" class="custom-modal hidden">
-    <div class="modal-card">
-      <div class="modal-title">🎉 Поздравляем!</div>
-      <div class="modal-desc" id="level-up-desc">Вы достигли уровня!</div>
-      <button id="level-up-ok-btn" class="claim-btn" style="width: 100%;">Отлично!</button>
-    </div>
-  </div>
-
-  <div id="dev-modal" class="custom-modal hidden">
-    <div class="modal-card" style="border-color: #f59e0b; box-shadow: 0 0 25px rgba(245,158,11,0.6);">
-      <button id="dev-close-btn" class="profile-modal-close">✕</button>
-      <div class="modal-title" style="color: #f59e0b;">В разработке 🛠️</div>
-      <div class="modal-desc">Это приложение появится в будущих обновлениях!</div>
-      <button id="dev-ok-btn" class="claim-btn" style="width: 100%; background: #f59e0b; color: #1a1a1a;">Жду!</button>
-    </div>
-  </div>
-
-  <div id="profile-modal" class="custom-modal hidden">
-    <div class="modal-card" style="border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(34,211,238,0.4); padding: 15px;">
-      <button id="profile-close-btn" class="profile-modal-close">✕</button>
-      <div class="avatar-placeholder" id="profile-avatar-large" style="width: 60px; height: 60px; margin: 0 auto 10px; font-size: 20px; border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(34,211,238,0.5);">VIP</div>
-      <div class="modal-title" id="profile-nickname-large" style="font-size: 16px; margin-bottom: 2px;">RIDERNICK</div>
-      <div style="font-size: 14px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 20px;">Уровень <span id="profile-level-large">1</span></div>
-      
-      <div style="text-align: left; font-size: 11px; margin-bottom: 4px; display: flex; justify-content: space-between; color: var(--text-dim);">
-        <span>Опыт (EXP)</span>
-        <span id="profile-exp-text" style="font-weight: bold;">0 / 200</span>
-      </div>
-      <div class="level-bar" style="width: 100%; height: 10px; border-radius: 5px; margin-bottom: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(34,211,238,0.3);"><div class="level-progress" id="profile-progress-bar-large" style="border-radius: 5px; background-color: var(--accent-cyan);"></div></div>
-      
-      <div style="max-height: 250px; overflow-y: auto;">
-        <div id="profile-daily-btn" class="profile-action-btn">
-          <span style="font-size: 14px; font-weight: bold; color: var(--accent-cyan);">🎁 Ежедневные бонусы</span><span style="font-size: 12px; color: var(--text-dim);">Посмотреть ➔</span>
-        </div>
-        <div id="profile-wheel-btn" class="profile-action-btn">
-          <span style="font-size: 14px; font-weight: bold; color: #f43f5e;">🎡 Колесо Удачи</span><span style="font-size: 12px; color: var(--text-dim);">Крутить ➔</span>
-        </div>
-        <div id="profile-friends-btn" class="profile-action-btn">
-          <span style="font-size: 14px; font-weight: bold; color: #a855f7;">👥 Мои Друзья</span><span style="font-size: 12px; color: var(--text-dim);">Пригласить ➔</span>
-        </div>
-        <div id="profile-promo-btn" class="profile-action-btn">
-          <span style="font-size: 14px; font-weight: bold; color: #10b981;">🎟️ Промокод</span><span style="font-size: 12px; color: var(--text-dim);">Ввести ➔</span>
+        <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px; font-size: 12px; color: var(--text-dim); display: flex; justify-content: space-between; margin-top: 10px;">
+          <span>Всего тапов:</span><span id="profile-total-taps" style="color: var(--accent-orange); font-weight: bold;">0</span>
         </div>
       </div>
-      <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px; font-size: 12px; color: var(--text-dim); display: flex; justify-content: space-between; margin-top: 10px;">
-        <span>Всего тапов:</span><span id="profile-total-taps" style="color: var(--accent-orange); font-weight: bold;">0</span>
+    </div>
+
+    <div id="daily-bonus-modal" class="custom-modal hidden">
+      <div class="modal-card" style="max-width: 350px;">
+        <button id="daily-close-btn" class="profile-modal-close">✕</button>
+        <div class="modal-title">🎁 Ежедневный бонус!</div>
+        <div class="modal-desc" style="font-size: 12px;">Заходите каждый день, чтобы забирать награды!</div>
+        <div id="daily-bonus-grid" class="daily-bonus-grid"></div>
+        <button id="daily-bonus-claim-btn" class="claim-btn" style="width: 100%; font-size: 15px; padding: 12px;">Забрать бонус</button>
       </div>
     </div>
-  </div>
 
-  <div id="daily-bonus-modal" class="custom-modal hidden">
-    <div class="modal-card" style="max-width: 350px;">
-      <button id="daily-close-btn" class="profile-modal-close">✕</button>
-      <div class="modal-title">🎁 Ежедневный бонус!</div>
-      <div class="modal-desc" style="font-size: 12px;">Заходите каждый день, чтобы забирать награды!</div>
-      <div id="daily-bonus-grid" class="daily-bonus-grid"></div>
-      <button id="daily-bonus-claim-btn" class="claim-btn" style="width: 100%; font-size: 15px; padding: 12px;">Забрать бонус</button>
+    <div id="friends-modal" class="custom-modal hidden">
+      <div class="modal-card" style="border-color: #a855f7; box-shadow: 0 0 25px rgba(168,85,247,0.4);">
+        <button id="friends-close-btn" class="profile-modal-close">✕</button>
+        <div class="modal-title" style="color: #a855f7;">👥 Друзья</div>
+        <div class="modal-desc" style="font-size: 12px;">Приглашайте друзей и получайте <b>5%</b> от всех их заработанных монет и опыта навсегда!</div>
+        <button id="friends-invite-btn" class="claim-btn" style="width: 100%; background: #a855f7; color: #fff; margin-bottom: 15px;">🔗 Скопировать ссылку</button>
+        <div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 10px; color: var(--accent-cyan);">Список рефералов:</div>
+        <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 15px; font-size: 12px; color: var(--text-dim);">У вас пока нет приглашенных друзей.</div>
+      </div>
     </div>
-  </div>
 
-  <div id="friends-modal" class="custom-modal hidden">
-    <div class="modal-card" style="border-color: #a855f7; box-shadow: 0 0 25px rgba(168,85,247,0.4);">
-      <button id="friends-close-btn" class="profile-modal-close">✕</button>
-      <div class="modal-title" style="color: #a855f7;">👥 Друзья</div>
-      <div class="modal-desc" style="font-size: 12px;">Приглашайте друзей и получайте <b>5%</b> от всех их заработанных монет и опыта навсегда!</div>
-      <button id="friends-invite-btn" class="claim-btn" style="width: 100%; background: #a855f7; color: #fff; margin-bottom: 15px;">🔗 Скопировать ссылку</button>
-      <div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 10px; color: var(--accent-cyan);">Список рефералов:</div>
-      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 15px; font-size: 12px; color: var(--text-dim);">У вас пока нет приглашенных друзей.</div>
+    <div id="promo-modal" class="custom-modal hidden">
+      <div class="modal-card" style="border-color: #10b981; box-shadow: 0 0 25px rgba(16,185,129,0.4);">
+        <button id="promo-close-btn" class="profile-modal-close">✕</button>
+        <div class="modal-title" style="color: #10b981;">🎟️ Промокод</div>
+        <div class="modal-desc" style="font-size: 12px;">Введите секретный промокод, чтобы получить награду.</div>
+        <input type="text" id="promo-input" class="input-field" placeholder="ВВЕДИТЕ КОД" maxlength="15">
+        <button id="promo-apply-btn" class="claim-btn" style="width: 100%; background: #10b981; color: #fff;">Применить</button>
+      </div>
     </div>
-  </div>
 
-  <div id="promo-modal" class="custom-modal hidden">
-    <div class="modal-card" style="border-color: #10b981; box-shadow: 0 0 25px rgba(16,185,129,0.4);">
-      <button id="promo-close-btn" class="profile-modal-close">✕</button>
-      <div class="modal-title" style="color: #10b981;">🎟️ Промокод</div>
-      <div class="modal-desc" style="font-size: 12px;">Введите секретный промокод, чтобы получить награду.</div>
-      <input type="text" id="promo-input" class="input-field" placeholder="ВВЕДИТЕ КОД" maxlength="15">
-      <button id="promo-apply-btn" class="claim-btn" style="width: 100%; background: #10b981; color: #fff;">Применить</button>
-    </div>
-  </div>
-
-</div>
+  </div> <!-- КОНЕЦ APP-CONTAINER -->
+</div> <!-- КОНЕЦ DESKTOP WRAPPER -->
 
 <script>
 // --- STATE & SETTINGS ---
 const SAVE_KEY = 'motoTapalkaSave';
-function defaultState() { return { coins: 500, totalTaps: 0, level: 1, exp: 0, ownedBikeIds: [], activeBikeId: 'starter', tuning: {}, claimedMissions: {}, lastBonusDate: null, loginStreak: 0, vibration: true, theme: 'dark', lastWheelTime: 0, usedPromos: [] }; }
+function defaultState() { return { coins: 500, totalTaps: 0, level: 1, exp: 0, ownedBikeIds: [], activeBikeId: 'starter', claimedMissions: {}, lastBonusDate: null, loginStreak: 0, vibration: true, theme: 'dark', lastWheelTime: 0, usedPromos: [] }; }
 function loadState() {
   const def = defaultState();
   try {
@@ -587,10 +596,9 @@ function loadState() {
       coins: typeof parsed.coins === 'number' ? parsed.coins : def.coins, totalTaps: typeof parsed.totalTaps === 'number' ? parsed.totalTaps : def.totalTaps, 
       level: typeof parsed.level === 'number' ? parsed.level : def.level, exp: typeof parsed.exp === 'number' ? parsed.exp : def.exp, 
       ownedBikeIds: Array.isArray(parsed.ownedBikeIds) ? parsed.ownedBikeIds : def.ownedBikeIds, activeBikeId: parsed.activeBikeId || def.activeBikeId, 
-      tuning: parsed.tuning || def.tuning, claimedMissions: parsed.claimedMissions || def.claimedMissions,
-      lastBonusDate: parsed.lastBonusDate || def.lastBonusDate, loginStreak: typeof parsed.loginStreak === 'number' ? parsed.loginStreak : def.loginStreak,
-      vibration: parsed.vibration !== undefined ? parsed.vibration : def.vibration, theme: parsed.theme || def.theme,
-      lastWheelTime: parsed.lastWheelTime || def.lastWheelTime, usedPromos: parsed.usedPromos || def.usedPromos
+      claimedMissions: parsed.claimedMissions || def.claimedMissions, lastBonusDate: parsed.lastBonusDate || def.lastBonusDate, 
+      loginStreak: typeof parsed.loginStreak === 'number' ? parsed.loginStreak : def.loginStreak, vibration: parsed.vibration !== undefined ? parsed.vibration : def.vibration, 
+      theme: parsed.theme || def.theme, lastWheelTime: parsed.lastWheelTime || def.lastWheelTime, usedPromos: parsed.usedPromos || def.usedPromos
     };
   } catch (e) { return def; }
 }
@@ -730,7 +738,7 @@ document.getElementById('profile-daily-btn').addEventListener('click', () => {
   } else { showDailyBonusModal(state.loginStreak === 0 ? 1 : state.loginStreak, false); }
 });
 
-// Кнопка Друзья
+// Друзья
 document.getElementById('profile-friends-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('friends-modal').classList.remove('hidden'); });
 document.getElementById('friends-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('friends-modal').classList.add('hidden'); });
 document.getElementById('friends-invite-btn').addEventListener('click', () => {
@@ -739,7 +747,7 @@ document.getElementById('friends-invite-btn').addEventListener('click', () => {
   navigator.clipboard.writeText(botLink).then(() => { const btn = document.getElementById('friends-invite-btn'); btn.innerText = "✅ Ссылка скопирована!"; setTimeout(() => btn.innerText = "🔗 Скопировать ссылку", 2000); });
 });
 
-// Кнопка Промокод
+// Промокод
 document.getElementById('profile-promo-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('promo-modal').classList.remove('hidden'); });
 document.getElementById('promo-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('promo-modal').classList.add('hidden'); });
 document.getElementById('promo-apply-btn').addEventListener('click', () => {
@@ -751,7 +759,7 @@ document.getElementById('promo-apply-btn').addEventListener('click', () => {
   } else { playSound('error'); alert("Неверный или устаревший промокод."); }
 });
 
-// Колесо удачи (Кнопка из профиля)
+// Колесо
 document.getElementById('profile-wheel-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.querySelector('.nav-item[data-screen="phone"]').click(); document.getElementById('app-wheel-btn').click(); });
 
 function renderGarage() {
