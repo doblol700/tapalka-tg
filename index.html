@@ -24,21 +24,23 @@
 
   * { box-sizing: border-box; }
 
-  /* ЦЕНТРИРОВАНИЕ ДЛЯ ПК */
+  /* --- БРОНЕБОЙНОЕ ЦЕНТРИРОВАНИЕ ДЛЯ ПК (ABSOLUTE) --- */
   html, body {
-    margin: 0; padding: 0; width: 100%; height: 100%;
+    margin: 0; padding: 0; width: 100vw; height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
-    display: flex; justify-content: center; align-items: center; transition: background-color 0.3s, color 0.3s;
+    position: relative; display: block; /* Никаких flex на уровне body! */
+    transition: background-color 0.3s, color 0.3s;
   }
 
-  /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА */
+  /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА ПО ЦЕНТРУ */
   #app-container {
-    width: 100%; height: 100%; max-width: 480px; position: relative;
+    width: 100%; height: 100%; max-width: 480px; 
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
-    box-shadow: 0 0 40px rgba(0,0,0,1); overflow: hidden;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9); overflow: hidden;
   }
   body.light-theme #app-container { background-image: none; background-color: #f1f5f9; }
 
@@ -97,7 +99,7 @@
     cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.5); transition: background 0.3s;
   }
   .home-indicator:active { background: #9ca3af; transform: translateX(-50%) scale(0.95); }
-  body.light-theme .phone-app-screen .home-indicator { background: #000; } /* Черная полоска в светлых приложениях */
+  body.light-theme .phone-app-screen .home-indicator { background: #000; }
 
   .dynamic-island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 110px; height: 30px; background: #000; border-radius: 15px; z-index: 40; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
   .island-cam { width: 12px; height: 12px; border-radius: 50%; background: #111; box-shadow: inset 0 0 2px rgba(255,255,255,0.2); }
@@ -145,7 +147,7 @@
   .map-bg { position: absolute; inset: 0; background-color: #e5e5e5; background-image: linear-gradient(45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%); background-size: 60px 60px; opacity: 0.7; }
   .map-pin { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.5); border: 2px solid white; animation: bouncePin 2s infinite; z-index: 10; }
   @keyframes bouncePin { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, -60%); } }
-  .pin-label { position: absolute; top: -30px; background: rgba(0,0,0,0.8); font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-weight: bold; }
+  .pin-label { position: absolute; top: -30px; background: rgba(0,0,0,0.8); font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-weight: bold; color: white; }
 
   /* SHOP VIEW APP */
   .shop-tabs { display: flex; gap: 6px; padding: 10px 12px 4px; flex-shrink: 0; overflow-x: auto; background: var(--bg-color); }
@@ -166,6 +168,20 @@
   .bike-btn.selected { background: #2d3748; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
 
 
+  /* --- MISSIONS & CLAN --- */
+  .missions-list { padding: 10px 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .mission-card { background: var(--card-bg); border: 1px solid rgba(34,211,238,0.35); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+  .mission-info { flex-grow: 1; }
+  .mission-name { font-size: 13px; font-weight: bold; }
+  .mission-progress { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+  .mission-reward { font-size: 12px; color: var(--accent-orange); margin-top: 3px; font-weight: bold; }
+  .claim-btn { border: none; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: bold; cursor: pointer; flex-shrink: 0; background: var(--accent-orange); color: #1a1a1a; }
+  .claim-btn:disabled { background: #4a5568; color: #8a97a8; }
+  .claim-btn.done { background: #2d3748; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+  .clan-placeholder { margin: auto; text-align: center; padding: 30px; color: var(--text-dim); }
+  .clan-placeholder .icon { font-size: 48px; margin-bottom: 10px; }
+  .clan-placeholder .title { font-size: 16px; color: var(--text-color); font-weight: bold; margin-bottom: 6px; }
+
   /* --- NAV PANEL --- */
   .nav-panel { display: flex; justify-content: space-around; padding: 10px 5px; background: var(--ui-bg); border-top: 2px solid var(--accent-cyan); box-shadow: var(--glow); flex-shrink: 0; z-index: 10; transition: background 0.3s; }
   .nav-item { text-align: center; cursor: pointer; color: var(--accent-cyan); opacity: 0.6; transition: opacity 0.2s, transform 0.1s; flex: 1; }
@@ -179,6 +195,7 @@
   .start-stunt-wrap { padding: 4px 12px 18px; margin-top: auto; }
   .start-stunt-btn { width: 100%; padding: 14px 10px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; font-size: 15px; font-weight: bold; letter-spacing: 0.5px; cursor: pointer; box-shadow: 0 0 16px rgba(249,115,22,0.5); transition: transform 0.1s; }
   .start-stunt-btn:active { transform: scale(0.97); }
+  
   .mode-btn { width: 100%; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; margin-bottom: 10px; transition: transform 0.1s; }
   .mode-btn:active { transform: scale(0.97); }
   .mode-stunt { background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; }
@@ -191,6 +208,7 @@
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: var(--sky-color, #4ca1af); transition: background-color 2s ease; }
+  
   .stunt-city-bg { position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; background-image: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); background-size: 100% 100%, 120px 100%; background-position: bottom; z-index: 1; filter: brightness(var(--city-bright, 1)); transition: filter 2s ease; }
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; transition: transform 0.05s linear; }
@@ -222,7 +240,7 @@
   .chase-obstacle { position: absolute; width: 50px; height: 50px; z-index: 3; display: flex; align-items: center; justify-content: center; font-size: 40px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); }
   .swipe-indicator { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 24px; font-weight: bold; pointer-events: none; text-align: center; }
 
-  /* --- МОДАЛЬНЫЕ ОКНА --- */
+  /* --- МОДАЛЬНЫЕ ОКНА (АБСОЛЮТ) --- */
   .custom-modal { position: absolute; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
   .custom-modal.hidden { display: none; }
   .modal-card { background: var(--card-bg); border: 2px solid var(--accent-orange); border-radius: 16px; padding: 24px; text-align: center; width: 82%; max-width: 320px; box-shadow: 0 0 25px rgba(249,115,22,0.6); position: relative; }
@@ -248,6 +266,7 @@
 </head>
 <body>
 
+<!-- КОНТЕНТ СТРОГО ВНУТРИ APP-CONTAINER (ЗАФИКСИРОВАН ПО ЦЕНТРУ ЧЕРЕЗ АБСОЛЮТ) -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
@@ -392,7 +411,7 @@
     <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
   </div>
 
-  <!-- МОДАЛЬНЫЕ ОКНА -->
+  <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА РЕЖИМА -->
   <div id="mode-modal" class="custom-modal hidden">
     <div class="modal-card">
       <button id="mode-close-btn" class="profile-modal-close">✕</button>
@@ -602,7 +621,6 @@ function loadState() {
 let state = loadState();
 function saveState() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {} }
 
-// Apply theme on load
 if (state.theme === 'light') { document.body.classList.add('light-theme'); document.getElementById('toggle-theme').classList.add('on'); }
 if (!state.vibration) { document.getElementById('toggle-vibro').classList.remove('on'); }
 
@@ -616,9 +634,7 @@ function haptic(type = 'light') {
       if(type==='medium') window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
       if(type==='heavy') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
       if(type==='success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-    } else if (navigator.vibrate) {
-      navigator.vibrate(type === 'heavy' ? 50 : 20);
-    }
+    } else if (navigator.vibrate) { navigator.vibrate(type === 'heavy' ? 50 : 20); }
   } catch(e) {}
 }
 
@@ -627,7 +643,6 @@ function playSound(type) {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const now = audioCtx.currentTime;
-
     if (type === 'tap') {
       haptic('light');
       const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(100, now + 0.03); gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.03);
@@ -661,15 +676,13 @@ const BIKE_CATALOG = {
   motocross: { label: 'Кросс', emoji: '🏁', bikes: [ { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156' } ]}
 };
 const STARTER_BIKE = BIKE_CATALOG.scooter.bikes[0];
-const TUNING_TYPES = [ { id: 'engine', name: 'Двигатель', icon: '⚙️', baseCost: 400, costMult: 1.6, powerPerLevel: 3, maxLevel: 10 }, { id: 'exhaust', name: 'Выхлоп', icon: '🔥', baseCost: 300, costMult: 1.55, powerPerLevel: 2, maxLevel: 10 } ];
 const MISSIONS = [ { id: 'taps50', name: 'Сделать 50 тапов', reward: 300, type: 'taps', target: 50 } ];
 const LEVEL_REQUIREMENTS = { 2: { exp: 200, reward: 1000 }, 3: { exp: 300, reward: 1000 }, 4: { exp: 450, reward: 1000 }, 5: { exp: 700, reward: 3000 }, 6: { exp: 1000, reward: 1500 }, 7: { exp: 1400, reward: 1500 }, 8: { exp: 1900, reward: 1500 }, 9: { exp: 2500, reward: 1500 }, 10: { exp: 3300, reward: 5000 }, 11: { exp: 4300, reward: 2500 }, 12: { exp: 5500, reward: 2500 }, 13: { exp: 7000, reward: 2500 }, 14: { exp: 8800, reward: 2500 }, 15: { exp: 11000, reward: 7500 } };
 const DAILY_REWARDS = [ { day: 1, coins: 1500, exp: 75 }, { day: 2, coins: 2500, exp: 150 }, { day: 3, coins: 3500, exp: 300 }, { day: 4, coins: 5000, exp: 500 }, { day: 5, coins: 7500, exp: 800 }, { day: 6, coins: 10000, exp: 1000 }, { day: 7, coins: 15000, exp: 1500 } ];
 
 function findBikeById(id) { if (id === 'starter') return STARTER_BIKE; for (const cat of Object.values(BIKE_CATALOG)) { const f = cat.bikes.find(b => b.id === id); if (f) return f; } return STARTER_BIKE; }
 function activeBike() { return findBikeById(state.activeBikeId); }
-function tuningCost(type, level) { return Math.round(type.baseCost * Math.pow(type.costMult, level)); }
-function perTapValue() { let v = activeBike().power || 1; return v; } // Тюнинг убрали из влияния, т.к. вкладку убрали
+function perTapValue() { return activeBike().power || 1; }
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
 
 function addExp(amount) { state.exp += amount; checkLevelUp(); saveState(); renderTop(); }
@@ -690,7 +703,7 @@ function renderTop() {
   document.getElementById('level-progress-bar').style.width = p + '%';
 }
 
-// --- ЕЖЕДНЕВНЫЙ БОНУС ---
+// ЕЖЕДНЕВНЫЙ БОНУС
 let pendingStreak = 1;
 function checkDailyBonus() {
   const now = new Date(); const todayDateStr = now.toDateString(); const lastDateStr = state.lastBonusDate;
@@ -716,11 +729,11 @@ function showDailyBonusModal(displayStreak, canClaim) {
 document.getElementById('daily-bonus-claim-btn').addEventListener('click', () => {
   playSound('reward');
   state.loginStreak = pendingStreak; const reward = DAILY_REWARDS[state.loginStreak - 1]; state.coins += reward.coins; if (reward.exp > 0) addExp(reward.exp);
-  state.lastBonusDate = new Date().toDateString(); saveState(); renderTop(); document.getElementById('daily-bonus-modal').classList.add('hidden');
+  state.lastBonusDate = new Date().toDateString(); saveState(); renderTop(); renderGarage(); document.getElementById('daily-bonus-modal').classList.add('hidden');
 });
 document.getElementById('daily-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('daily-bonus-modal').classList.add('hidden'); });
 
-// --- ПРОФИЛЬ (Меню, Друзья, Промокод) ---
+// ПРОФИЛЬ
 const profileModal = document.getElementById('profile-modal');
 document.getElementById('user-profile-btn').addEventListener('click', () => {
   playSound('click');
@@ -744,26 +757,19 @@ document.getElementById('profile-daily-btn').addEventListener('click', () => {
 });
 
 // Кнопка Друзья
-document.getElementById('profile-friends-btn').addEventListener('click', () => {
-  playSound('click'); profileModal.classList.add('hidden');
-  document.getElementById('friends-modal').classList.remove('hidden');
-});
+document.getElementById('profile-friends-btn').addEventListener('click', () => { playSound('click'); profileModal.classList.add('hidden'); document.getElementById('friends-modal').classList.remove('hidden'); });
 document.getElementById('friends-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('friends-modal').classList.add('hidden'); });
 document.getElementById('friends-invite-btn').addEventListener('click', () => {
   playSound('click');
   const botLink = "https://t.me/MotoTapalkaBot?start=ref12345";
   navigator.clipboard.writeText(botLink).then(() => {
     const btn = document.getElementById('friends-invite-btn');
-    btn.innerText = "✅ Ссылка скопирована!";
-    setTimeout(() => btn.innerText = "🔗 Скопировать ссылку", 2000);
+    btn.innerText = "✅ Ссылка скопирована!"; setTimeout(() => btn.innerText = "🔗 Скопировать ссылку", 2000);
   });
 });
 
 // Кнопка Промокод
-document.getElementById('profile-promo-btn').addEventListener('click', () => {
-  playSound('click'); profileModal.classList.add('hidden');
-  document.getElementById('promo-modal').classList.remove('hidden');
-});
+document.getElementById('profile-promo-btn').addEventListener('click', () => { playSound('click'); profileModal.classList.add('hidden'); document.getElementById('promo-modal').classList.remove('hidden'); });
 document.getElementById('promo-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('promo-modal').classList.add('hidden'); });
 document.getElementById('promo-apply-btn').addEventListener('click', () => {
   const code = document.getElementById('promo-input').value.toUpperCase().trim();
@@ -775,11 +781,7 @@ document.getElementById('promo-apply-btn').addEventListener('click', () => {
 });
 
 // Колесо удачи (Кнопка из профиля)
-document.getElementById('profile-wheel-btn').addEventListener('click', () => {
-  playSound('click'); profileModal.classList.add('hidden');
-  document.querySelector('.nav-item[data-screen="phone"]').click();
-  document.getElementById('app-wheel-btn').click();
-});
+document.getElementById('profile-wheel-btn').addEventListener('click', () => { playSound('click'); profileModal.classList.add('hidden'); document.querySelector('.nav-item[data-screen="phone"]').click(); document.getElementById('app-wheel-btn').click(); });
 
 function renderGarage() {
   const bike = activeBike(); document.getElementById('active-bike-name').innerText = bike.name; document.getElementById('points-display').innerText = fmt(state.coins) + ' pts'; document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
@@ -789,107 +791,57 @@ function renderGarage() {
 
 // --- ЛОГИКА ТЕЛЕФОНА И ПРИЛОЖЕНИЙ ---
 const phoneApps = document.querySelectorAll('.phone-app-screen');
-// Home Indicator (Закрыть приложение)
-document.querySelectorAll('.home-indicator').forEach(ind => {
-  ind.addEventListener('click', () => { playSound('click'); phoneApps.forEach(app => app.classList.remove('active')); });
-});
-// Кнопки Назад (Запасной вариант)
+document.querySelectorAll('.home-indicator').forEach(ind => { ind.addEventListener('click', () => { playSound('click'); phoneApps.forEach(app => app.classList.remove('active')); }); });
 document.getElementById('map-back-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-map').classList.remove('active'); });
 document.getElementById('shop-back-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-shop').classList.remove('active'); });
 
-// Настройки
 document.getElementById('app-settings-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-settings').classList.add('active'); });
-document.getElementById('toggle-vibro').addEventListener('click', (e) => {
-  playSound('click');
-  state.vibration = !state.vibration; saveState();
-  e.currentTarget.classList.toggle('on', state.vibration);
-});
+document.getElementById('toggle-vibro').addEventListener('click', (e) => { playSound('click'); state.vibration = !state.vibration; saveState(); e.currentTarget.classList.toggle('on', state.vibration); });
 document.getElementById('toggle-theme').addEventListener('click', (e) => {
   playSound('click');
-  if(state.theme === 'dark') { state.theme = 'light'; document.body.classList.add('light-theme'); e.currentTarget.classList.add('on'); }
-  else { state.theme = 'dark'; document.body.classList.remove('light-theme'); e.currentTarget.classList.remove('on'); }
+  if(state.theme === 'dark') { state.theme = 'light'; document.body.classList.add('light-theme'); e.currentTarget.classList.add('on'); } else { state.theme = 'dark'; document.body.classList.remove('light-theme'); e.currentTarget.classList.remove('on'); }
   saveState();
 });
 
-// Карта и Магазин
 document.getElementById('app-map-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-map').classList.add('active'); });
 document.getElementById('map-pin-shop').addEventListener('click', () => { playSound('click'); renderShopTabs(); document.getElementById('phone-app-shop').classList.add('active'); });
 
-// Колесо удачи
-document.getElementById('app-wheel-btn').addEventListener('click', () => { 
-  playSound('click'); 
-  updateWheelTimer();
-  document.getElementById('phone-app-wheel').classList.add('active'); 
-});
-
+document.getElementById('app-wheel-btn').addEventListener('click', () => { playSound('click'); updateWheelTimer(); document.getElementById('phone-app-wheel').classList.add('active'); });
 let wheelTimerInterval;
 function updateWheelTimer() {
-  const btn = document.getElementById('wheel-spin-btn');
-  const txt = document.getElementById('wheel-timer');
-  clearInterval(wheelTimerInterval);
-  
+  const btn = document.getElementById('wheel-spin-btn'); const txt = document.getElementById('wheel-timer'); clearInterval(wheelTimerInterval);
   const checkTime = () => {
-    const now = Date.now();
-    const diff = (state.lastWheelTime + (4 * 60 * 60 * 1000)) - now;
-    if (diff <= 0) {
-      btn.disabled = false; btn.innerText = "КРУТИТЬ"; txt.innerText = "Готово к прокрутке!";
-      clearInterval(wheelTimerInterval);
-    } else {
-      btn.disabled = true; btn.innerText = "ОЖИДАНИЕ";
-      let h = Math.floor(diff / (1000 * 60 * 60)); let m = Math.floor((diff / (1000 * 60)) % 60); let s = Math.floor((diff / 1000) % 60);
-      txt.innerText = `Следующая прокрутка через: ${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-    }
+    const now = Date.now(); const diff = (state.lastWheelTime + (4 * 60 * 60 * 1000)) - now;
+    if (diff <= 0) { btn.disabled = false; btn.innerText = "КРУТИТЬ"; txt.innerText = "Готово к прокрутке!"; clearInterval(wheelTimerInterval); } 
+    else { btn.disabled = true; btn.innerText = "ОЖИДАНИЕ"; let h = Math.floor(diff / (1000 * 60 * 60)); let m = Math.floor((diff / (1000 * 60)) % 60); let s = Math.floor((diff / 1000) % 60); txt.innerText = `Следующая прокрутка через: ${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
   };
-  checkTime();
-  wheelTimerInterval = setInterval(checkTime, 1000);
+  checkTime(); wheelTimerInterval = setInterval(checkTime, 1000);
 }
 
 document.getElementById('wheel-spin-btn').addEventListener('click', () => {
-  const circle = document.getElementById('wheel-circle');
-  const btn = document.getElementById('wheel-spin-btn');
-  if (btn.disabled) return;
-  playSound('click');
-  btn.disabled = true;
-  
-  // Крутим колесо
-  let currentRotation = parseInt(circle.dataset.rot || '0');
-  let extraSpins = 360 * 5; // 5 полных оборотов
-  let randomAngle = Math.floor(Math.random() * 360);
-  let finalRotation = currentRotation + extraSpins + randomAngle;
-  
-  circle.style.transform = `rotate(${finalRotation}deg)`;
-  circle.dataset.rot = finalRotation;
-  
-  // Ждем конец анимации (4 секунды)
+  const circle = document.getElementById('wheel-circle'); const btn = document.getElementById('wheel-spin-btn');
+  if (btn.disabled) return; playSound('click'); btn.disabled = true;
+  let currentRotation = parseInt(circle.dataset.rot || '0'); let extraSpins = 360 * 5; let randomAngle = Math.floor(Math.random() * 360); let finalRotation = currentRotation + extraSpins + randomAngle;
+  circle.style.transform = `rotate(${finalRotation}deg)`; circle.dataset.rot = finalRotation;
   setTimeout(() => {
     playSound('reward');
     let prizes = [ {t: 'coins', v: 1000, n: '1000 Монет'}, {t: 'coins', v: 5000, n: '5000 Монет'}, {t: 'exp', v: 50, n: '50 Опыта'}, {t: 'exp', v: 200, n: '200 Опыта'} ];
     let prize = prizes[Math.floor(Math.random() * prizes.length)];
     if(prize.t === 'coins') state.coins += prize.v; else addExp(prize.v);
-    
-    state.lastWheelTime = Date.now(); saveState(); renderTop();
-    alert(`🎉 Вы выиграли: ${prize.n}!`);
-    updateWheelTimer();
+    state.lastWheelTime = Date.now(); saveState(); renderTop(); alert(`🎉 Вы выиграли: ${prize.n}!`); updateWheelTimer();
   }, 4000);
 });
 
-
-// Кнопки "В разработке"
-document.querySelectorAll('.dev-btn').forEach(btn => {
-  btn.addEventListener('click', () => { playSound('click'); document.getElementById('dev-modal').classList.remove('hidden'); });
-});
+document.querySelectorAll('.dev-btn').forEach(btn => { btn.addEventListener('click', () => { playSound('click'); document.getElementById('dev-modal').classList.remove('hidden'); }); });
 document.getElementById('dev-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('dev-modal').classList.add('hidden'); });
 document.getElementById('dev-ok-btn').addEventListener('click', () => { playSound('click'); document.getElementById('dev-modal').classList.add('hidden'); });
-
 
 let activeShopTab = 'scooter';
 function renderShopTabs() { 
   const tabsEl = document.getElementById('shop-tabs'); tabsEl.innerHTML = ''; 
   Object.keys(BIKE_CATALOG).forEach(key => { 
     const cat = BIKE_CATALOG[key]; const tab = document.createElement('div'); tab.className = 'shop-tab' + (key === activeShopTab ? ' active' : ''); 
-    tab.innerText = cat.label; 
-    tab.addEventListener('click', () => { playSound('click'); activeShopTab = key; renderShopTabs(); renderBikeList(); }); 
-    tabsEl.appendChild(tab); 
+    tab.innerText = cat.label; tab.addEventListener('click', () => { playSound('click'); activeShopTab = key; renderShopTabs(); renderBikeList(); }); tabsEl.appendChild(tab); 
   }); 
   renderBikeList();
 }
@@ -947,10 +899,7 @@ function initTelegramUser() {
   try { const tg = window.Telegram && window.Telegram.WebApp; if (!tg) return; tg.ready(); tg.expand(); const user = tg.initDataUnsafe && tg.initDataUnsafe.user; if (!user) return; document.getElementById('user-nickname').innerText = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' '); const avatarEl = document.getElementById('avatar-placeholder'); if (user.photo_url) avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`; else avatarEl.innerText = (user.first_name ? user.first_name[0] : (user.username ? user.username[0].toUpperCase() : 'R')); } catch (e) {}
 }
 
-setInterval(() => {
-  const d = new Date(); const timeEl = document.getElementById('iphone-time');
-  if (timeEl) timeEl.innerText = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
-}, 1000);
+setInterval(() => { const d = new Date(); const timeEl = document.getElementById('iphone-time'); if (timeEl) timeEl.innerText = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0'); }, 1000);
 
 // --- ЛОГИКА МЕНЮ ВЫБОРА РЕЖИМА ---
 document.getElementById('main-start-btn').addEventListener('click', () => { playSound('click'); document.getElementById('mode-modal').classList.remove('hidden'); });
@@ -1168,5 +1117,3 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
-
-```
