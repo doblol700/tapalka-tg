@@ -24,23 +24,23 @@
 
   * { box-sizing: border-box; }
 
-  /* --- БРОНЕБОЙНОЕ ЦЕНТРИРОВАНИЕ ДЛЯ ПК (ABSOLUTE) --- */
+  /* --- ЖЕЛЕЗОБЕТОННОЕ ЦЕНТРИРОВАНИЕ ДЛЯ ПК --- */
   html, body {
-    margin: 0; padding: 0; width: 100vw; height: 100vh;
+    margin: 0; padding: 0; width: 100%; height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
-    position: relative; display: block; /* Никаких flex на уровне body! */
+    display: block; /* Никаких Flexbox на уровне body, чтобы Telegram Desktop не ломал рамки! */
     transition: background-color 0.3s, color 0.3s;
   }
 
   /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА ПО ЦЕНТРУ */
   #app-container {
-    width: 100%; height: 100%; max-width: 480px; 
-    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    margin: 0 auto; /* Строгое выравнивание по центру */
+    width: 100%; height: 100%; max-width: 480px; position: relative;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
-    box-shadow: 0 0 50px rgba(0,0,0,0.9); overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,1); overflow: hidden;
   }
   body.light-theme #app-container { background-image: none; background-color: #f1f5f9; }
 
@@ -78,7 +78,7 @@
   .floating-bonus { position: absolute; font-size: 22px; font-weight: bold; color: var(--accent-orange); z-index: 4; pointer-events: none; animation: floatUp 0.8s ease-out forwards; text-shadow: 0 0 5px #000; }
   @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-70px); } }
 
-  /* --- IPHONE 18 PRO --- */
+  /* --- IPHONE 18 PRO SCREEN --- */
   .iphone-frame {
     width: 90%; max-width: 360px; height: 90%; margin: auto;
     background: var(--phone-bg) center/cover;
@@ -87,12 +87,11 @@
     position: relative; overflow: hidden; display: flex; flex-direction: column;
     transition: background 0.5s;
   }
-  
   .iphone-status-bar { position: absolute; top: 12px; left: 0; right: 0; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600; font-size: 13px; z-index: 45; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
   .iphone-time { font-size: 14px; letter-spacing: 0.5px; }
   .iphone-icons { display: flex; gap: 5px; font-size: 13px; }
 
-  /* Home Indicator (ПОЛОСКА) */
+  /* Home Indicator (ПОЛОСКА ВНИЗУ ТЕЛЕФОНА) */
   .home-indicator {
     position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
     width: 130px; height: 5px; background: #fff; border-radius: 10px; z-index: 50;
@@ -111,17 +110,13 @@
   .app-icon-inner { width: 55px; height: 55px; border-radius: 14px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
   .app-label { font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); margin-top: 5px; font-weight: 500; text-align: center; }
   
-  /* Нижний Dock */
+  /* Нижний Dock iPhone */
   .iphone-dock { position: absolute; bottom: 25px; left: 15px; right: 15px; height: 75px; background: rgba(255,255,255,0.25); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 28px; display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 5; }
   .iphone-dock .app-label { display: none; }
   .iphone-dock .app-icon-inner { width: 50px; height: 50px; }
 
   /* PHONE APPS OVERLAYS */
-  .phone-app-screen {
-    position: absolute; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 30;
-    display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-    overflow: hidden;
-  }
+  .phone-app-screen { position: absolute; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 30; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); overflow: hidden; }
   .phone-app-screen.active { transform: translateY(0); }
   .phone-app-header { height: 85px; padding-top: 45px; background: var(--ui-bg); display: flex; align-items: center; padding-left: 15px; border-bottom: 1px solid var(--accent-cyan); font-weight: bold; font-size: 18px; flex-shrink: 0; }
   .phone-app-content { flex-grow: 1; padding: 20px; overflow-y: auto; }
@@ -142,14 +137,13 @@
   .spin-btn:active { transform: scale(0.95); }
   .spin-btn:disabled { background: #4a5568; box-shadow: none; color: #cbd5e1; cursor: default; }
 
-  /* MAP VIEW APP */
+  /* Карта и Салон (Внутри телефона) */
   .map-view { flex-grow: 1; position: relative; overflow: hidden; background-color: #d1d5db; }
   .map-bg { position: absolute; inset: 0; background-color: #e5e5e5; background-image: linear-gradient(45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%); background-size: 60px 60px; opacity: 0.7; }
   .map-pin { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.5); border: 2px solid white; animation: bouncePin 2s infinite; z-index: 10; }
   @keyframes bouncePin { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, -60%); } }
-  .pin-label { position: absolute; top: -30px; background: rgba(0,0,0,0.8); font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-weight: bold; color: white; }
+  .pin-label { position: absolute; top: -30px; background: rgba(0,0,0,0.8); font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-weight: bold; color: white;}
 
-  /* SHOP VIEW APP */
   .shop-tabs { display: flex; gap: 6px; padding: 10px 12px 4px; flex-shrink: 0; overflow-x: auto; background: var(--bg-color); }
   .shop-tab { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(34,211,238,0.35); background: var(--card-bg); color: var(--accent-cyan); font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
   .shop-tab.active { background: var(--accent-orange); color: #1a1a1a; border-color: var(--accent-orange); }
@@ -166,7 +160,7 @@
   .bike-btn.buy:disabled { background: #4a5568; color: #8a97a8; }
   .bike-btn.select { background: var(--accent-cyan); color: #1a1a1a; }
   .bike-btn.selected { background: #2d3748; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
-
+  .phone-back-btn { color: #007aff; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
   /* --- MISSIONS & CLAN --- */
   .missions-list { padding: 10px 12px 16px; display: flex; flex-direction: column; gap: 8px; }
@@ -195,20 +189,18 @@
   .start-stunt-wrap { padding: 4px 12px 18px; margin-top: auto; }
   .start-stunt-btn { width: 100%; padding: 14px 10px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; font-size: 15px; font-weight: bold; letter-spacing: 0.5px; cursor: pointer; box-shadow: 0 0 16px rgba(249,115,22,0.5); transition: transform 0.1s; }
   .start-stunt-btn:active { transform: scale(0.97); }
-  
   .mode-btn { width: 100%; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; margin-bottom: 10px; transition: transform 0.1s; }
   .mode-btn:active { transform: scale(0.97); }
   .mode-stunt { background: linear-gradient(135deg, var(--accent-orange), #ea580c); color: #1a1a1a; }
   .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
-  /* --- ОБЩИЕ ОВЕРЛЕИ --- */
+  /* --- ОБЩИЕ ОВЕРЛЕИ (ИГРОВЫЕ РЕЖИМЫ) --- */
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: var(--sky-color, #4ca1af); transition: background-color 2s ease; }
-  
   .stunt-city-bg { position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; background-image: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); background-size: 100% 100%, 120px 100%; background-position: bottom; z-index: 1; filter: brightness(var(--city-bright, 1)); transition: filter 2s ease; }
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; transition: transform 0.05s linear; }
@@ -232,7 +224,7 @@
   .spark-particle { position: absolute; width: 7px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #fff9c4, #f97316); box-shadow: 0 0 6px 1px rgba(249,115,22,0.9); pointer-events: none; z-index: 4; animation: sparkFly 0.5s ease-out forwards; }
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
 
-  /* --- СТИЛИ ДЛЯ РЕЖИМА ПОГОНИ --- */
+  /* --- ПОГОНЯ --- */
   .chase-road { position: absolute; left: 0; right: 0; bottom: 0; height: 60%; background-color: #1a1c23; border-top: 5px solid #475569; z-index: 2; overflow: hidden; }
   .chase-line { position: absolute; width: 100%; height: 4px; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0, rgba(255,255,255,0.7) 60px, transparent 60px, transparent 120px); }
   .chase-player { position: absolute; left: 120px; width: 120px; height: 90px; transition: top 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 4; display: flex; align-items: flex-end; }
@@ -259,14 +251,13 @@
 
   .profile-action-btn { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 12px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
   .profile-action-btn:active { transform: scale(0.97); background: rgba(34,211,238,0.2); }
-  
   .input-field { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--accent-cyan); background: rgba(0,0,0,0.2); color: var(--text-color); font-size: 14px; margin-bottom: 15px; outline: none; text-align: center; font-weight: bold; }
   body.light-theme .input-field { background: #fff; border-color: #cbd5e1; }
 </style>
 </head>
 <body>
 
-<!-- КОНТЕНТ СТРОГО ВНУТРИ APP-CONTAINER (ЗАФИКСИРОВАН ПО ЦЕНТРУ ЧЕРЕЗ АБСОЛЮТ) -->
+<!-- КОНТЕНТ СТРОГО ВНУТРИ APP-CONTAINER. ЦЕНТРИРОВАНИЕ БЕЗ POSITION: ABSOLUTE ДЛЯ ФОНА! -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
@@ -307,7 +298,7 @@
         </div>
         <div class="dynamic-island"><div class="island-sensor"></div><div class="island-cam"></div></div>
         
-        <!-- Рабочий стол телефона -->
+        <!-- Рабочий стол -->
         <div class="app-grid" id="phone-desktop">
           <div class="app-icon" id="app-map-btn">
             <div class="app-icon-inner" style="background: linear-gradient(135deg, #34d399, #059669);">📍</div>
@@ -334,7 +325,7 @@
           <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: #e2e8f0; color: #1e293b;">📷</div></div>
         </div>
 
-        <!-- ОВЕРЛЕЙ: Карта -->
+        <!-- Приложения телефона -->
         <div class="phone-app-screen" id="phone-app-map">
           <div class="phone-app-header">Карта Города</div>
           <div class="map-view">
@@ -344,7 +335,6 @@
           <div class="home-indicator"></div>
         </div>
 
-        <!-- ОВЕРЛЕЙ: Мотосалон (Открывается из Карты) -->
         <div class="phone-app-screen" id="phone-app-shop" style="z-index: 35;">
           <div class="phone-app-header" style="justify-content: space-between; padding-right: 15px;">
             <div class="phone-back-btn" id="shop-back-btn" style="color: var(--accent-cyan);">‹ Карта</div>
@@ -355,30 +345,20 @@
           <div class="home-indicator"></div>
         </div>
 
-        <!-- ОВЕРЛЕЙ: Настройки -->
         <div class="phone-app-screen" id="phone-app-settings">
           <div class="phone-app-header">Настройки</div>
           <div class="phone-app-content">
-            <div class="setting-row">
-              Вибрация
-              <div class="toggle-switch on" id="toggle-vibro"><div class="toggle-circle"></div></div>
-            </div>
-            <div class="setting-row">
-              Светлая тема
-              <div class="toggle-switch" id="toggle-theme"><div class="toggle-circle"></div></div>
-            </div>
+            <div class="setting-row">Вибрация <div class="toggle-switch on" id="toggle-vibro"><div class="toggle-circle"></div></div></div>
+            <div class="setting-row">Светлая тема <div class="toggle-switch" id="toggle-theme"><div class="toggle-circle"></div></div></div>
           </div>
           <div class="home-indicator"></div>
         </div>
 
-        <!-- ОВЕРЛЕЙ: Колесо Удачи -->
         <div class="phone-app-screen" id="phone-app-wheel">
           <div class="phone-app-header">Колесо Удачи</div>
           <div class="phone-app-content wheel-container">
             <div class="wheel-pointer"></div>
-            <div class="wheel-circle" id="wheel-circle">
-              <div class="wheel-center"></div>
-            </div>
+            <div class="wheel-circle" id="wheel-circle"><div class="wheel-center"></div></div>
             <div style="font-size: 14px; margin-bottom: 15px; font-weight: bold;" id="wheel-timer">Готово к прокрутке!</div>
             <button class="spin-btn" id="wheel-spin-btn">КРУТИТЬ</button>
           </div>
@@ -411,7 +391,7 @@
     <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА РЕЖИМА -->
+  <!-- ОВЕРЛЕИ -->
   <div id="mode-modal" class="custom-modal hidden">
     <div class="modal-card">
       <button id="mode-close-btn" class="profile-modal-close">✕</button>
@@ -424,7 +404,6 @@
     </div>
   </div>
 
-  <!-- СТАНТ-ЗАЕЗД -->
   <div id="stunt-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud">
       <div class="stunt-hud-item">⏱ <span id="stunt-timer">0.0</span>с</div>
@@ -435,10 +414,7 @@
     </div>
     <div class="stunt-scene" id="stunt-scene">
       <div class="stunt-city-bg" id="stunt-city-bg"></div>
-      <div class="stunt-bike-wrap">
-        <div class="stunt-bike" id="stunt-bike">🏍️</div>
-        <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div> 
-      </div>
+      <div class="stunt-bike-wrap"><div class="stunt-bike" id="stunt-bike">🏍️</div><div class="stunt-spark-anchor" id="stunt-spark-anchor"></div></div>
       <div class="stunt-road" id="stunt-road"></div>
     </div>
     <div class="stunt-controls">
@@ -455,7 +431,6 @@
     <button id="stunt-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
-  <!-- ГОНКА 1 VS 1 -->
   <div id="race-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud">
       <div class="stunt-hud-item" style="min-width: 100%; text-align: left; padding-left: 10px;">🏎️ <span id="race-speed">0</span> км/ч</div>
@@ -484,7 +459,6 @@
     <button id="race-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
-  <!-- ПОГОНЯ (ДПС) -->
   <div id="chase-overlay" class="stunt-overlay hidden">
     <div class="stunt-hud" style="background: rgba(0,0,0,0.9);">
       <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
@@ -499,9 +473,7 @@
         <div class="chase-player" id="chase-player">🏍️</div>
         <div id="chase-obstacles-container"></div>
       </div>
-      <div class="swipe-indicator">
-        <div>СВАЙП ВВЕРХ / ВНИЗ</div><div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div>
-      </div>
+      <div class="swipe-indicator"><div>СВАЙП ВВЕРХ / ВНИЗ</div><div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div></div>
     </div>
     <div class="stunt-result hidden" id="chase-result">
       <div class="stunt-result-card" style="border-color: #ef4444; box-shadow: 0 0 25px rgba(239,68,68,0.6);">
@@ -513,7 +485,6 @@
     <button id="chase-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
-  <!-- МОДАЛЬНЫЕ ОКНА: УРОВЕНЬ, ПРОФИЛЬ, БОНУСЫ, ДРУЗЬЯ, ПРОМО -->
   <div id="level-up-modal" class="custom-modal hidden">
     <div class="modal-card">
       <div class="modal-title">🎉 Поздравляем!</div>
@@ -526,7 +497,7 @@
     <div class="modal-card" style="border-color: #f59e0b; box-shadow: 0 0 25px rgba(245,158,11,0.6);">
       <button id="dev-close-btn" class="profile-modal-close">✕</button>
       <div class="modal-title" style="color: #f59e0b;">В разработке 🛠️</div>
-      <div class="modal-desc">Это приложение появится в будущих обновлениях! Следите за новостями.</div>
+      <div class="modal-desc">Это приложение появится в будущих обновлениях!</div>
       <button id="dev-ok-btn" class="claim-btn" style="width: 100%; background: #f59e0b; color: #1a1a1a;">Жду!</button>
     </div>
   </div>
@@ -545,7 +516,6 @@
       <div class="level-bar" style="width: 100%; height: 10px; border-radius: 5px; margin-bottom: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(34,211,238,0.3);"><div class="level-progress" id="profile-progress-bar-large" style="border-radius: 5px; background-color: var(--accent-cyan);"></div></div>
       
       <div style="max-height: 250px; overflow-y: auto;">
-        <!-- Кнопки действий -->
         <div id="profile-daily-btn" class="profile-action-btn">
           <span style="font-size: 14px; font-weight: bold; color: var(--accent-cyan);">🎁 Ежедневные бонусы</span><span style="font-size: 12px; color: var(--text-dim);">Посмотреть ➔</span>
         </div>
@@ -559,7 +529,6 @@
           <span style="font-size: 14px; font-weight: bold; color: #10b981;">🎟️ Промокод</span><span style="font-size: 12px; color: var(--text-dim);">Ввести ➔</span>
         </div>
       </div>
-
       <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 8px; font-size: 12px; color: var(--text-dim); display: flex; justify-content: space-between; margin-top: 10px;">
         <span>Всего тапов:</span><span id="profile-total-taps" style="color: var(--accent-orange); font-weight: bold;">0</span>
       </div>
@@ -583,7 +552,7 @@
       <div class="modal-desc" style="font-size: 12px;">Приглашайте друзей и получайте <b>5%</b> от всех их заработанных монет и опыта навсегда!</div>
       <button id="friends-invite-btn" class="claim-btn" style="width: 100%; background: #a855f7; color: #fff; margin-bottom: 15px;">🔗 Скопировать ссылку</button>
       <div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 10px; color: var(--accent-cyan);">Список рефералов:</div>
-      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 15px; font-size: 12px; color: var(--text-dim);">У вас пока нет приглашенных друзей. Скопируйте ссылку и отправьте её друзьям!</div>
+      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 15px; font-size: 12px; color: var(--text-dim);">У вас пока нет приглашенных друзей.</div>
     </div>
   </div>
 
@@ -597,7 +566,7 @@
     </div>
   </div>
 
-</div>
+</div> <!-- КОНЕЦ APP-CONTAINER -->
 
 <script>
 // --- STATE & SETTINGS ---
@@ -624,14 +593,13 @@ function saveState() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(state
 if (state.theme === 'light') { document.body.classList.add('light-theme'); document.getElementById('toggle-theme').classList.add('on'); }
 if (!state.vibration) { document.getElementById('toggle-vibro').classList.remove('on'); }
 
-// --- АУДИО И ВИБРАЦИЯ (HAPTICS) ---
+// --- АУДИО И ВИБРАЦИЯ ---
 let audioCtx = null;
 function haptic(type = 'light') {
   if (!state.vibration) return;
   try {
     if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
       if(type==='light') window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-      if(type==='medium') window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
       if(type==='heavy') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
       if(type==='success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
     } else if (navigator.vibrate) { navigator.vibrate(type === 'heavy' ? 50 : 20); }
@@ -729,12 +697,11 @@ function showDailyBonusModal(displayStreak, canClaim) {
 document.getElementById('daily-bonus-claim-btn').addEventListener('click', () => {
   playSound('reward');
   state.loginStreak = pendingStreak; const reward = DAILY_REWARDS[state.loginStreak - 1]; state.coins += reward.coins; if (reward.exp > 0) addExp(reward.exp);
-  state.lastBonusDate = new Date().toDateString(); saveState(); renderTop(); renderGarage(); document.getElementById('daily-bonus-modal').classList.add('hidden');
+  state.lastBonusDate = new Date().toDateString(); saveState(); renderTop(); document.getElementById('daily-bonus-modal').classList.add('hidden');
 });
 document.getElementById('daily-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('daily-bonus-modal').classList.add('hidden'); });
 
 // ПРОФИЛЬ
-const profileModal = document.getElementById('profile-modal');
 document.getElementById('user-profile-btn').addEventListener('click', () => {
   playSound('click');
   document.getElementById('profile-nickname-large').innerText = document.getElementById('user-nickname').innerText;
@@ -743,12 +710,12 @@ document.getElementById('user-profile-btn').addEventListener('click', () => {
   let p = 100, expT = `${fmt(state.exp)} (МАКС)`;
   if (LEVEL_REQUIREMENTS[state.level + 1]) { let c = LEVEL_REQUIREMENTS[state.level + 1].exp, pr = state.level===1?0:LEVEL_REQUIREMENTS[state.level].exp; p = Math.min(100, Math.max(0, ((state.exp - pr) / (c - pr)) * 100)); expT = `${fmt(state.exp)} / ${fmt(c)}`; }
   document.getElementById('profile-exp-text').innerText = expT; document.getElementById('profile-progress-bar-large').style.width = p + '%';
-  profileModal.classList.remove('hidden');
+  document.getElementById('profile-modal').classList.remove('hidden');
 });
-document.getElementById('profile-close-btn').addEventListener('click', () => { playSound('click'); profileModal.classList.add('hidden'); });
+document.getElementById('profile-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); });
 
 document.getElementById('profile-daily-btn').addEventListener('click', () => {
-  playSound('click'); profileModal.classList.add('hidden'); const now = new Date();
+  playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); const now = new Date();
   if (state.lastBonusDate !== now.toDateString()) {
     const yesterday = new Date(); yesterday.setDate(now.getDate() - 1);
     if (state.lastBonusDate === yesterday.toDateString()) { pendingStreak = (state.loginStreak || 0) + 1; if (pendingStreak > 7) pendingStreak = 1; } else { pendingStreak = 1; }
@@ -756,20 +723,15 @@ document.getElementById('profile-daily-btn').addEventListener('click', () => {
   } else { showDailyBonusModal(state.loginStreak === 0 ? 1 : state.loginStreak, false); }
 });
 
-// Кнопка Друзья
-document.getElementById('profile-friends-btn').addEventListener('click', () => { playSound('click'); profileModal.classList.add('hidden'); document.getElementById('friends-modal').classList.remove('hidden'); });
+document.getElementById('profile-friends-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('friends-modal').classList.remove('hidden'); });
 document.getElementById('friends-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('friends-modal').classList.add('hidden'); });
 document.getElementById('friends-invite-btn').addEventListener('click', () => {
   playSound('click');
   const botLink = "https://t.me/MotoTapalkaBot?start=ref12345";
-  navigator.clipboard.writeText(botLink).then(() => {
-    const btn = document.getElementById('friends-invite-btn');
-    btn.innerText = "✅ Ссылка скопирована!"; setTimeout(() => btn.innerText = "🔗 Скопировать ссылку", 2000);
-  });
+  navigator.clipboard.writeText(botLink).then(() => { const btn = document.getElementById('friends-invite-btn'); btn.innerText = "✅ Ссылка скопирована!"; setTimeout(() => btn.innerText = "🔗 Скопировать ссылку", 2000); });
 });
 
-// Кнопка Промокод
-document.getElementById('profile-promo-btn').addEventListener('click', () => { playSound('click'); profileModal.classList.add('hidden'); document.getElementById('promo-modal').classList.remove('hidden'); });
+document.getElementById('profile-promo-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('promo-modal').classList.remove('hidden'); });
 document.getElementById('promo-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('promo-modal').classList.add('hidden'); });
 document.getElementById('promo-apply-btn').addEventListener('click', () => {
   const code = document.getElementById('promo-input').value.toUpperCase().trim();
@@ -780,8 +742,7 @@ document.getElementById('promo-apply-btn').addEventListener('click', () => {
   } else { playSound('error'); alert("Неверный или устаревший промокод."); }
 });
 
-// Колесо удачи (Кнопка из профиля)
-document.getElementById('profile-wheel-btn').addEventListener('click', () => { playSound('click'); profileModal.classList.add('hidden'); document.querySelector('.nav-item[data-screen="phone"]').click(); document.getElementById('app-wheel-btn').click(); });
+document.getElementById('profile-wheel-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.querySelector('.nav-item[data-screen="phone"]').click(); document.getElementById('app-wheel-btn').click(); });
 
 function renderGarage() {
   const bike = activeBike(); document.getElementById('active-bike-name').innerText = bike.name; document.getElementById('points-display').innerText = fmt(state.coins) + ' pts'; document.getElementById('per-tap-display').innerText = '+' + perTapValue() + ' за тап';
@@ -790,18 +751,13 @@ function renderGarage() {
 }
 
 // --- ЛОГИКА ТЕЛЕФОНА И ПРИЛОЖЕНИЙ ---
-const phoneApps = document.querySelectorAll('.phone-app-screen');
-document.querySelectorAll('.home-indicator').forEach(ind => { ind.addEventListener('click', () => { playSound('click'); phoneApps.forEach(app => app.classList.remove('active')); }); });
+document.querySelectorAll('.home-indicator').forEach(ind => { ind.addEventListener('click', () => { playSound('click'); document.querySelectorAll('.phone-app-screen').forEach(app => app.classList.remove('active')); }); });
 document.getElementById('map-back-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-map').classList.remove('active'); });
 document.getElementById('shop-back-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-shop').classList.remove('active'); });
 
 document.getElementById('app-settings-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-settings').classList.add('active'); });
 document.getElementById('toggle-vibro').addEventListener('click', (e) => { playSound('click'); state.vibration = !state.vibration; saveState(); e.currentTarget.classList.toggle('on', state.vibration); });
-document.getElementById('toggle-theme').addEventListener('click', (e) => {
-  playSound('click');
-  if(state.theme === 'dark') { state.theme = 'light'; document.body.classList.add('light-theme'); e.currentTarget.classList.add('on'); } else { state.theme = 'dark'; document.body.classList.remove('light-theme'); e.currentTarget.classList.remove('on'); }
-  saveState();
-});
+document.getElementById('toggle-theme').addEventListener('click', (e) => { playSound('click'); if(state.theme === 'dark') { state.theme = 'light'; document.body.classList.add('light-theme'); e.currentTarget.classList.add('on'); } else { state.theme = 'dark'; document.body.classList.remove('light-theme'); e.currentTarget.classList.remove('on'); } saveState(); });
 
 document.getElementById('app-map-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-map').classList.add('active'); });
 document.getElementById('map-pin-shop').addEventListener('click', () => { playSound('click'); renderShopTabs(); document.getElementById('phone-app-shop').classList.add('active'); });
