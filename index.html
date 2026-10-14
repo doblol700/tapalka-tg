@@ -24,20 +24,20 @@
 
   * { box-sizing: border-box; }
 
-  /* --- ЖЕЛЕЗОБЕТОННОЕ ЦЕНТРИРОВАНИЕ ДЛЯ ПК --- */
+  /* --- ЖЕЛЕЗОБЕТОННОЕ ЦЕНТРИРОВАНИЕ ДЛЯ TELEGRAM DESKTOP --- */
   html, body {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     margin: 0; padding: 0; width: 100%; height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color); color: var(--text-color);
     overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
-    display: block; /* Никаких Flexbox на уровне body, чтобы Telegram Desktop не ломал рамки! */
     transition: background-color 0.3s, color 0.3s;
   }
 
-  /* ФИКСАЦИЯ ШИРИНЫ КОНТЕЙНЕРА ПО ЦЕНТРУ */
   #app-container {
-    margin: 0 auto; /* Строгое выравнивание по центру */
-    width: 100%; height: 100%; max-width: 480px; position: relative;
+    width: 100%; height: 100%; max-width: 480px; 
+    margin: 0 auto; /* Строго по центру */
+    position: relative;
     background-image: url('garage1.jpg'); background-size: cover; background-position: center;
     background-color: #0b1220; display: flex; flex-direction: column;
     box-shadow: 0 0 40px rgba(0,0,0,1); overflow: hidden;
@@ -77,6 +77,7 @@
   .bike-emoji-btn.is-svg { width: 190px; }
   .floating-bonus { position: absolute; font-size: 22px; font-weight: bold; color: var(--accent-orange); z-index: 4; pointer-events: none; animation: floatUp 0.8s ease-out forwards; text-shadow: 0 0 5px #000; }
   @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-70px); } }
+  .section-title { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-cyan); margin: 10px 14px 6px; }
 
   /* --- IPHONE 18 PRO SCREEN --- */
   .iphone-frame {
@@ -87,11 +88,12 @@
     position: relative; overflow: hidden; display: flex; flex-direction: column;
     transition: background 0.5s;
   }
+  
   .iphone-status-bar { position: absolute; top: 12px; left: 0; right: 0; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 600; font-size: 13px; z-index: 45; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
   .iphone-time { font-size: 14px; letter-spacing: 0.5px; }
   .iphone-icons { display: flex; gap: 5px; font-size: 13px; }
 
-  /* Home Indicator (ПОЛОСКА ВНИЗУ ТЕЛЕФОНА) */
+  /* Home Indicator (ПОЛОСКА) */
   .home-indicator {
     position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
     width: 130px; height: 5px; background: #fff; border-radius: 10px; z-index: 50;
@@ -110,13 +112,17 @@
   .app-icon-inner { width: 55px; height: 55px; border-radius: 14px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
   .app-label { font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); margin-top: 5px; font-weight: 500; text-align: center; }
   
-  /* Нижний Dock iPhone */
+  /* Нижний Dock */
   .iphone-dock { position: absolute; bottom: 25px; left: 15px; right: 15px; height: 75px; background: rgba(255,255,255,0.25); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 28px; display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 5; }
   .iphone-dock .app-label { display: none; }
   .iphone-dock .app-icon-inner { width: 50px; height: 50px; }
 
   /* PHONE APPS OVERLAYS */
-  .phone-app-screen { position: absolute; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 30; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); overflow: hidden; }
+  .phone-app-screen {
+    position: absolute; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 30;
+    display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+  }
   .phone-app-screen.active { transform: translateY(0); }
   .phone-app-header { height: 85px; padding-top: 45px; background: var(--ui-bg); display: flex; align-items: center; padding-left: 15px; border-bottom: 1px solid var(--accent-cyan); font-weight: bold; font-size: 18px; flex-shrink: 0; }
   .phone-app-content { flex-grow: 1; padding: 20px; overflow-y: auto; }
@@ -137,13 +143,14 @@
   .spin-btn:active { transform: scale(0.95); }
   .spin-btn:disabled { background: #4a5568; box-shadow: none; color: #cbd5e1; cursor: default; }
 
-  /* Карта и Салон (Внутри телефона) */
+  /* MAP VIEW APP */
   .map-view { flex-grow: 1; position: relative; overflow: hidden; background-color: #d1d5db; }
   .map-bg { position: absolute; inset: 0; background-color: #e5e5e5; background-image: linear-gradient(45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%), linear-gradient(-45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%); background-size: 60px 60px; opacity: 0.7; }
   .map-pin { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.5); border: 2px solid white; animation: bouncePin 2s infinite; z-index: 10; }
   @keyframes bouncePin { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, -60%); } }
   .pin-label { position: absolute; top: -30px; background: rgba(0,0,0,0.8); font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-weight: bold; color: white;}
 
+  /* SHOP VIEW APP */
   .shop-tabs { display: flex; gap: 6px; padding: 10px 12px 4px; flex-shrink: 0; overflow-x: auto; background: var(--bg-color); }
   .shop-tab { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(34,211,238,0.35); background: var(--card-bg); color: var(--accent-cyan); font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
   .shop-tab.active { background: var(--accent-orange); color: #1a1a1a; border-color: var(--accent-orange); }
@@ -195,7 +202,7 @@
   .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
-  /* --- ОБЩИЕ ОВЕРЛЕИ (ИГРОВЫЕ РЕЖИМЫ) --- */
+  /* --- ОБЩИЕ ОВЕРЛЕИ --- */
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
@@ -232,7 +239,7 @@
   .chase-obstacle { position: absolute; width: 50px; height: 50px; z-index: 3; display: flex; align-items: center; justify-content: center; font-size: 40px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); }
   .swipe-indicator { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 24px; font-weight: bold; pointer-events: none; text-align: center; }
 
-  /* --- МОДАЛЬНЫЕ ОКНА (АБСОЛЮТ) --- */
+  /* --- МОДАЛЬНЫЕ ОКНА --- */
   .custom-modal { position: absolute; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
   .custom-modal.hidden { display: none; }
   .modal-card { background: var(--card-bg); border: 2px solid var(--accent-orange); border-radius: 16px; padding: 24px; text-align: center; width: 82%; max-width: 320px; box-shadow: 0 0 25px rgba(249,115,22,0.6); position: relative; }
@@ -257,7 +264,6 @@
 </head>
 <body>
 
-<!-- КОНТЕНТ СТРОГО ВНУТРИ APP-CONTAINER. ЦЕНТРИРОВАНИЕ БЕЗ POSITION: ABSOLUTE ДЛЯ ФОНА! -->
 <div id="app-container">
 
   <!-- Верхняя панель -->
@@ -391,7 +397,7 @@
     <div class="nav-item" data-screen="clan"><div class="nav-item-icon">👥</div><div class="nav-text-label">Клан</div></div>
   </div>
 
-  <!-- ОВЕРЛЕИ -->
+  <!-- ОВЕРЛЕИ РЕЖИМОВ ИГРЫ -->
   <div id="mode-modal" class="custom-modal hidden">
     <div class="modal-card">
       <button id="mode-close-btn" class="profile-modal-close">✕</button>
@@ -485,6 +491,7 @@
     <button id="chase-close-btn" class="stunt-close-btn">✕</button>
   </div>
 
+  <!-- МОДАЛЬНЫЕ ОКНА ИНТЕРФЕЙСА -->
   <div id="level-up-modal" class="custom-modal hidden">
     <div class="modal-card">
       <div class="modal-title">🎉 Поздравляем!</div>
@@ -507,7 +514,7 @@
       <button id="profile-close-btn" class="profile-modal-close">✕</button>
       <div class="avatar-placeholder" id="profile-avatar-large" style="width: 60px; height: 60px; margin: 0 auto 10px; font-size: 20px; border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(34,211,238,0.5);">VIP</div>
       <div class="modal-title" id="profile-nickname-large" style="font-size: 16px; margin-bottom: 2px;">RIDERNICK</div>
-      <div style="font-size: 12px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 15px;">Уровень <span id="profile-level-large">1</span></div>
+      <div style="font-size: 14px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 20px;">Уровень <span id="profile-level-large">1</span></div>
       
       <div style="text-align: left; font-size: 11px; margin-bottom: 4px; display: flex; justify-content: space-between; color: var(--text-dim);">
         <span>Опыт (EXP)</span>
@@ -566,7 +573,7 @@
     </div>
   </div>
 
-</div> <!-- КОНЕЦ APP-CONTAINER -->
+</div>
 
 <script>
 // --- STATE & SETTINGS ---
@@ -697,7 +704,7 @@ function showDailyBonusModal(displayStreak, canClaim) {
 document.getElementById('daily-bonus-claim-btn').addEventListener('click', () => {
   playSound('reward');
   state.loginStreak = pendingStreak; const reward = DAILY_REWARDS[state.loginStreak - 1]; state.coins += reward.coins; if (reward.exp > 0) addExp(reward.exp);
-  state.lastBonusDate = new Date().toDateString(); saveState(); renderTop(); document.getElementById('daily-bonus-modal').classList.add('hidden');
+  state.lastBonusDate = new Date().toDateString(); saveState(); renderTop(); renderGarage(); document.getElementById('daily-bonus-modal').classList.add('hidden');
 });
 document.getElementById('daily-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('daily-bonus-modal').classList.add('hidden'); });
 
@@ -723,6 +730,7 @@ document.getElementById('profile-daily-btn').addEventListener('click', () => {
   } else { showDailyBonusModal(state.loginStreak === 0 ? 1 : state.loginStreak, false); }
 });
 
+// Кнопка Друзья
 document.getElementById('profile-friends-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('friends-modal').classList.remove('hidden'); });
 document.getElementById('friends-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('friends-modal').classList.add('hidden'); });
 document.getElementById('friends-invite-btn').addEventListener('click', () => {
@@ -731,6 +739,7 @@ document.getElementById('friends-invite-btn').addEventListener('click', () => {
   navigator.clipboard.writeText(botLink).then(() => { const btn = document.getElementById('friends-invite-btn'); btn.innerText = "✅ Ссылка скопирована!"; setTimeout(() => btn.innerText = "🔗 Скопировать ссылку", 2000); });
 });
 
+// Кнопка Промокод
 document.getElementById('profile-promo-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('promo-modal').classList.remove('hidden'); });
 document.getElementById('promo-close-btn').addEventListener('click', () => { playSound('click'); document.getElementById('promo-modal').classList.add('hidden'); });
 document.getElementById('promo-apply-btn').addEventListener('click', () => {
@@ -742,6 +751,7 @@ document.getElementById('promo-apply-btn').addEventListener('click', () => {
   } else { playSound('error'); alert("Неверный или устаревший промокод."); }
 });
 
+// Колесо удачи (Кнопка из профиля)
 document.getElementById('profile-wheel-btn').addEventListener('click', () => { playSound('click'); document.getElementById('profile-modal').classList.add('hidden'); document.querySelector('.nav-item[data-screen="phone"]').click(); document.getElementById('app-wheel-btn').click(); });
 
 function renderGarage() {
@@ -751,13 +761,18 @@ function renderGarage() {
 }
 
 // --- ЛОГИКА ТЕЛЕФОНА И ПРИЛОЖЕНИЙ ---
-document.querySelectorAll('.home-indicator').forEach(ind => { ind.addEventListener('click', () => { playSound('click'); document.querySelectorAll('.phone-app-screen').forEach(app => app.classList.remove('active')); }); });
+const phoneApps = document.querySelectorAll('.phone-app-screen');
+document.querySelectorAll('.home-indicator').forEach(ind => { ind.addEventListener('click', () => { playSound('click'); phoneApps.forEach(app => app.classList.remove('active')); }); });
 document.getElementById('map-back-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-map').classList.remove('active'); });
 document.getElementById('shop-back-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-shop').classList.remove('active'); });
 
 document.getElementById('app-settings-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-settings').classList.add('active'); });
 document.getElementById('toggle-vibro').addEventListener('click', (e) => { playSound('click'); state.vibration = !state.vibration; saveState(); e.currentTarget.classList.toggle('on', state.vibration); });
-document.getElementById('toggle-theme').addEventListener('click', (e) => { playSound('click'); if(state.theme === 'dark') { state.theme = 'light'; document.body.classList.add('light-theme'); e.currentTarget.classList.add('on'); } else { state.theme = 'dark'; document.body.classList.remove('light-theme'); e.currentTarget.classList.remove('on'); } saveState(); });
+document.getElementById('toggle-theme').addEventListener('click', (e) => {
+  playSound('click');
+  if(state.theme === 'dark') { state.theme = 'light'; document.body.classList.add('light-theme'); e.currentTarget.classList.add('on'); } else { state.theme = 'dark'; document.body.classList.remove('light-theme'); e.currentTarget.classList.remove('on'); }
+  saveState();
+});
 
 document.getElementById('app-map-btn').addEventListener('click', () => { playSound('click'); document.getElementById('phone-app-map').classList.add('active'); });
 document.getElementById('map-pin-shop').addEventListener('click', () => { playSound('click'); renderShopTabs(); document.getElementById('phone-app-shop').classList.add('active'); });
@@ -1068,7 +1083,7 @@ chaseScene.addEventListener('mouseup', e => {
 // --- 12. ИНИЦИАЛИЗАЦИЯ И ОТЛОВ ОШИБОК ---
 document.addEventListener("DOMContentLoaded", () => {
   try { initTelegramUser(); renderTop(); renderGarage(); renderShopTabs(); renderMissions(); checkDailyBonus(); } 
-  catch (err) { alert("Ошибка запуска: " + err.message); localStorage.removeItem(SAVE_KEY); }
+  catch (err) { alert("Ошибка запуска (Сброс сохраненных данных). Код ошибки: " + err.message); localStorage.removeItem(SAVE_KEY); location.reload(); }
 });
 </script>
 </body>
