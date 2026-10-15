@@ -171,14 +171,13 @@
   .mode-race { background: linear-gradient(135deg, var(--accent-cyan), #0891b2); color: #1a1a1a; }
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
-  /* --- НОВЫЙ БЕСКОНЕЧНЫЙ ГОРОД (PARALLAX SVG) --- */
+  /* --- ОБЩИЕ ОВЕРЛЕИ --- */
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: var(--sky-color, #4ca1af); transition: background-color 2s ease; }
   
-  /* ЭФФЕКТ ДВУХ СЛОЕВ ГОРОДА С ВЫВЕСКАМИ */
   .stunt-city-bg { 
     position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; 
     background-image: 
@@ -190,23 +189,27 @@
     z-index: 1; filter: brightness(var(--city-bright, 1)); transition: filter 2s ease;
   }
 
-  /* НОВАЯ ТЕКСТУРА АСФАЛЬТА И БОРДЮРА КАК НА ВИДЕО */
   .stunt-road { 
     position: absolute; left: 0; right: 0; bottom: 0; height: 34%; 
     background-color: #1a1c23; 
     background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.6) 0, rgba(255,255,255,0.6) 60px, transparent 60px, transparent 120px); 
-    background-position: 0 15px; 
-    background-size: 120px 6px; 
-    background-repeat: repeat-x; 
-    border-top: 8px solid #475569; 
-    box-shadow: inset 0 35px 35px -20px rgba(0,0,0,0.9); 
-    z-index: 2; 
+    background-position: 0 15px; background-size: 120px 6px; background-repeat: repeat-x; 
+    border-top: 8px solid #475569; box-shadow: inset 0 35px 35px -20px rgba(0,0,0,0.9); z-index: 2; 
   }
 
+  /* ДОБАВЛЕНА ПОДВЕСКА И ТОЧНЫЙ ЯКОРЬ ДЛЯ ИСКР */
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
-  .stunt-bike { width: 100%; transform-origin: 20% 85%; }
+  .stunt-bike { width: 100%; transform-origin: 20% 85%; position: relative; }
   .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
   
+  .stunt-spark-anchor {
+      position: absolute;
+      left: 2%;
+      bottom: 20%; 
+      width: 4px; height: 4px;
+      z-index: 5;
+  }
+
   .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; touch-action: none; }
   .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; color: white; touch-action: none; }
   .stunt-zone-icon { font-size: 34px; }
@@ -312,7 +315,6 @@
             <div class="app-icon dev-btn"><div class="app-icon-inner" style="background: #e2e8f0; color: #1e293b;">📷</div></div>
           </div>
 
-          <!-- Приложения телефона -->
           <div class="phone-app-screen" id="phone-app-map">
             <div class="phone-app-header" style="display: flex; gap: 10px;">
               <div class="phone-back-btn">‹ Домой</div>
@@ -450,7 +452,12 @@
       <div class="stunt-scene" id="stunt-scene">
         <div class="stunt-city-bg" id="stunt-city-bg"></div>
         <div id="stunt-danger" style="position: absolute; top: 30%; left: 50%; transform: translateX(-50%); font-size: 26px; font-weight: bold; font-style: italic; color: #ef4444; text-shadow: 0 3px 5px rgba(0,0,0,0.8); z-index: 10; opacity: 0; transition: opacity 0.1s;">x1.5 DANGER!</div>
-        <div class="stunt-bike-wrap"><div class="stunt-bike" id="stunt-bike">🏍️</div><div class="stunt-spark-anchor" id="stunt-spark-anchor"></div></div>
+        <div class="stunt-bike-wrap">
+          <div class="stunt-bike" id="stunt-bike">
+             <div id="stunt-bike-content">🏍️</div>
+             <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div>
+          </div>
+        </div>
         <div class="stunt-road" id="stunt-road"></div>
       </div>
       <div class="stunt-controls">
@@ -631,8 +638,8 @@
       </div>
     </div>
 
-  </div> <!-- КОНЕЦ APP-CONTAINER -->
-</div> <!-- КОНЕЦ DESKTOP WRAPPER -->
+  </div>
+</div>
 
 <script>
 try {
@@ -798,7 +805,6 @@ try {
   addEvt('app-map-btn', 'click', () => { playSound('click'); document.getElementById('phone-app-map').classList.add('active'); });
   addEvt('map-pin-shop', 'click', () => { playSound('click'); renderShopTabs(); document.getElementById('phone-app-shop').classList.add('active'); });
 
-  // Кейсы
   addEvt('app-cases-btn', 'click', () => { playSound('click'); document.getElementById('phone-app-cases').classList.add('active'); });
   addEvt('buy-case-btn', 'click', () => {
     if (state.coins < 1000) { playSound('error'); return; }
@@ -844,7 +850,6 @@ try {
     }, 4000);
   });
 
-  // Доставка
   addEvt('app-delivery-btn', 'click', () => { 
     playSound('click'); 
     document.getElementById('delivery-rating-ui').innerText = state.deliveryRating.toFixed(1);
@@ -932,7 +937,7 @@ try {
     el.addEventListener('mouseleave', release);
   }
 
-  // --- СТАНТ-ЗАЕЗД ---
+  // --- СТАНТ-ЗАЕЗД С НОВОЙ ФИЗИКОЙ ПОДВЕСКИ ---
   const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntClockEl = document.getElementById('stunt-clock'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats'), stuntDangerEl = document.getElementById('stunt-danger');
   let stunt = null, lastSparkTs = 0;
 
@@ -940,7 +945,8 @@ try {
     const sparkAnchorEl = document.getElementById('stunt-spark-anchor'); const stuntSceneEl = document.getElementById('stunt-scene');
     if(!sparkAnchorEl || !stuntSceneEl) return;
     const anchorRect = sparkAnchorEl.getBoundingClientRect(), sceneRect = stuntSceneEl.getBoundingClientRect();
-    const baseX = anchorRect.left - sceneRect.left, baseY = anchorRect.top - sceneRect.top;
+    const baseX = anchorRect.left - sceneRect.left + (anchorRect.width / 2);
+    const baseY = anchorRect.top - sceneRect.top + (anchorRect.height / 2);
     for (let i = 0; i < count; i++) {
       const el = document.createElement('div'); el.className = 'spark-particle';
       const rad = (-110 + (Math.random() * 90 - 45)) * Math.PI / 180, dist = 18 + Math.random() * 30;
@@ -951,13 +957,19 @@ try {
   }
 
   function openStunt() {
-    stunt = { angle: 0, angularVelocity: 0, speed: 15, score: 0, roadOffset: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null, gameTimeMinutes: 8 * 60 };
+    // Добавлены переменные для амортизации (suspOffset, suspVelocity)
+    stunt = { angle: 0, angularVelocity: 0, suspOffset: 0, suspVelocity: 0, speed: 15, score: 0, roadOffset: 0, cityOffset: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null, gameTimeMinutes: 8 * 60 };
     lastSparkTs = 0; const stuntSceneEl = document.getElementById('stunt-scene'); if(stuntSceneEl) stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
     stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
     stuntDangerEl.style.opacity = 0;
+    
     const bike = activeBike();
-    if (bike.imgSrc) { stuntBikeEl.classList.add('is-svg'); stuntBikeEl.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); } else { stuntBikeEl.classList.remove('is-svg'); stuntBikeEl.innerText = bike.emoji || '🏍️'; }
-    stuntBikeEl.style.transform = 'rotate(0deg)'; stuntAngleEl.innerText = '0'; stuntSpeedEl.innerText = '15'; stuntCoinsEl.innerText = '0';
+    const bikeContent = document.getElementById('stunt-bike-content');
+    if (bikeContent) {
+        if (bike.imgSrc) { bikeContent.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); } 
+        else { bikeContent.innerText = bike.emoji || '🏍️'; }
+    }
+    stuntBikeEl.style.transform = 'translateY(0px) rotate(0deg)'; stuntAngleEl.innerText = '0'; stuntSpeedEl.innerText = '15'; stuntCoinsEl.innerText = '0';
     stunt.rafId = requestAnimationFrame(stuntTick);
   }
 
@@ -968,26 +980,47 @@ try {
     if (stunt.lastTs === null) stunt.lastTs = ts;
     const dt = Math.min((ts - stunt.lastTs) / 1000, 0.05); stunt.lastTs = ts;
 
+    // ФИЗИКА ВРАЩЕНИЯ И УСКОРЕНИЯ
     let torque = 0;
     if (stunt.gas) { torque += 280 - (stunt.angle * 1.2); stunt.speed = Math.min(stunt.speed + 40 * dt, 100); } 
     else { stunt.speed = Math.max(stunt.speed - 20 * dt, 15); }
-    
     if (stunt.brake) { torque -= 500; stunt.speed = Math.max(stunt.speed - 100 * dt, 15); }
 
-    torque -= 140; // Грава
+    torque -= 140; // Гравитация (тянет колесо вниз)
     stunt.angularVelocity += torque * dt;
-    stunt.angularVelocity *= 0.93; 
+    stunt.angularVelocity *= 0.93; // Трение воздуха
+    
+    let oldAngle = stunt.angle;
     stunt.angle += stunt.angularVelocity * dt;
 
-    if (stunt.angle <= 0) { stunt.angle = 0; if (stunt.angularVelocity < 0) stunt.angularVelocity = 0; }
+    // ФИЗИКА АМОРТИЗАТОРА (ПРУЖИНА)
+    const K = 400; // Жесткость пружины
+    const DAMP = 25; // Затухание (чтобы не прыгал вечно)
+    let targetSusp = (stunt.angle / 90) * 8; // Сжатие заднего аморта при вилли (макс 8px)
+    
+    let suspForce = -K * (stunt.suspOffset - targetSusp) - DAMP * stunt.suspVelocity;
+    stunt.suspVelocity += suspForce * dt;
+    stunt.suspOffset += stunt.suspVelocity * dt;
+
+    // УДАР ОБ ЗЕМЛЮ (СЖАТИЕ ВИЛКИ)
+    if (stunt.angle <= 0) {
+        if (oldAngle > 0 && stunt.angularVelocity < -30) {
+            // Резко переносим энергию падения в сжатие передней вилки!
+            stunt.suspVelocity += Math.abs(stunt.angularVelocity) * 0.35; 
+            playSound('tap'); // Звук удара колеса
+        }
+        stunt.angle = 0;
+        if (stunt.angularVelocity < 0) stunt.angularVelocity = 0;
+    }
 
     stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
     stunt.roadOffset -= stunt.speed * dt * 4; 
     
-    stuntBikeEl.style.transform = `rotate(${-stunt.angle}deg)`;
+    // ПРИМЕНЕНИЕ ПОДВЕСКИ И УГЛА НА ЭКРАНЕ
+    stuntBikeEl.style.transform = `translateY(${stunt.suspOffset}px) rotate(${-stunt.angle}deg)`;
+    
     stuntRoadEl.style.backgroundPosition = `0 0, ${stunt.roadOffset}px 15px`; 
 
-    // ПАРАЛЛАКС ФОНА (Бесконечный город)
     let nearOffsetStunt = stunt.roadOffset * 0.8;
     let farOffsetStunt = stunt.roadOffset * 0.3;
     stuntCityBg.style.backgroundPosition = `${nearOffsetStunt}px bottom, ${farOffsetStunt}px bottom`;
@@ -1064,7 +1097,6 @@ try {
     race.roadOffset -= race.playerSpeed * dt * 4; 
     raceRoad.style.backgroundPosition = `0 0, ${race.roadOffset}px 15px`;
 
-    // ПАРАЛЛАКС ФОНА
     let nearOffsetRace = race.roadOffset * 0.8;
     let farOffsetRace = race.roadOffset * 0.3;
     document.getElementById('race-city-bg').style.backgroundPosition = `${nearOffsetRace}px bottom, ${farOffsetRace}px bottom`;
@@ -1127,7 +1159,6 @@ try {
       let policeLeft = -20 + (chase.wantedLevel * 15); chasePolice.style.left = policeLeft + 'px';
     }
 
-    // ПАРАЛЛАКС ДЛЯ ПОГОНИ
     let nearOffsetChase = chase.score * -8;
     let farOffsetChase = chase.score * -3;
     document.getElementById('chase-city-bg').style.backgroundPosition = `${nearOffsetChase}px bottom, ${farOffsetChase}px bottom`;
@@ -1190,7 +1221,6 @@ try {
     delivTimeEl.innerText = Math.max(0, deliv.time).toFixed(1);
     delivDistEl.innerText = Math.floor(Math.min(deliv.dist, deliv.targetDist)) + '/' + deliv.targetDist + 'м';
 
-    // ПАРАЛЛАКС ДЛЯ ДОСТАВКИ
     let nearOffsetDeliv = deliv.dist * -8;
     let farOffsetDeliv = deliv.dist * -3;
     document.getElementById('deliv-city-bg').style.backgroundPosition = `${nearOffsetDeliv}px bottom, ${farOffsetDeliv}px bottom`;
