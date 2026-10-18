@@ -174,16 +174,32 @@
   /* --- ОБЩИЕ ОВЕРЛЕИ --- */
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
-  .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: #000; }
+  .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: rgba(0,0,0,0.8); }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
-  .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: var(--sky-color, #4ca1af); transition: background-color 2s ease; }
-  .stunt-city-bg { position: absolute; bottom: 34%; left: 0; right: 0; height: 45%; background-image: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 50px, transparent 50px, transparent 100px); background-size: 100% 100%, 120px 100%; background-position: bottom; z-index: 1; filter: brightness(var(--city-bright, 1)); transition: filter 2s ease; }
+  
+  /* РЕАЛИСТИЧНЫЙ ФОН СТАНТА */
+  .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: #0f172a; }
+  .stunt-city-bg { 
+    position: absolute; bottom: 34%; left: 0; right: 0; height: 66%; 
+    background-image: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=1000&auto=format&fit=crop'); 
+    background-size: auto 100%; background-position: bottom left; background-repeat: repeat-x; 
+    z-index: 1; filter: brightness(0.7); 
+  }
+
+  /* РЕАЛИСТИЧНАЯ ДОРОГА */
+  .stunt-road { 
+    position: absolute; left: 0; right: 0; bottom: 0; height: 34%; 
+    background-color: #374151; /* Темно-серый асфальт */
+    background-image: repeating-linear-gradient(90deg, #fff 0, #fff 40px, transparent 40px, transparent 100px); /* Прерывистая разметка */
+    background-position: 0 15%; background-size: 100px 4px; background-repeat: repeat-x; 
+    border-top: 3px solid #1f2937; box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; 
+  }
+
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; position: relative; }
   .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
   .stunt-spark-anchor { position: absolute; left: 2%; bottom: 20%; width: 4px; height: 4px; z-index: 5; }
 
-  .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background-color: #0f1218; background-image: linear-gradient(180deg, #1e293b 0%, #090d16 100%), repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0, rgba(255,255,255,0.85) 70px, transparent 70px, transparent 140px); background-position: 0 0, 0 18px; background-size: 100% 100%, 140px 8px; border-top: 4px solid var(--accent-cyan); box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; }
   .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; touch-action: none; }
   .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; color: white; touch-action: none; }
   .stunt-zone-icon { font-size: 34px; }
@@ -416,18 +432,14 @@
       </div>
     </div>
 
-    <!-- СТАНТ-ЗАЕЗД (ОБНОВЛЕННАЯ ФИЗИКА) -->
     <div id="stunt-overlay" class="stunt-overlay hidden">
       <div class="stunt-hud">
-        <div class="stunt-hud-item" style="display:none;">⏱ <span id="stunt-timer">0.0</span>с</div>
         <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
         <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
-        <div class="stunt-hud-item" style="color: var(--accent-orange);">PTS: <span id="stunt-coins-preview">0</span></div>
-        <div class="stunt-hud-item" style="min-width: 25%;">🕒 <span id="stunt-clock">08:00</span></div>
+        <div class="stunt-hud-item" style="color: var(--accent-orange); min-width: 30%;">PTS: <span id="stunt-coins-preview">0</span></div>
       </div>
       <div class="stunt-scene" id="stunt-scene">
         <div class="stunt-city-bg" id="stunt-city-bg"></div>
-        <div id="stunt-danger" style="position: absolute; top: 30%; left: 50%; transform: translateX(-50%); font-size: 26px; font-weight: bold; font-style: italic; color: #ef4444; text-shadow: 0 3px 5px rgba(0,0,0,0.8); z-index: 10; opacity: 0; transition: opacity 0.1s;">x1.5 DANGER!</div>
         <div class="stunt-bike-wrap">
           <div class="stunt-bike" id="stunt-bike">
              <div id="stunt-bike-content">🏍️</div>
@@ -912,8 +924,8 @@ try {
     el.addEventListener('mouseleave', release);
   }
 
-  // --- СТАНТ-ЗАЕЗД (ОБНОВЛЕННАЯ ХАРДКОРНАЯ ФИЗИКА) ---
-  const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntClockEl = document.getElementById('stunt-clock'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats'), stuntDangerEl = document.getElementById('stunt-danger');
+  // --- СТАНТ-ЗАЕЗД ---
+  const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
   let stunt = null, lastSparkTs = 0;
 
   function spawnSparkBurst(count) {
@@ -932,10 +944,9 @@ try {
   }
 
   function openStunt() {
-    stunt = { angle: 0, angularVelocity: 0, suspOffset: 0, suspVelocity: 0, speed: 15, score: 0, roadOffset: 0, cityOffset: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null, gameTimeMinutes: 8 * 60 };
+    stunt = { angle: 0, angularVelocity: 0, suspOffset: 0, suspVelocity: 0, speed: 15, score: 0, roadOffset: 0, cityOffset: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null };
     lastSparkTs = 0; const stuntSceneEl = document.getElementById('stunt-scene'); if(stuntSceneEl) stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
     stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
-    stuntDangerEl.style.opacity = 0;
     
     const bike = activeBike();
     const bikeContent = document.getElementById('stunt-bike-content');
@@ -954,39 +965,28 @@ try {
     if (stunt.lastTs === null) stunt.lastTs = ts;
     const dt = Math.min((ts - stunt.lastTs) / 1000, 0.05); stunt.lastTs = ts;
 
-    // --- НОВАЯ ЖЕСТКАЯ ФИЗИКА (БЕЗ ОГРАНИЧЕНИЙ) ---
-    
-    // 1. ФИЗИКА СКОРОСТИ
     if (stunt.gas) { 
-        stunt.speed += 50 * dt; // Ускорение от газа
+        stunt.speed += 50 * dt; 
     } else if (stunt.brake) { 
-        stunt.speed -= 150 * dt; // Торможение
+        stunt.speed -= 150 * dt; 
     } else { 
-        stunt.speed -= 35 * dt; // Резкое торможение двигателем, если бросить газ
+        stunt.speed -= 35 * dt; 
     }
     
     const maxSpeed = parseInt(activeBike().top) || 100;
-    stunt.speed = Math.max(0, Math.min(stunt.speed, maxSpeed)); // Теперь скорость может падать до НУЛЯ!
+    stunt.speed = Math.max(0, Math.min(stunt.speed, maxSpeed));
 
-    // 2. ФИЗИКА ВРАЩЕНИЯ И БАЛАНСА
-    let torque = -600; // ГРАВИТАЦИЯ: Всегда резко и сильно тянет переднее колесо вниз
+    let torque = -600;
     
-    if (stunt.gas) { 
-        torque += 1300; // Мощный рывок наверх при газе
-    } 
-    if (stunt.brake) { 
-        torque -= 1500; // Тормоз мгновенно впечатывает колесо в асфальт
-    }
+    if (stunt.gas) { torque += 1300; } 
+    if (stunt.brake) { torque -= 1500; }
 
     stunt.angularVelocity += torque * dt;
-    
-    // ЖЕСТКОЕ ГАШЕНИЕ ИНЕРЦИИ (Мгновенный отклик на кнопки)
     stunt.angularVelocity -= stunt.angularVelocity * 8 * dt; 
     
     let oldAngle = stunt.angle;
     stunt.angle += stunt.angularVelocity * dt;
 
-    // 3. ФИЗИКА АМОРТИЗАТОРА (ПРУЖИНА ПРИ УДАРЕ)
     const K = 400; const DAMP = 25; 
     let targetSusp = (stunt.angle / 90) * 8; 
     let suspForce = -K * (stunt.suspOffset - targetSusp) - DAMP * stunt.suspVelocity;
@@ -1005,20 +1005,16 @@ try {
     stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
     stunt.roadOffset -= stunt.speed * dt * 4; 
     
-    // ПРИМЕНЕНИЕ ПОДВЕСКИ И УГЛА НА ЭКРАНЕ
     stuntBikeEl.style.transform = `translateY(${stunt.suspOffset}px) rotate(${-stunt.angle}deg)`;
-    stuntRoadEl.style.backgroundPosition = `0 0, ${stunt.roadOffset}px 15px`; 
+    stuntRoadEl.style.backgroundPosition = `0 0, ${stunt.roadOffset}px 10%`; 
 
     let nearOffsetStunt = stunt.roadOffset * 0.8;
-    let farOffsetStunt = stunt.roadOffset * 0.3;
-    stuntCityBg.style.backgroundPosition = `${nearOffsetStunt}px bottom, ${farOffsetStunt}px bottom`;
+    stuntCityBg.style.backgroundPosition = `${nearOffsetStunt}px bottom`;
     
-    let multiplier = 1.0; let dangerStr = ""; let showDanger = false;
-    if (stunt.angle > 75) { multiplier = 2.0; dangerStr = "x2.0 DANGER!"; showDanger = true; stuntDangerEl.style.color = "#ef4444"; } 
-    else if (stunt.angle > 55) { multiplier = 1.5; dangerStr = "x1.5 DANGER!"; showDanger = true; stuntDangerEl.style.color = "#f59e0b"; } 
-    else if (stunt.angle > 25) { multiplier = 1.1; dangerStr = "x1.1 DANGER!"; showDanger = true; stuntDangerEl.style.color = "#eab308"; }
-
-    if (showDanger) { stuntDangerEl.innerText = dangerStr; stuntDangerEl.style.opacity = 1; } else { stuntDangerEl.style.opacity = 0; }
+    let multiplier = 1.0; 
+    if (stunt.angle > 75) { multiplier = 2.0; } 
+    else if (stunt.angle > 55) { multiplier = 1.5; } 
+    else if (stunt.angle > 25) { multiplier = 1.1; }
 
     if (stunt.angle > 5) { stunt.score += (multiplier * 15 * dt); }
 
@@ -1028,16 +1024,8 @@ try {
 
     if (stunt.angle >= 85 && ts - lastSparkTs > 40) { spawnSparkBurst(3 + Math.floor(Math.random() * 3)); lastSparkTs = ts; }
 
-    stunt.gameTimeMinutes += dt * 10;
-    let hours = Math.floor((stunt.gameTimeMinutes % 1440) / 60), mins = Math.floor((stunt.gameTimeMinutes % 1440) % 60);
-    stuntClockEl.innerText = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-    let newSky, newBright;
-    if (hours >= 22 || hours < 6) { newSky = '#050b14'; newBright = 0.3; } else if (hours >= 6 && hours < 10) { newSky = '#ff7e5f'; newBright = 0.7; } else if (hours >= 10 && hours < 18) { newSky = '#4ca1af'; newBright = 1.0; } else { newSky = '#ffb347'; newBright = 0.6; }
-    if (stunt.currentSkyClass !== newSky) { document.getElementById('stunt-scene').style.setProperty('--sky-color', newSky); stuntCityBg.style.setProperty('--city-bright', newBright); stunt.currentSkyClass = newSky; }
-
-    // АВАРИЯ ПРИ ПЕРЕВОРОТЕ
     if (stunt.angle >= 100) {
-      playSound('error'); stunt.crashed = true; spawnSparkBurst(20); stuntDangerEl.style.opacity = 0;
+      playSound('error'); stunt.crashed = true; spawnSparkBurst(20); 
       let reward = Math.floor(stunt.score * 0.2); 
       stuntResultStatsEl.innerHTML = `Угол: <b>${Math.round(stunt.maxAngle)}°</b><br>Штраф за аварию: <b style="color:#ef4444;">-80% PTS</b><br>Награда: <b>🪙 ${fmt(reward)}</b>`;
       stuntResultEl.dataset.reward = reward; stuntResultEl.classList.remove('hidden'); return;
@@ -1058,7 +1046,7 @@ try {
   bindHold('stunt-gas', () => { if (stunt && !stunt.crashed) { stunt.gas = true; document.getElementById('stunt-gas').classList.add('pressed'); } }, () => { if (stunt) stunt.gas = false; document.getElementById('stunt-gas').classList.remove('pressed'); });
   bindHold('stunt-brake', () => { if (stunt && !stunt.crashed) { stunt.brake = true; document.getElementById('stunt-brake').classList.add('pressed'); } }, () => { if (stunt) stunt.brake = false; document.getElementById('stunt-brake').classList.remove('pressed'); });
 
-  // --- ГОНКА 1X1 И ОСТАЛЬНЫЕ РЕЖИМЫ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ ---
+  /* ГОНКА 1X1 */
   const raceOverlay = document.getElementById('race-overlay'), raceSpeedEl = document.getElementById('race-speed'), raceDistPlayerEl = document.getElementById('race-dist-player'), raceDistBotEl = document.getElementById('race-dist-bot'), raceBotWrap = document.getElementById('race-bot-wrap'), raceRoad = document.getElementById('race-road'), racePlayerBike = document.getElementById('race-bike-player'), raceResultEl = document.getElementById('race-result'), raceResultTitle = document.getElementById('race-result-title'), raceResultStats = document.getElementById('race-result-stats');
   let race = null;
 
