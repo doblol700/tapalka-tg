@@ -177,22 +177,42 @@
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: rgba(0,0,0,0.5); }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
   
-  /* Контейнер сцены */
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: transparent; }
   
-  /* ИСПРАВЛЕНИЕ РАЗМЕРА И ПОЗИЦИИ БАЙКА */
+  /* ИСПРАВЛЕНИЕ: НОВЫЕ КЛАССЫ ДЛЯ РИГГИНГА (КОЛЕСА И РАМА) */
   .stunt-bike-wrap { 
     position: absolute; 
-    bottom: 8%; /* Опустили на асфальт Canvas-фона */
+    bottom: 8%; /* Стоит на асфальте */
     left: 50%; 
     transform: translate(-50%, 0); 
     z-index: 3; 
     display: flex; justify-content: center; align-items: flex-end; 
-    width: 145px; /* Сделали компактнее */
+    width: 145px; 
     height: 135px; 
   }
-  .stunt-bike { width: 100%; transform-origin: 20% 85%; position: relative; }
-  .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.7)); }
+  .stunt-bike { 
+      width: 100%; 
+      transform-origin: 20% 85%; /* Ось заднего колеса (центр вращения) */
+      position: relative; 
+  }
+  
+  /* Классы для составного байка */
+  .rig-frame { width: 100%; display: block; position: relative; z-index: 2; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.7)); }
+  .rig-fork-front { position: absolute; z-index: 1; transform: translate(-50%, -50%); }
+  .rig-fork-rear { position: absolute; z-index: 1; transform: translate(-50%, -50%); }
+  
+  /* Стилизация заглушки колеса (пунктирный круг), пока нет картинок */
+  .rig-wheel {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(0,0,0,0.8);
+      border: 4px dashed #9ca3af;
+      background-color: #374151;
+      display: block;
+      /* Добавляем фейковые спицы для наглядности вращения */
+      background-image: radial-gradient(circle, #000 20%, transparent 20%), linear-gradient(0deg, transparent 48%, #1f2937 48%, #1f2937 52%, transparent 52%), linear-gradient(90deg, transparent 48%, #1f2937 48%, #1f2937 52%, transparent 52%);
+  }
+
   .stunt-spark-anchor { position: absolute; left: 2%; bottom: 12%; width: 4px; height: 4px; z-index: 5; }
 
   .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; touch-action: none; }
@@ -435,6 +455,7 @@
         <div class="stunt-bike-wrap" id="stunt-bike-wrap">
           <div class="stunt-bike" id="stunt-bike">
              <div id="stunt-bike-content">🏍️</div>
+             <!-- Якорь искр: левый нижний край -->
              <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div>
           </div>
         </div>
@@ -631,7 +652,7 @@ class ParallaxBackground {
       const img = new Image();
       img.onload = () => { l.img = img; res(); };
       img.onerror = () => {
-         console.warn('Не найден фон: ' + this.path + l.file + '. Используем заглушку.');
+         console.warn('Не найден фон: ' + this.path + l.file);
          const c = document.createElement('canvas'); c.width = 10; c.height = 10; l.img = c;
          res();
       };
@@ -724,8 +745,16 @@ try {
 
   function bikeImageMarkup(cls, src) { return `<img src="${src}" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Мотоцикл">`; }
   
+  // --- ДОБАВЛЕНА ПОДДЕРЖКА РИГГИНГА (isRigged и parts) ---
+  // На примере первого байка: если картинки dio_frame.png нет, будет крутиться CSS заглушка
   const BIKE_CATALOG = {
-    scooter: { label: 'Скутеры', emoji: '🛵', bikes: [ { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgSrc: 'дио1.png' }, { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png' } ]},
+    scooter: { label: 'Скутеры', emoji: '🛵', bikes: [ 
+        { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgSrc: 'дио1.png',
+          isRigged: true,
+          parts: { frame: 'dio_frame.png', wheelF: 'dio_wheel.png', wheelR: 'dio_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', wSize: '45px' }
+        }, 
+        { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png' } 
+    ]},
     pitbike: { label: 'Питбайки', emoji: '🏍️', bikes: [ { id: 'kayo-tt125', name: 'Kayo TT 125', price: 2000, power: 2, top: '80', imgSrc: 'kayott125.png' }, { id: 'apollo-rfz125', name: 'Apollo RFZ 125', price: 3500, power: 3, top: '85', imgSrc: 'apollorfz125.png' }, { id: 'bse-ph125', name: 'BSE PH 125', price: 5000, power: 4, top: '90', imgSrc: 'bseph125.png' }, { id: 'progasi-smart125', name: 'Progasi Smart 125', price: 6500, power: 5, top: '95', imgSrc: 'progasismart125.png' }, { id: 'sharmax-miami145', name: 'Sharmax Miami 145', price: 8000, power: 6, top: '105', imgSrc: 'sharmaxmiami145.png' }, { id: 'kayo-tt250', name: 'KAYO TT250', price: 12000, power: 8, top: '115' } ]},
     electric: { label: 'Электро', emoji: '⚡', bikes: [ { id: 'surron-light', name: 'Surron Light Bee X', price: 18000, power: 10, top: '75' }, { id: 'surron-ultra', name: 'Surron Ultra Bee', price: 45000, power: 18, top: '90' } ]},
     enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [ { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145' } ]},
@@ -962,7 +991,6 @@ try {
     el.addEventListener('mouseleave', release);
   }
 
-  // === ИНТЕГРАЦИЯ CANVAS ФОНА ===
   const bgCanvas = document.createElement('canvas');
   bgCanvas.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;';
   const bgCtx = bgCanvas.getContext('2d');
@@ -981,7 +1009,7 @@ try {
     }
   }
 
-  // --- СТАНТ-ЗАЕЗД ---
+  // --- СТАНТ-ЗАЕЗД (РИГГИНГ) ---
   const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
   let stunt = null, lastSparkTs = 0;
 
@@ -1002,16 +1030,34 @@ try {
 
   function openStunt() {
     setupCanvasForScene('stunt-scene');
-    stunt = { angle: 0, angularVelocity: 0, suspOffset: 0, suspVelocity: 0, speed: 15, score: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null };
+    stunt = { angle: 0, angularVelocity: 0, suspOffset: 0, suspVelocity: 0, wheelRot: 0, speed: 15, score: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null };
     lastSparkTs = 0; const stuntSceneEl = document.getElementById('stunt-scene'); if(stuntSceneEl) stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
     stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
     
     const bike = activeBike();
     const bikeContent = document.getElementById('stunt-bike-content');
+    
+    // ОТРИСОВКА РИГГИНГА ИЛИ ОБЫЧНОЙ КАРТИНКИ
     if (bikeContent) {
-        if (bike.imgSrc) { bikeContent.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); } 
-        else { bikeContent.innerText = bike.emoji || '🏍️'; }
+        if (bike.isRigged && bike.parts) {
+            bikeContent.innerHTML = `
+                <div style="position:relative; width:100%; height:100%;">
+                    <img src="${bike.parts.frame}" class="rig-frame" onerror="this.style.display='none'">
+                    <div id="stunt-fork-front" class="rig-fork-front" style="left:${bike.parts.fwX}; top:${bike.parts.fwY}; width:${bike.parts.wSize}; height:${bike.parts.wSize};">
+                        <div class="rig-wheel" id="stunt-wheel-front" style="background: url('${bike.parts.wheelF}') center/contain no-repeat;"></div>
+                    </div>
+                    <div id="stunt-fork-rear" class="rig-fork-rear" style="left:${bike.parts.rwX}; top:${bike.parts.rwY}; width:${bike.parts.wSize}; height:${bike.parts.wSize};">
+                        <div class="rig-wheel" id="stunt-wheel-rear" style="background: url('${bike.parts.wheelR}') center/contain no-repeat;"></div>
+                    </div>
+                </div>
+            `;
+        } else if (bike.imgSrc) { 
+            bikeContent.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); 
+        } else { 
+            bikeContent.innerText = bike.emoji || '🏍️'; 
+        }
     }
+    
     stuntBikeEl.style.transform = 'translateY(0px) rotate(0deg)'; stuntAngleEl.innerText = '0'; stuntSpeedEl.innerText = '15'; stuntCoinsEl.innerText = '0';
     stunt.rafId = requestAnimationFrame(stuntTick);
   }
@@ -1051,7 +1097,18 @@ try {
     }
 
     stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
-    stuntBikeEl.style.transform = `translateY(${stunt.suspOffset}px) rotate(${-stunt.angle}deg)`;
+    
+    // ВРАЩЕНИЕ КОЛЕС И АМОРТИЗАЦИЯ
+    stunt.wheelRot += stunt.speed * dt * 25; // Скорость вращения
+    const wf = document.getElementById('stunt-wheel-front');
+    const wr = document.getElementById('stunt-wheel-rear');
+    if (wf) wf.style.transform = `rotate(${stunt.wheelRot}deg)`;
+    if (wr) wr.style.transform = `rotate(${stunt.wheelRot}deg)`;
+
+    const forkFront = document.getElementById('stunt-fork-front');
+    if (forkFront) forkFront.style.transform = `translate(-50%, calc(-50% + ${stunt.suspOffset}px))`; // Вилка пружинит
+
+    stuntBikeEl.style.transform = `rotate(${-stunt.angle}deg)`; // Рама наклоняется
     
     if (isBgLoaded) {
       parallaxBg.update(dt, stunt.speed * 8); 
