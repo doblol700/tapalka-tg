@@ -175,14 +175,14 @@
   .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: transparent; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: rgba(0,0,0,0.5); }
-  .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
+  .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 25%; color: white; }
   
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: transparent; }
   
   /* РИГГИНГ С ИСПРАВЛЕННЫМ МАСШТАБОМ */
   .stunt-bike-wrap { 
     position: absolute; 
-    bottom: 8%; /* Стоит на асфальте */
+    bottom: 8%; 
     left: 50%; 
     transform: translate(-50%, 0); 
     z-index: 3; 
@@ -200,14 +200,12 @@
   .rig-fork-front { position: absolute; z-index: 1; transform: translate(-50%, -50%); }
   .rig-fork-rear { position: absolute; z-index: 1; transform: translate(-50%, -50%); }
   
+  /* КОЛЕСА БЕЗ ОБВОДКИ */
   .rig-wheel {
       width: 100%; height: 100%;
       border-radius: 50%;
-      box-shadow: 0 0 5px rgba(0,0,0,0.8);
-      border: 4px dashed #9ca3af;
-      background-color: #374151;
       display: block;
-      background-image: radial-gradient(circle, #000 20%, transparent 20%), linear-gradient(0deg, transparent 48%, #1f2937 48%, #1f2937 52%, transparent 52%), linear-gradient(90deg, transparent 48%, #1f2937 48%, #1f2937 52%, transparent 52%);
+      /* Убран серый фон, пунктир и спицы. Только чистая картинка из базы. */
   }
 
   .stunt-spark-anchor { position: absolute; left: 2%; bottom: 12%; width: 4px; height: 4px; z-index: 5; }
@@ -444,11 +442,9 @@
 
     <div id="stunt-overlay" class="stunt-overlay hidden">
       <div class="stunt-hud">
-        <div class="stunt-hud-item" style="display:none;">⏱ <span id="stunt-timer">0.0</span>с</div>
         <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
         <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
         <div class="stunt-hud-item" style="color: var(--accent-orange);">PTS: <span id="stunt-coins-preview">0</span></div>
-        <div class="stunt-hud-item" style="min-width: 25%;">🕒 <span id="stunt-clock">08:00</span></div>
       </div>
       <div class="stunt-scene" id="stunt-scene">
         <div class="stunt-bike-wrap" id="stunt-bike-wrap">
@@ -744,53 +740,54 @@ try {
 
   function bikeImageMarkup(cls, src) { return `<img src="${src}" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Мотоцикл">`; }
   
+  // ИЗМЕНЕНИЯ: Размер колес Дио = 65px. Размер Kayo = 50px/44px. 
   const BIKE_CATALOG = {
     scooter: { label: 'Скутеры', emoji: '🛵', bikes: [ 
         { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgSrc: 'дио1.png',
           isRigged: true,
-          parts: { frame: 'dio_frame.png', wheelF: 'dio_wheel.png', wheelR: 'dio_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', fwSize: '58px', rwSize: '58px' }
+          parts: { frame: 'dio_frame.png', wheelF: 'dio_wheel.png', wheelR: 'dio_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', fwSize: '65px', rwSize: '65px' }
         }, 
         { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png',
           isRigged: true,
-          parts: { frame: 'jog_frame.png', wheelF: 'jog_wheel.png', wheelR: 'jog_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', fwSize: '58px', rwSize: '58px' }
+          parts: { frame: 'jog_frame.png', wheelF: 'jog_wheel.png', wheelR: 'jog_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', fwSize: '65px', rwSize: '65px' }
         } 
     ]},
     pitbike: { label: 'Питбайки', emoji: '🏍️', bikes: [ 
         { id: 'kayo-tt125', name: 'Kayo TT 125', price: 2000, power: 2, top: '80', imgSrc: 'kayott125.png',
-          isRigged: true, parts: { frame: 'kayott125_frame.png', wheelF: 'kayott125_wheel_f.png', wheelR: 'kayott125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+          isRigged: true, parts: { frame: 'kayott125_frame.png', wheelF: 'kayott125_wheel_f.png', wheelR: 'kayott125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '50px', rwSize: '44px' }
         }, 
         { id: 'apollo-rfz125', name: 'Apollo RFZ 125', price: 3500, power: 3, top: '85', imgSrc: 'apollorfz125.png',
-          isRigged: true, parts: { frame: 'apollorfz125_frame.png', wheelF: 'apollorfz125_wheel_f.png', wheelR: 'apollorfz125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+          isRigged: true, parts: { frame: 'apollorfz125_frame.png', wheelF: 'apollorfz125_wheel_f.png', wheelR: 'apollorfz125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '50px', rwSize: '44px' }
         }, 
         { id: 'bse-ph125', name: 'BSE PH 125', price: 5000, power: 4, top: '90', imgSrc: 'bseph125.png',
-          isRigged: true, parts: { frame: 'bseph125_frame.png', wheelF: 'bseph125_wheel_f.png', wheelR: 'bseph125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+          isRigged: true, parts: { frame: 'bseph125_frame.png', wheelF: 'bseph125_wheel_f.png', wheelR: 'bseph125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '50px', rwSize: '44px' }
         }, 
         { id: 'progasi-smart125', name: 'Progasi Smart 125', price: 6500, power: 5, top: '95', imgSrc: 'progasismart125.png',
-          isRigged: true, parts: { frame: 'progasismart125_frame.png', wheelF: 'progasismart125_wheel_f.png', wheelR: 'progasismart125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+          isRigged: true, parts: { frame: 'progasismart125_frame.png', wheelF: 'progasismart125_wheel_f.png', wheelR: 'progasismart125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '50px', rwSize: '44px' }
         }, 
         { id: 'sharmax-miami145', name: 'Sharmax Miami 145', price: 8000, power: 6, top: '105', imgSrc: 'sharmaxmiami145.png',
-          isRigged: true, parts: { frame: 'sharmaxmiami145_frame.png', wheelF: 'sharmaxmiami145_wheel_f.png', wheelR: 'sharmaxmiami145_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+          isRigged: true, parts: { frame: 'sharmaxmiami145_frame.png', wheelF: 'sharmaxmiami145_wheel_f.png', wheelR: 'sharmaxmiami145_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '50px', rwSize: '44px' }
         }, 
         { id: 'kayo-tt250', name: 'KAYO TT250', price: 12000, power: 8, top: '115',
-          isRigged: true, parts: { frame: 'kayott250_frame.png', wheelF: 'kayott250_wheel_f.png', wheelR: 'kayott250_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '68px', rwSize: '58px' }
+          isRigged: true, parts: { frame: 'kayott250_frame.png', wheelF: 'kayott250_wheel_f.png', wheelR: 'kayott250_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '52px', rwSize: '46px' }
         } 
     ]},
     electric: { label: 'Электро', emoji: '⚡', bikes: [ 
         { id: 'surron-light', name: 'Surron Light Bee X', price: 18000, power: 10, top: '75',
-          isRigged: true, parts: { frame: 'surronlight_frame.png', wheelF: 'surronlight_wheel_f.png', wheelR: 'surronlight_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '65px' }
+          isRigged: true, parts: { frame: 'surronlight_frame.png', wheelF: 'surronlight_wheel_f.png', wheelR: 'surronlight_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '50px', rwSize: '50px' }
         }, 
         { id: 'surron-ultra', name: 'Surron Ultra Bee', price: 45000, power: 18, top: '90',
-          isRigged: true, parts: { frame: 'surronultra_frame.png', wheelF: 'surronultra_wheel_f.png', wheelR: 'surronultra_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '68px', rwSize: '68px' }
+          isRigged: true, parts: { frame: 'surronultra_frame.png', wheelF: 'surronultra_wheel_f.png', wheelR: 'surronultra_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '52px', rwSize: '52px' }
         } 
     ]},
     enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [ 
         { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145',
-          isRigged: true, parts: { frame: 'yamahawr_frame.png', wheelF: 'yamahawr_wheel_f.png', wheelR: 'yamahawr_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '70px', rwSize: '60px' }
+          isRigged: true, parts: { frame: 'yamahawr_frame.png', wheelF: 'yamahawr_wheel_f.png', wheelR: 'yamahawr_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '55px', rwSize: '48px' }
         } 
     ]},
     motocross: { label: 'Кросс', emoji: '🏁', bikes: [ 
         { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156',
-          isRigged: true, parts: { frame: 'yamahayz_frame.png', wheelF: 'yamahayz_wheel_f.png', wheelR: 'yamahayz_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '70px', rwSize: '60px' }
+          isRigged: true, parts: { frame: 'yamahayz_frame.png', wheelF: 'yamahayz_wheel_f.png', wheelR: 'yamahayz_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '55px', rwSize: '48px' }
         } 
     ]}
   };
@@ -1111,16 +1108,19 @@ try {
     const maxSpeed = parseInt(activeBike().top) || 100;
     stunt.speed = Math.max(0, Math.min(stunt.speed, maxSpeed));
 
-    let torque = -600;
-    if (stunt.gas) { torque += 1300; } 
-    if (stunt.brake) { torque -= 1500; }
+    // ИЗМЕНЕНИЯ В ФИЗИКЕ СТАНТА (Резче и динамичнее)
+    let torque = -900; // Базовое падение (гравитация) стало сильнее
+    if (stunt.gas) { torque += 2400; } // Рывок вверх стал намного агрессивнее
+    if (stunt.brake) { torque -= 3000; } // Тормоз резко кидает морду вниз
 
     stunt.angularVelocity += torque * dt;
-    stunt.angularVelocity -= stunt.angularVelocity * 8 * dt; 
+    stunt.angularVelocity -= stunt.angularVelocity * 5 * dt; // Уменьшили сопротивление (стало 5 вместо 8)
     let oldAngle = stunt.angle;
     stunt.angle += stunt.angularVelocity * dt;
 
-    const K = 400; const DAMP = 25; 
+    // Пружина вилки
+    const K = 600; // Пружина жестче
+    const DAMP = 20; // Меньше вязкости, больше отскока
     let targetSusp = (stunt.angle / 90) * 8; 
     let suspForce = -K * (stunt.suspOffset - targetSusp) - DAMP * stunt.suspVelocity;
     stunt.suspVelocity += suspForce * dt;
