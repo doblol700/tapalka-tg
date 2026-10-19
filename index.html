@@ -179,9 +179,10 @@
   
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: transparent; }
   
+  /* РИГГИНГ С ИСПРАВЛЕННЫМ МАСШТАБОМ */
   .stunt-bike-wrap { 
     position: absolute; 
-    bottom: 8%; 
+    bottom: 8%; /* Стоит на асфальте */
     left: 50%; 
     transform: translate(-50%, 0); 
     z-index: 3; 
@@ -191,7 +192,7 @@
   }
   .stunt-bike { 
       width: 100%; 
-      transform-origin: 20% 85%; 
+      transform-origin: 20% 85%; /* Ось заднего колеса (центр вращения) */
       position: relative; 
   }
   
@@ -747,15 +748,51 @@ try {
     scooter: { label: 'Скутеры', emoji: '🛵', bikes: [ 
         { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgSrc: 'дио1.png',
           isRigged: true,
-          // УВЕЛИЧЕН РАЗМЕР КОЛЕС: wSize теперь 70px
-          parts: { frame: 'dio_frame.png', wheelF: 'dio_wheel.png', wheelR: 'dio_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', wSize: '70px' }
+          parts: { frame: 'dio_frame.png', wheelF: 'dio_wheel.png', wheelR: 'dio_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', fwSize: '58px', rwSize: '58px' }
         }, 
-        { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png' } 
+        { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png',
+          isRigged: true,
+          parts: { frame: 'jog_frame.png', wheelF: 'jog_wheel.png', wheelR: 'jog_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', fwSize: '58px', rwSize: '58px' }
+        } 
     ]},
-    pitbike: { label: 'Питбайки', emoji: '🏍️', bikes: [ { id: 'kayo-tt125', name: 'Kayo TT 125', price: 2000, power: 2, top: '80', imgSrc: 'kayott125.png' }, { id: 'apollo-rfz125', name: 'Apollo RFZ 125', price: 3500, power: 3, top: '85', imgSrc: 'apollorfz125.png' }, { id: 'bse-ph125', name: 'BSE PH 125', price: 5000, power: 4, top: '90', imgSrc: 'bseph125.png' }, { id: 'progasi-smart125', name: 'Progasi Smart 125', price: 6500, power: 5, top: '95', imgSrc: 'progasismart125.png' }, { id: 'sharmax-miami145', name: 'Sharmax Miami 145', price: 8000, power: 6, top: '105', imgSrc: 'sharmaxmiami145.png' }, { id: 'kayo-tt250', name: 'KAYO TT250', price: 12000, power: 8, top: '115' } ]},
-    electric: { label: 'Электро', emoji: '⚡', bikes: [ { id: 'surron-light', name: 'Surron Light Bee X', price: 18000, power: 10, top: '75' }, { id: 'surron-ultra', name: 'Surron Ultra Bee', price: 45000, power: 18, top: '90' } ]},
-    enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [ { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145' } ]},
-    motocross: { label: 'Кросс', emoji: '🏁', bikes: [ { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156' } ]}
+    pitbike: { label: 'Питбайки', emoji: '🏍️', bikes: [ 
+        { id: 'kayo-tt125', name: 'Kayo TT 125', price: 2000, power: 2, top: '80', imgSrc: 'kayott125.png',
+          isRigged: true, parts: { frame: 'kayott125_frame.png', wheelF: 'kayott125_wheel_f.png', wheelR: 'kayott125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+        }, 
+        { id: 'apollo-rfz125', name: 'Apollo RFZ 125', price: 3500, power: 3, top: '85', imgSrc: 'apollorfz125.png',
+          isRigged: true, parts: { frame: 'apollorfz125_frame.png', wheelF: 'apollorfz125_wheel_f.png', wheelR: 'apollorfz125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+        }, 
+        { id: 'bse-ph125', name: 'BSE PH 125', price: 5000, power: 4, top: '90', imgSrc: 'bseph125.png',
+          isRigged: true, parts: { frame: 'bseph125_frame.png', wheelF: 'bseph125_wheel_f.png', wheelR: 'bseph125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+        }, 
+        { id: 'progasi-smart125', name: 'Progasi Smart 125', price: 6500, power: 5, top: '95', imgSrc: 'progasismart125.png',
+          isRigged: true, parts: { frame: 'progasismart125_frame.png', wheelF: 'progasismart125_wheel_f.png', wheelR: 'progasismart125_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+        }, 
+        { id: 'sharmax-miami145', name: 'Sharmax Miami 145', price: 8000, power: 6, top: '105', imgSrc: 'sharmaxmiami145.png',
+          isRigged: true, parts: { frame: 'sharmaxmiami145_frame.png', wheelF: 'sharmaxmiami145_wheel_f.png', wheelR: 'sharmaxmiami145_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '55px' }
+        }, 
+        { id: 'kayo-tt250', name: 'KAYO TT250', price: 12000, power: 8, top: '115',
+          isRigged: true, parts: { frame: 'kayott250_frame.png', wheelF: 'kayott250_wheel_f.png', wheelR: 'kayott250_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '68px', rwSize: '58px' }
+        } 
+    ]},
+    electric: { label: 'Электро', emoji: '⚡', bikes: [ 
+        { id: 'surron-light', name: 'Surron Light Bee X', price: 18000, power: 10, top: '75',
+          isRigged: true, parts: { frame: 'surronlight_frame.png', wheelF: 'surronlight_wheel_f.png', wheelR: 'surronlight_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '65px', rwSize: '65px' }
+        }, 
+        { id: 'surron-ultra', name: 'Surron Ultra Bee', price: 45000, power: 18, top: '90',
+          isRigged: true, parts: { frame: 'surronultra_frame.png', wheelF: 'surronultra_wheel_f.png', wheelR: 'surronultra_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '68px', rwSize: '68px' }
+        } 
+    ]},
+    enduro: { label: 'Эндуро', emoji: '🏍️', bikes: [ 
+        { id: 'yamaha-wr450f', name: 'Yamaha WR450F', price: 52000, power: 14, top: '145',
+          isRigged: true, parts: { frame: 'yamahawr_frame.png', wheelF: 'yamahawr_wheel_f.png', wheelR: 'yamahawr_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '70px', rwSize: '60px' }
+        } 
+    ]},
+    motocross: { label: 'Кросс', emoji: '🏁', bikes: [ 
+        { id: 'yamaha-yz450f', name: 'Yamaha YZ450F', price: 92000, power: 22, top: '156',
+          isRigged: true, parts: { frame: 'yamahayz_frame.png', wheelF: 'yamahayz_wheel_f.png', wheelR: 'yamahayz_wheel_r.png', fwX: '82%', fwY: '85%', rwX: '18%', rwY: '85%', fwSize: '70px', rwSize: '60px' }
+        } 
+    ]}
   };
   const STARTER_BIKE = BIKE_CATALOG.scooter.bikes[0];
   const MISSIONS = [ { id: 'taps50', name: 'Сделать 50 тапов', reward: 300, type: 'taps', target: 50 } ];
@@ -1036,13 +1073,15 @@ try {
     
     if (bikeContent) {
         if (bike.isRigged && bike.parts) {
+            let fwS = bike.parts.fwSize || bike.parts.wSize;
+            let rwS = bike.parts.rwSize || bike.parts.wSize;
             bikeContent.innerHTML = `
                 <div style="position:relative; width:100%; height:100%;">
                     <img src="${bike.parts.frame}" class="rig-frame" onerror="this.style.display='none'">
-                    <div id="stunt-fork-front" class="rig-fork-front" style="left:${bike.parts.fwX}; top:${bike.parts.fwY}; width:${bike.parts.wSize}; height:${bike.parts.wSize};">
+                    <div id="stunt-fork-front" class="rig-fork-front" style="left:${bike.parts.fwX}; top:${bike.parts.fwY}; width:${fwS}; height:${fwS};">
                         <div class="rig-wheel" id="stunt-wheel-front" style="background: url('${bike.parts.wheelF}') center/contain no-repeat;"></div>
                     </div>
-                    <div id="stunt-fork-rear" class="rig-fork-rear" style="left:${bike.parts.rwX}; top:${bike.parts.rwY}; width:${bike.parts.wSize}; height:${bike.parts.wSize};">
+                    <div id="stunt-fork-rear" class="rig-fork-rear" style="left:${bike.parts.rwX}; top:${bike.parts.rwY}; width:${rwS}; height:${rwS};">
                         <div class="rig-wheel" id="stunt-wheel-rear" style="background: url('${bike.parts.wheelR}') center/contain no-repeat;"></div>
                     </div>
                 </div>
