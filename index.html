@@ -177,16 +177,23 @@
   .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: rgba(0,0,0,0.5); }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
   
+  /* Контейнер сцены */
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: transparent; }
   
-  .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; z-index: 2; pointer-events: none;}
-  .chase-road { position: absolute; left: 0; right: 0; bottom: 0; height: 60%; z-index: 2; overflow: hidden; pointer-events: none;}
-  .chase-line { display: none; } 
-
-  .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
+  /* ИСПРАВЛЕНИЕ РАЗМЕРА И ПОЗИЦИИ БАЙКА */
+  .stunt-bike-wrap { 
+    position: absolute; 
+    bottom: 8%; /* Опустили на асфальт Canvas-фона */
+    left: 50%; 
+    transform: translate(-50%, 0); 
+    z-index: 3; 
+    display: flex; justify-content: center; align-items: flex-end; 
+    width: 145px; /* Сделали компактнее */
+    height: 135px; 
+  }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; position: relative; }
-  .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7)); }
-  .stunt-spark-anchor { position: absolute; left: 2%; bottom: 20%; width: 4px; height: 4px; z-index: 5; }
+  .stunt-bike img { width: 100%; height: auto; display: block; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.7)); }
+  .stunt-spark-anchor { position: absolute; left: 2%; bottom: 12%; width: 4px; height: 4px; z-index: 5; }
 
   .stunt-controls { display: flex; height: 26%; flex-shrink: 0; z-index: 5; background: #000; touch-action: none; }
   .stunt-zone { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-weight: bold; letter-spacing: 1px; font-size: 13px; cursor: pointer; user-select: none; color: white; touch-action: none; }
@@ -207,7 +214,7 @@
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
 
   /* --- РАННЕР (ПОГОНЯ И ДОСТАВКА) --- */
-  .chase-player { position: absolute; left: 120px; width: 120px; height: 90px; transition: top 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 4; display: flex; align-items: flex-end; }
+  .chase-player { position: absolute; left: 120px; width: 100px; height: 80px; transition: top 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 4; display: flex; align-items: flex-end; }
   .chase-police { position: absolute; left: -20px; transition: top 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), left 1s ease; z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
   .chase-obstacle { position: absolute; width: 50px; height: 50px; z-index: 3; display: flex; align-items: center; justify-content: center; font-size: 40px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); }
   .swipe-indicator { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 24px; font-weight: bold; pointer-events: none; text-align: center; }
@@ -420,14 +427,12 @@
 
     <div id="stunt-overlay" class="stunt-overlay hidden">
       <div class="stunt-hud">
-        <div class="stunt-hud-item" style="display:none;">⏱ <span id="stunt-timer">0.0</span>с</div>
         <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
         <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
-        <div class="stunt-hud-item" style="color: var(--accent-orange);">PTS: <span id="stunt-coins-preview">0</span></div>
-        <div class="stunt-hud-item" style="min-width: 25%;">🕒 <span id="stunt-clock">08:00</span></div>
+        <div class="stunt-hud-item" style="color: var(--accent-orange); min-width: 30%;">PTS: <span id="stunt-coins-preview">0</span></div>
       </div>
       <div class="stunt-scene" id="stunt-scene">
-        <div class="stunt-bike-wrap">
+        <div class="stunt-bike-wrap" id="stunt-bike-wrap">
           <div class="stunt-bike" id="stunt-bike">
              <div id="stunt-bike-content">🏍️</div>
              <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div>
@@ -455,10 +460,10 @@
         <div class="stunt-hud-item" style="color: #fca5a5;">🤖 Бот: <span id="race-dist-bot">0</span>/500м</div>
       </div>
       <div class="stunt-scene" id="race-scene">
-        <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 42%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
+        <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 16%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
           <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));" id="race-bike-bot">🏍️</div>
         </div>
-        <div class="stunt-bike-wrap" id="race-player-wrap" style="left: 20%; z-index: 3;"><div class="stunt-bike" id="race-bike-player">🏍️</div></div>
+        <div class="stunt-bike-wrap" id="race-player-wrap" style="bottom: 8%; left: 20%; z-index: 3;"><div class="stunt-bike" id="race-bike-player">🏍️</div></div>
       </div>
       <div class="stunt-controls">
         <div class="stunt-zone brake" id="race-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
@@ -481,11 +486,9 @@
         <div class="stunt-hud-item" style="color: var(--accent-cyan); min-width: 40%;">Счет: <span id="chase-score">0</span></div>
       </div>
       <div class="stunt-scene" id="chase-scene" style="background-color: transparent; touch-action: none;">
-        <div class="chase-road" id="chase-road">
-          <div class="chase-player" id="chase-player">🏍️</div>
-          <div class="chase-police" id="chase-police"><img src="pogonya1.gif" style="width: 170px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС"></div>
-          <div id="chase-obstacles-container"></div>
-        </div>
+        <div class="chase-player" id="chase-player">🏍️</div>
+        <div class="chase-police" id="chase-police"><img src="pogonya1.gif" style="width: 130px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС"></div>
+        <div id="chase-obstacles-container"></div>
         <div class="swipe-indicator"><div>СВАЙП ВВЕРХ / ВНИЗ</div><div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div></div>
       </div>
       <div class="stunt-result hidden" id="chase-result">
@@ -506,10 +509,8 @@
         <div class="stunt-hud-item" style="color:#000; border-color:#000;">⭐ <span id="deliv-rating-hud">5.0</span></div>
       </div>
       <div class="stunt-scene" id="deliv-scene" style="background-color: transparent; touch-action: none;">
-        <div class="chase-road" id="deliv-road">
-          <div class="chase-player" id="deliv-player">🏍️</div>
-          <div id="deliv-obstacles-container"></div>
-        </div>
+        <div class="chase-player" id="deliv-player">🏍️</div>
+        <div id="deliv-obstacles-container"></div>
         <div class="swipe-indicator"><div>СВАЙП ВВЕРХ / ВНИЗ</div><div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для маневрирования в потоке</div></div>
       </div>
       <div class="stunt-result hidden" id="deliv-result">
@@ -608,9 +609,6 @@
 </div>
 
 <script>
-/**
- * КЛАСС ПАРАЛЛАКС ФОНА (Canvas)
- */
 class ParallaxBackground {
   constructor(opts = {}) {
     this.path = opts.path || '';
@@ -1055,7 +1053,6 @@ try {
     stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
     stuntBikeEl.style.transform = `translateY(${stunt.suspOffset}px) rotate(${-stunt.angle}deg)`;
     
-    // ОТРИСОВКА НОВОГО ФОНА
     if (isBgLoaded) {
       parallaxBg.update(dt, stunt.speed * 8); 
       parallaxBg.draw(bgCtx);
