@@ -172,28 +172,16 @@
   .mode-chase { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: 1px solid #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.5); }
 
   /* --- ОБЩИЕ ОВЕРЛЕИ --- */
-  .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; }
+  .stunt-overlay { position: absolute; inset: 0; z-index: 100; background: transparent; display: flex; flex-direction: column; }
   .stunt-overlay.hidden { display: none; }
-  .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: rgba(0,0,0,0.8); }
+  .stunt-hud { display: flex; justify-content: space-around; flex-wrap: wrap; padding: 30px 4px 6px; flex-shrink: 0; z-index: 5; gap: 4px; background: rgba(0,0,0,0.5); }
   .stunt-hud-item { background: rgba(15,23,42,0.85); border: 1px solid rgba(34,211,238,0.4); border-radius: 8px; padding: 6px 4px; font-size: 12px; font-weight: bold; box-shadow: var(--glow); text-align: center; flex: 1; min-width: 18%; color: white; }
   
-  /* РЕАЛИСТИЧНЫЙ ФОН СТАНТА */
-  .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: #0f172a; }
-  .stunt-city-bg { 
-    position: absolute; bottom: 34%; left: 0; right: 0; height: 66%; 
-    background-image: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=1000&auto=format&fit=crop'); 
-    background-size: auto 100%; background-position: bottom left; background-repeat: repeat-x; 
-    z-index: 1; filter: brightness(0.7); 
-  }
-
-  /* РЕАЛИСТИЧНАЯ ДОРОГА */
-  .stunt-road { 
-    position: absolute; left: 0; right: 0; bottom: 0; height: 34%; 
-    background-color: #374151; /* Темно-серый асфальт */
-    background-image: repeating-linear-gradient(90deg, #fff 0, #fff 40px, transparent 40px, transparent 100px); /* Прерывистая разметка */
-    background-position: 0 15%; background-size: 100px 4px; background-repeat: repeat-x; 
-    border-top: 3px solid #1f2937; box-shadow: inset 0 25px 25px -20px rgba(0,0,0,0.9); z-index: 2; 
-  }
+  .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: transparent; }
+  
+  .stunt-road { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; z-index: 2; pointer-events: none;}
+  .chase-road { position: absolute; left: 0; right: 0; bottom: 0; height: 60%; z-index: 2; overflow: hidden; pointer-events: none;}
+  .chase-line { display: none; } 
 
   .stunt-bike-wrap { position: absolute; bottom: 34%; left: 50%; transform: translate(-50%, 0); z-index: 3; display: flex; justify-content: center; align-items: flex-end; width: 190px; height: 170px; }
   .stunt-bike { width: 100%; transform-origin: 20% 85%; position: relative; }
@@ -219,8 +207,6 @@
   @keyframes sparkFly { 0% { opacity: 1; transform: translate(0,0) rotate(var(--sa, 0deg)) scale(1); } 100% { opacity: 0; transform: translate(var(--sx, 20px), var(--sy, -10px)) rotate(var(--sa, 0deg)) scale(0.3); } }
 
   /* --- РАННЕР (ПОГОНЯ И ДОСТАВКА) --- */
-  .chase-road { position: absolute; left: 0; right: 0; bottom: 0; height: 60%; background-color: #1a1c23; border-top: 5px solid #475569; z-index: 2; overflow: hidden; }
-  .chase-line { position: absolute; width: 100%; height: 4px; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0, rgba(255,255,255,0.7) 60px, transparent 60px, transparent 120px); }
   .chase-player { position: absolute; left: 120px; width: 120px; height: 90px; transition: top 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 4; display: flex; align-items: flex-end; }
   .chase-police { position: absolute; left: -20px; transition: top 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), left 1s ease; z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
   .chase-obstacle { position: absolute; width: 50px; height: 50px; z-index: 3; display: flex; align-items: center; justify-content: center; font-size: 40px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); }
@@ -434,19 +420,19 @@
 
     <div id="stunt-overlay" class="stunt-overlay hidden">
       <div class="stunt-hud">
+        <div class="stunt-hud-item" style="display:none;">⏱ <span id="stunt-timer">0.0</span>с</div>
         <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
         <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
-        <div class="stunt-hud-item" style="color: var(--accent-orange); min-width: 30%;">PTS: <span id="stunt-coins-preview">0</span></div>
+        <div class="stunt-hud-item" style="color: var(--accent-orange);">PTS: <span id="stunt-coins-preview">0</span></div>
+        <div class="stunt-hud-item" style="min-width: 25%;">🕒 <span id="stunt-clock">08:00</span></div>
       </div>
       <div class="stunt-scene" id="stunt-scene">
-        <div class="stunt-city-bg" id="stunt-city-bg"></div>
         <div class="stunt-bike-wrap">
           <div class="stunt-bike" id="stunt-bike">
              <div id="stunt-bike-content">🏍️</div>
              <div class="stunt-spark-anchor" id="stunt-spark-anchor"></div>
           </div>
         </div>
-        <div class="stunt-road" id="stunt-road"></div>
       </div>
       <div class="stunt-controls">
         <div class="stunt-zone brake" id="stunt-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
@@ -469,12 +455,10 @@
         <div class="stunt-hud-item" style="color: #fca5a5;">🤖 Бот: <span id="race-dist-bot">0</span>/500м</div>
       </div>
       <div class="stunt-scene" id="race-scene">
-        <div class="stunt-city-bg" id="race-city-bg"></div>
         <div class="stunt-bike-wrap" id="race-bot-wrap" style="bottom: 42%; left: 20%; transform: scale(0.85); z-index: 2; opacity: 0.9;">
           <div class="stunt-bike" style="filter: hue-rotate(90deg) drop-shadow(0 10px 10px rgba(0,0,0,0.9));" id="race-bike-bot">🏍️</div>
         </div>
         <div class="stunt-bike-wrap" id="race-player-wrap" style="left: 20%; z-index: 3;"><div class="stunt-bike" id="race-bike-player">🏍️</div></div>
-        <div class="stunt-road" id="race-road"></div>
       </div>
       <div class="stunt-controls">
         <div class="stunt-zone brake" id="race-brake"><div class="stunt-zone-icon">🛑</div><div class="stunt-zone-label">ТОРМОЗ</div></div>
@@ -496,13 +480,10 @@
         <div class="stunt-hud-item" style="color: #ef4444; font-size: 16px; border-color: #ef4444; min-width: 40%;" id="chase-wanted-stars">⭐ 🌑 🌑 🌑 🌑</div>
         <div class="stunt-hud-item" style="color: var(--accent-cyan); min-width: 40%;">Счет: <span id="chase-score">0</span></div>
       </div>
-      <div class="stunt-scene" id="chase-scene" style="background-color: #0f172a; touch-action: none;">
-        <div class="stunt-city-bg" id="chase-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.4);"></div>
+      <div class="stunt-scene" id="chase-scene" style="background-color: transparent; touch-action: none;">
         <div class="chase-road" id="chase-road">
-          <div class="chase-line" style="top: 33%;"></div>
-          <div class="chase-line" style="top: 66%;"></div>
-          <div class="chase-police" id="chase-police"><img src="pogonya1.gif" style="width: 170px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС"></div>
           <div class="chase-player" id="chase-player">🏍️</div>
+          <div class="chase-police" id="chase-police"><img src="pogonya1.gif" style="width: 170px; height: auto; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));" alt="ДПС"></div>
           <div id="chase-obstacles-container"></div>
         </div>
         <div class="swipe-indicator"><div>СВАЙП ВВЕРХ / ВНИЗ</div><div style="font-size: 14px; font-weight: normal; margin-top: 10px;">Для перестроения</div></div>
@@ -524,11 +505,8 @@
         <div class="stunt-hud-item" style="color:#000; border-color:#000; min-width:40%;">📦 <span id="deliv-dist">0</span>/1000м</div>
         <div class="stunt-hud-item" style="color:#000; border-color:#000;">⭐ <span id="deliv-rating-hud">5.0</span></div>
       </div>
-      <div class="stunt-scene" id="deliv-scene" style="background-color: #1e293b; touch-action: none;">
-        <div class="stunt-city-bg" id="deliv-city-bg" style="bottom: 60%; height: 40%; filter: brightness(0.7);"></div>
+      <div class="stunt-scene" id="deliv-scene" style="background-color: transparent; touch-action: none;">
         <div class="chase-road" id="deliv-road">
-          <div class="chase-line" style="top: 33%;"></div>
-          <div class="chase-line" style="top: 66%;"></div>
           <div class="chase-player" id="deliv-player">🏍️</div>
           <div id="deliv-obstacles-container"></div>
         </div>
@@ -630,6 +608,71 @@
 </div>
 
 <script>
+/**
+ * КЛАСС ПАРАЛЛАКС ФОНА (Canvas)
+ */
+class ParallaxBackground {
+  constructor(opts = {}) {
+    this.path = opts.path || '';
+    this.topColor = opts.topColor || '#8f9ba7'; 
+    this.layers = opts.layers || [
+      { file: 'sky.svg',    y: 0,   h: 1280, k: 0.02 },
+      { file: 'far.svg',    y: 420, h: 420,  k: 0.10 },
+      { file: 'mid.svg',    y: 400, h: 440,  k: 0.30 },
+      { file: 'street.svg', y: 640, h: 300,  k: 0.80 },
+      { file: 'road.svg',   y: 920, h: 360,  k: 1.00 },
+    ];
+    this.offset = 0;   
+    this.scale = 1;
+    this.originY = 0;
+    this.W = 0;
+  }
+
+  load() {
+    return Promise.all(this.layers.map(l => new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => { l.img = img; res(); };
+      img.onerror = () => {
+         console.warn('Не найден фон: ' + this.path + l.file + '. Используем заглушку.');
+         const c = document.createElement('canvas'); c.width = 10; c.height = 10; l.img = c;
+         res();
+      };
+      img.src = this.path + l.file;
+    })));
+  }
+
+  resize(cw, ch) {
+    this.cw = cw; this.ch = ch;
+    this.W = Math.round(cw);            
+    this.scale = this.W / 720;          
+    this.originY = ch - 1280 * this.scale; 
+    for (const l of this.layers) {
+      if(!l.img) continue;
+      const c = document.createElement('canvas');
+      c.width = this.W;
+      c.height = Math.max(1, Math.round(l.h * this.scale));
+      c.getContext('2d').drawImage(l.img, 0, 0, c.width, c.height);
+      l.cache = c;                      
+    }
+  }
+
+  update(dt, speed) {
+    this.offset += speed * dt;
+  }
+
+  draw(ctx) {
+    ctx.fillStyle = this.topColor;
+    ctx.fillRect(0, 0, this.cw, this.ch);
+    for (const l of this.layers) {
+      if(!l.cache) continue;
+      const shift = Math.floor((this.offset * l.k * this.scale) % this.W);
+      const y = Math.round(this.originY + l.y * this.scale);
+      ctx.drawImage(l.cache, -shift, y);
+      ctx.drawImage(l.cache, this.W - shift, y);
+    }
+  }
+}
+
 try {
   const addEvt = (id, event, handler) => { const el = document.getElementById(id); if (el) el.addEventListener(event, handler); };
 
@@ -752,7 +795,6 @@ try {
   });
   addEvt('daily-close-btn', 'click', () => { playSound('click'); document.getElementById('daily-bonus-modal').classList.add('hidden'); });
 
-  // ПРОФИЛЬ
   const profileModal = document.getElementById('profile-modal');
   addEvt('user-profile-btn', 'click', () => {
     playSound('click');
@@ -777,7 +819,6 @@ try {
     }
   }
 
-  // --- ТЕЛЕФОН И ПРИЛОЖЕНИЯ ---
   document.querySelectorAll('.phone-back-btn').forEach(btn => { btn.addEventListener('click', () => { playSound('click'); document.querySelectorAll('.phone-app-screen').forEach(app => app.classList.remove('active')); }); });
   document.querySelectorAll('.home-indicator').forEach(ind => { ind.addEventListener('click', () => { playSound('click'); document.querySelectorAll('.phone-app-screen').forEach(app => app.classList.remove('active')); }); });
   
@@ -905,7 +946,6 @@ try {
     if (target === 'garage') renderGarage(); if (target === 'missions') renderMissions();
   }));
 
-  // --- ЛОГИКА МЕНЮ ВЫБОРА РЕЖИМА ---
   addEvt('main-start-btn', 'click', () => { playSound('click'); document.getElementById('mode-modal').classList.remove('hidden'); });
   addEvt('mode-close-btn', 'click', () => { playSound('click'); document.getElementById('mode-modal').classList.add('hidden'); });
   addEvt('mode-stunt-btn', 'click', () => { playSound('click'); document.getElementById('mode-modal').classList.add('hidden'); openStunt(); });
@@ -924,8 +964,27 @@ try {
     el.addEventListener('mouseleave', release);
   }
 
+  // === ИНТЕГРАЦИЯ CANVAS ФОНА ===
+  const bgCanvas = document.createElement('canvas');
+  bgCanvas.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;';
+  const bgCtx = bgCanvas.getContext('2d');
+  
+  const parallaxBg = new ParallaxBackground({ path: 'assets/bg/' });
+  let isBgLoaded = false;
+  parallaxBg.load().then(() => { isBgLoaded = true; }).catch(e => console.error(e));
+
+  function setupCanvasForScene(sceneId) {
+    const sceneEl = document.getElementById(sceneId);
+    if(sceneEl) {
+      sceneEl.insertBefore(bgCanvas, sceneEl.firstChild);
+      bgCanvas.width = sceneEl.clientWidth || 480;
+      bgCanvas.height = sceneEl.clientHeight || 800;
+      if (isBgLoaded) parallaxBg.resize(bgCanvas.width, bgCanvas.height);
+    }
+  }
+
   // --- СТАНТ-ЗАЕЗД ---
-  const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntRoadEl = document.getElementById('stunt-road'), stuntCityBg = document.getElementById('stunt-city-bg'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
+  const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
   let stunt = null, lastSparkTs = 0;
 
   function spawnSparkBurst(count) {
@@ -944,7 +1003,8 @@ try {
   }
 
   function openStunt() {
-    stunt = { angle: 0, angularVelocity: 0, suspOffset: 0, suspVelocity: 0, speed: 15, score: 0, roadOffset: 0, cityOffset: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null };
+    setupCanvasForScene('stunt-scene');
+    stunt = { angle: 0, angularVelocity: 0, suspOffset: 0, suspVelocity: 0, speed: 15, score: 0, maxAngle: 0, gas: false, brake: false, crashed: false, lastTs: null, rafId: null };
     lastSparkTs = 0; const stuntSceneEl = document.getElementById('stunt-scene'); if(stuntSceneEl) stuntSceneEl.querySelectorAll('.spark-particle').forEach(el => el.remove());
     stuntResultEl.classList.add('hidden'); stuntOverlay.classList.remove('hidden');
     
@@ -965,25 +1025,19 @@ try {
     if (stunt.lastTs === null) stunt.lastTs = ts;
     const dt = Math.min((ts - stunt.lastTs) / 1000, 0.05); stunt.lastTs = ts;
 
-    if (stunt.gas) { 
-        stunt.speed += 50 * dt; 
-    } else if (stunt.brake) { 
-        stunt.speed -= 150 * dt; 
-    } else { 
-        stunt.speed -= 35 * dt; 
-    }
+    if (stunt.gas) { stunt.speed += 50 * dt; } 
+    else if (stunt.brake) { stunt.speed -= 150 * dt; } 
+    else { stunt.speed -= 35 * dt; }
     
     const maxSpeed = parseInt(activeBike().top) || 100;
     stunt.speed = Math.max(0, Math.min(stunt.speed, maxSpeed));
 
     let torque = -600;
-    
     if (stunt.gas) { torque += 1300; } 
     if (stunt.brake) { torque -= 1500; }
 
     stunt.angularVelocity += torque * dt;
     stunt.angularVelocity -= stunt.angularVelocity * 8 * dt; 
-    
     let oldAngle = stunt.angle;
     stunt.angle += stunt.angularVelocity * dt;
 
@@ -994,22 +1048,18 @@ try {
     stunt.suspOffset += stunt.suspVelocity * dt;
 
     if (stunt.angle <= 0) {
-        if (oldAngle > 0 && stunt.angularVelocity < -50) {
-            stunt.suspVelocity += Math.abs(stunt.angularVelocity) * 0.4; 
-            playSound('tap'); 
-        }
-        stunt.angle = 0;
-        if (stunt.angularVelocity < 0) stunt.angularVelocity = 0;
+        if (oldAngle > 0 && stunt.angularVelocity < -50) { stunt.suspVelocity += Math.abs(stunt.angularVelocity) * 0.4; playSound('tap'); }
+        stunt.angle = 0; if (stunt.angularVelocity < 0) stunt.angularVelocity = 0;
     }
 
     stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
-    stunt.roadOffset -= stunt.speed * dt * 4; 
-    
     stuntBikeEl.style.transform = `translateY(${stunt.suspOffset}px) rotate(${-stunt.angle}deg)`;
-    stuntRoadEl.style.backgroundPosition = `0 0, ${stunt.roadOffset}px 10%`; 
-
-    let nearOffsetStunt = stunt.roadOffset * 0.8;
-    stuntCityBg.style.backgroundPosition = `${nearOffsetStunt}px bottom`;
+    
+    // ОТРИСОВКА НОВОГО ФОНА
+    if (isBgLoaded) {
+      parallaxBg.update(dt, stunt.speed * 8); 
+      parallaxBg.draw(bgCtx);
+    }
     
     let multiplier = 1.0; 
     if (stunt.angle > 75) { multiplier = 2.0; } 
@@ -1047,12 +1097,13 @@ try {
   bindHold('stunt-brake', () => { if (stunt && !stunt.crashed) { stunt.brake = true; document.getElementById('stunt-brake').classList.add('pressed'); } }, () => { if (stunt) stunt.brake = false; document.getElementById('stunt-brake').classList.remove('pressed'); });
 
   /* ГОНКА 1X1 */
-  const raceOverlay = document.getElementById('race-overlay'), raceSpeedEl = document.getElementById('race-speed'), raceDistPlayerEl = document.getElementById('race-dist-player'), raceDistBotEl = document.getElementById('race-dist-bot'), raceBotWrap = document.getElementById('race-bot-wrap'), raceRoad = document.getElementById('race-road'), racePlayerBike = document.getElementById('race-bike-player'), raceResultEl = document.getElementById('race-result'), raceResultTitle = document.getElementById('race-result-title'), raceResultStats = document.getElementById('race-result-stats');
+  const raceOverlay = document.getElementById('race-overlay'), raceSpeedEl = document.getElementById('race-speed'), raceDistPlayerEl = document.getElementById('race-dist-player'), raceDistBotEl = document.getElementById('race-dist-bot'), raceBotWrap = document.getElementById('race-bot-wrap'), racePlayerBike = document.getElementById('race-bike-player'), raceResultEl = document.getElementById('race-result'), raceResultTitle = document.getElementById('race-result-title'), raceResultStats = document.getElementById('race-result-stats');
   let race = null;
 
   function openRace() {
+    setupCanvasForScene('race-scene');
     const bike = activeBike(); let baseSpeed = parseInt(bike.top); let playerMaxSpeed = baseSpeed;
-    race = { playerDist: 0, botDist: 0, playerSpeed: 0, botSpeed: 0, playerMax: playerMaxSpeed, botMax: playerMaxSpeed * (0.9 + Math.random() * 0.2), gas: false, brake: false, finished: false, lastTs: null, rafId: null, roadOffset: 0 };
+    race = { playerDist: 0, botDist: 0, playerSpeed: 0, botSpeed: 0, playerMax: playerMaxSpeed, botMax: playerMaxSpeed * (0.9 + Math.random() * 0.2), gas: false, brake: false, finished: false, lastTs: null, rafId: null };
     raceResultEl.classList.add('hidden'); raceOverlay.classList.remove('hidden');
     if (bike.imgSrc) { racePlayerBike.classList.add('is-svg'); racePlayerBike.innerHTML = bikeImageMarkup('scooter-icon-stunt', bike.imgSrc); } else { racePlayerBike.classList.remove('is-svg'); racePlayerBike.innerText = bike.emoji || '🏍️'; }
     raceSpeedEl.innerText = '0'; raceDistPlayerEl.innerText = '0'; raceDistBotEl.innerText = '0'; raceBotWrap.style.transform = `translateX(0px) scale(0.85)`;
@@ -1071,12 +1122,11 @@ try {
     race.botSpeed = Math.min(race.botSpeed + botAcc * dt, race.botMax);
 
     race.playerDist += (race.playerSpeed / 3.6) * dt * 3; race.botDist += (race.botSpeed / 3.6) * dt * 3;
-    race.roadOffset -= race.playerSpeed * dt * 4; 
-    raceRoad.style.backgroundPosition = `0 0, ${race.roadOffset}px 15px`;
 
-    let nearOffsetRace = race.roadOffset * 0.8;
-    let farOffsetRace = race.roadOffset * 0.3;
-    document.getElementById('race-city-bg').style.backgroundPosition = `${nearOffsetRace}px bottom, ${farOffsetRace}px bottom`;
+    if (isBgLoaded) {
+      parallaxBg.update(dt, race.playerSpeed * 8);
+      parallaxBg.draw(bgCtx);
+    }
 
     let botOffsetPx = (race.botDist - race.playerDist) * 4;
     raceBotWrap.style.transform = `translateX(${botOffsetPx}px) scale(0.85)`;
@@ -1105,6 +1155,7 @@ try {
   function updateWantedStars() { let stars = ''; for(let i=0; i<5; i++) stars += (i < chase.wantedLevel) ? '⭐ ' : '🌑 '; chaseWantedEl.innerText = stars; }
 
   function openChase() {
+    setupCanvasForScene('chase-scene');
     const bike = activeBike();
     chase = { lane: 1, speed: 200, score: 0, wantedLevel: 1, elapsed: 0, obstacles: [], spawnTimer: 0, finished: false, lastTs: null, rafId: null };
     chaseObstaclesContainer.innerHTML = ''; chaseResultEl.classList.add('hidden'); chaseOverlay.classList.remove('hidden');
@@ -1136,8 +1187,10 @@ try {
       let policeLeft = -20 + (chase.wantedLevel * 15); chasePolice.style.left = policeLeft + 'px';
     }
 
-    let nearOffsetChase = chase.score * -8; let farOffsetChase = chase.score * -3;
-    document.getElementById('chase-city-bg').style.backgroundPosition = `${nearOffsetChase}px bottom, ${farOffsetChase}px bottom`;
+    if (isBgLoaded) {
+      parallaxBg.update(dt, chase.speed * 0.8);
+      parallaxBg.draw(bgCtx);
+    }
 
     chase.spawnTimer -= dt; if (chase.spawnTimer <= 0) { spawnChaseObstacle(); chase.spawnTimer = 1.8 - (chase.wantedLevel * 0.15); }
     if (Math.random() > 0.95) { chasePolice.style.top = CHASE_LANE_Y[chase.lane]; }
@@ -1164,6 +1217,7 @@ try {
   let deliv = null; const DELIV_OBSTACLES = ['🚗', '🚕', '🚙', '🚧', '🕳️'];
 
   function openDelivery() {
+    setupCanvasForScene('deliv-scene');
     const bike = activeBike();
     let speedBonus = parseInt(bike.top) * 1.5; 
     deliv = { lane: 1, speed: 120 + speedBonus, dist: 0, targetDist: 1000 + Math.floor(Math.random()*500), time: 60, obstacles: [], spawnTimer: 0, finished: false, lastTs: null, rafId: null };
@@ -1197,8 +1251,10 @@ try {
     delivTimeEl.innerText = Math.max(0, deliv.time).toFixed(1);
     delivDistEl.innerText = Math.floor(Math.min(deliv.dist, deliv.targetDist)) + '/' + deliv.targetDist + 'м';
 
-    let nearOffsetDeliv = deliv.dist * -8; let farOffsetDeliv = deliv.dist * -3;
-    document.getElementById('deliv-city-bg').style.backgroundPosition = `${nearOffsetDeliv}px bottom, ${farOffsetDeliv}px bottom`;
+    if (isBgLoaded) {
+      parallaxBg.update(dt, deliv.speed * 0.8);
+      parallaxBg.draw(bgCtx);
+    }
 
     deliv.spawnTimer -= dt; if (deliv.spawnTimer <= 0) { spawnDelivObstacle(); deliv.spawnTimer = 1.5 + Math.random(); }
 
@@ -1268,6 +1324,15 @@ try {
   function initTelegramUser() {
     try { const tg = window.Telegram && window.Telegram.WebApp; if (!tg) return; tg.ready(); tg.expand(); const user = tg.initDataUnsafe && tg.initDataUnsafe.user; if (!user) return; document.getElementById('user-nickname').innerText = user.username ? '@' + user.username : [user.first_name, user.last_name].filter(Boolean).join(' '); const avatarEl = document.getElementById('avatar-placeholder'); if (user.photo_url) avatarEl.innerHTML = `<img src="${user.photo_url}" alt="Avatar">`; else avatarEl.innerText = (user.first_name ? user.first_name[0] : (user.username ? user.username[0].toUpperCase() : 'R')); } catch (e) {}
   }
+  
+  window.addEventListener('resize', () => {
+     if(isBgLoaded && bgCanvas.parentElement) {
+         bgCanvas.width = bgCanvas.parentElement.clientWidth;
+         bgCanvas.height = bgCanvas.parentElement.clientHeight;
+         parallaxBg.resize(bgCanvas.width, bgCanvas.height);
+     }
+  });
+
   initTelegramUser(); renderTop(); renderGarage(); renderShopTabs(); renderMissions(); checkDailyBonus();
 
 } catch (err) {
