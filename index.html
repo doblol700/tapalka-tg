@@ -179,10 +179,9 @@
   
   .stunt-scene { flex-grow: 1; position: relative; overflow: hidden; background-color: transparent; }
   
-  /* ИСПРАВЛЕНИЕ: НОВЫЕ КЛАССЫ ДЛЯ РИГГИНГА (КОЛЕСА И РАМА) */
   .stunt-bike-wrap { 
     position: absolute; 
-    bottom: 8%; /* Стоит на асфальте */
+    bottom: 8%; 
     left: 50%; 
     transform: translate(-50%, 0); 
     z-index: 3; 
@@ -192,16 +191,14 @@
   }
   .stunt-bike { 
       width: 100%; 
-      transform-origin: 20% 85%; /* Ось заднего колеса (центр вращения) */
+      transform-origin: 20% 85%; 
       position: relative; 
   }
   
-  /* Классы для составного байка */
   .rig-frame { width: 100%; display: block; position: relative; z-index: 2; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.7)); }
   .rig-fork-front { position: absolute; z-index: 1; transform: translate(-50%, -50%); }
   .rig-fork-rear { position: absolute; z-index: 1; transform: translate(-50%, -50%); }
   
-  /* Стилизация заглушки колеса (пунктирный круг), пока нет картинок */
   .rig-wheel {
       width: 100%; height: 100%;
       border-radius: 50%;
@@ -209,7 +206,6 @@
       border: 4px dashed #9ca3af;
       background-color: #374151;
       display: block;
-      /* Добавляем фейковые спицы для наглядности вращения */
       background-image: radial-gradient(circle, #000 20%, transparent 20%), linear-gradient(0deg, transparent 48%, #1f2937 48%, #1f2937 52%, transparent 52%), linear-gradient(90deg, transparent 48%, #1f2937 48%, #1f2937 52%, transparent 52%);
   }
 
@@ -447,9 +443,11 @@
 
     <div id="stunt-overlay" class="stunt-overlay hidden">
       <div class="stunt-hud">
+        <div class="stunt-hud-item" style="display:none;">⏱ <span id="stunt-timer">0.0</span>с</div>
         <div class="stunt-hud-item">📐 <span id="stunt-angle">0</span>°</div>
         <div class="stunt-hud-item">💨 <span id="stunt-speed">15</span> км/ч</div>
-        <div class="stunt-hud-item" style="color: var(--accent-orange); min-width: 30%;">PTS: <span id="stunt-coins-preview">0</span></div>
+        <div class="stunt-hud-item" style="color: var(--accent-orange);">PTS: <span id="stunt-coins-preview">0</span></div>
+        <div class="stunt-hud-item" style="min-width: 25%;">🕒 <span id="stunt-clock">08:00</span></div>
       </div>
       <div class="stunt-scene" id="stunt-scene">
         <div class="stunt-bike-wrap" id="stunt-bike-wrap">
@@ -745,13 +743,12 @@ try {
 
   function bikeImageMarkup(cls, src) { return `<img src="${src}" class="${cls}" style="width: 100%; height: auto; display: block;" alt="Мотоцикл">`; }
   
-  // --- ДОБАВЛЕНА ПОДДЕРЖКА РИГГИНГА (isRigged и parts) ---
-  // На примере первого байка: если картинки dio_frame.png нет, будет крутиться CSS заглушка
   const BIKE_CATALOG = {
     scooter: { label: 'Скутеры', emoji: '🛵', bikes: [ 
         { id: 'starter', name: 'Honda Dio 27', price: 0, power: 1, top: '60', imgSrc: 'дио1.png',
           isRigged: true,
-          parts: { frame: 'dio_frame.png', wheelF: 'dio_wheel.png', wheelR: 'dio_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', wSize: '45px' }
+          // УВЕЛИЧЕН РАЗМЕР КОЛЕС: wSize теперь 58px
+          parts: { frame: 'dio_frame.png', wheelF: 'dio_wheel.png', wheelR: 'dio_wheel.png', fwX: '80%', fwY: '85%', rwX: '20%', rwY: '85%', wSize: '58px' }
         }, 
         { id: 'yamaha-jog', name: 'Yamaha JOG ZR', price: 4500, power: 3, top: '70', imgSrc: 'дио1.png' } 
     ]},
@@ -1009,7 +1006,7 @@ try {
     }
   }
 
-  // --- СТАНТ-ЗАЕЗД (РИГГИНГ) ---
+  // --- СТАНТ-ЗАЕЗД ---
   const stuntOverlay = document.getElementById('stunt-overlay'), stuntBikeEl = document.getElementById('stunt-bike'), stuntAngleEl = document.getElementById('stunt-angle'), stuntSpeedEl = document.getElementById('stunt-speed'), stuntCoinsEl = document.getElementById('stunt-coins-preview'), stuntResultEl = document.getElementById('stunt-result'), stuntResultStatsEl = document.getElementById('stunt-result-stats');
   let stunt = null, lastSparkTs = 0;
 
@@ -1037,7 +1034,6 @@ try {
     const bike = activeBike();
     const bikeContent = document.getElementById('stunt-bike-content');
     
-    // ОТРИСОВКА РИГГИНГА ИЛИ ОБЫЧНОЙ КАРТИНКИ
     if (bikeContent) {
         if (bike.isRigged && bike.parts) {
             bikeContent.innerHTML = `
@@ -1098,17 +1094,16 @@ try {
 
     stunt.maxAngle = Math.max(stunt.maxAngle, stunt.angle);
     
-    // ВРАЩЕНИЕ КОЛЕС И АМОРТИЗАЦИЯ
-    stunt.wheelRot += stunt.speed * dt * 25; // Скорость вращения
+    stunt.wheelRot += stunt.speed * dt * 25; 
     const wf = document.getElementById('stunt-wheel-front');
     const wr = document.getElementById('stunt-wheel-rear');
     if (wf) wf.style.transform = `rotate(${stunt.wheelRot}deg)`;
     if (wr) wr.style.transform = `rotate(${stunt.wheelRot}deg)`;
 
     const forkFront = document.getElementById('stunt-fork-front');
-    if (forkFront) forkFront.style.transform = `translate(-50%, calc(-50% + ${stunt.suspOffset}px))`; // Вилка пружинит
+    if (forkFront) forkFront.style.transform = `translate(-50%, calc(-50% + ${stunt.suspOffset}px))`; 
 
-    stuntBikeEl.style.transform = `rotate(${-stunt.angle}deg)`; // Рама наклоняется
+    stuntBikeEl.style.transform = `rotate(${-stunt.angle}deg)`; 
     
     if (isBgLoaded) {
       parallaxBg.update(dt, stunt.speed * 8); 
